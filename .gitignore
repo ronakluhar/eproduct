@@ -1,0 +1,8 @@
+/vendor
+.env
+/nbproject/private/
+/nbproject
+/node_modules
+/public/storage
+/storage/*.key
+/.env.example
