@@ -30,4 +30,18 @@ interface SchoolRepository extends BaseRepository
     public function updateSchoolDetailById($schoolData);
 
     public function getSchoolDetailByUnitId($id);
+
+    /**
+     * Save School Apply Accepted detail passed in $schoolApplyAcceptedDetail array
+    */
+    public function save_school_apply_accepted_detail($school_apply_accepted_detail);
+    
+    public function get_school_apply_accepted_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Award Level detail passed in $school_award_level_detail array
+    */
+    public function save_school_award_level_detail($school_award_level_detail);
+    
+    public function get_school_award_level_detail_by_unit_id($unit_id);
 }

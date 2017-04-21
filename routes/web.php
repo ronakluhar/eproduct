@@ -75,3 +75,7 @@ Route::get('admin/delete-cms-template/{id}', 'Admin\CMSManagementController@dele
 Route::get('admin/list-school', 'Admin\SchoolController@index');
 Route::get('admin/importSchoolQuickFact', 'Admin\SchoolController@importCSV');
 Route::post('admin/saveSchoolQuickFact', 'Admin\SchoolController@saveSchoolQuickFact');
+Route::get('admin/import-school-apply-accepted', 'Admin\SchoolController@import_apply_accepted_CSV');
+Route::post('admin/save-school-apply-accepted', 'Admin\SchoolController@save_school_apply_accepted');
+Route::get('admin/import-school-award-level', 'Admin\SchoolController@import_award_level_CSV');
+Route::post('admin/save-school-award-level', 'Admin\SchoolController@save_school_award_level');

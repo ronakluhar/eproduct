@@ -136,6 +136,15 @@ return [
     'formlblpseudoname' => 'Pseudo Name',
     'cmscreatesuccess' => 'CMS Template created successfully',
     'cmsupdatesuccess' => 'CMS Template updated successfully',
-    'cmsdeletesuccess' => 'CMS Template deleted successfully'
+    'cmsdeletesuccess' => 'CMS Template deleted successfully',
+    'select_csv_file' => 'Select CSV file',
+    'import' => 'Import',
+    
+    // Import School Apply Accepted Labels
+    'lbl_school_apply_accepted' => 'Import School Apply Accepted',
+    'school_apply_accepted' => 'School Apply Accepted',
 
+    // Import School Award Level Detail Labels
+    'lbl_school_award_level' => 'Import School Award Level',
+    'school_award_level' => 'School Award Level',
  ];
