@@ -125,4 +125,83 @@ class SchoolDetailController extends Controller
             }            
         }
     }
+    
+    public function importSchoolCompletion()
+    {
+        return view('admin.importSchoolCompletion');
+    }
+    
+    public function saveSchoolCompletion()
+    {
+        if (Input::hasFile('schoolCompletion')) 
+        {
+            $fileData = Input::file('schoolCompletion');
+            $extension = $fileData->getClientOriginalExtension();                        
+            if($extension == 'csv')
+            {
+                $name = time().'-'.$fileData->getClientOriginalName();
+                // Moves file to folder on server
+                $fileData->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/'.$name);
+                
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+                
+                $schoolCompletions = Helpers::csv_to_array($path, $delimiter);
+               
+                $insertData = array();
+                if (!empty($schoolCompletions)) {
+                    foreach($schoolCompletions as $key => $value) {   
+                        $insertData['UnitID'] = $value['UnitID'];
+                        $insertData['Agriculture_Operations_and_Related_Sciences'] = $value['Agriculture Operations and Related Sciences'];
+                        $insertData['Natural_Resources_and_Conservation'] = $value['Natural Resources and Conservation'];
+                        $insertData['Architecture_and_Related_Services'] = $value['Architecture and Related Services'];
+                        $insertData['Area_Ethnic_Cultural_Gender_Group_Studies'] = $value['Area  Ethnic  Cultural  Gender  and Group Studies'];
+                        $insertData['Communication_Journalism_and_Related_Programs'] = $value['Communication  Journalism  and Related Programs'];
+                        $insertData['Communications_Technologies_and_Support_Services'] = $value['Communications Technologies/Technicians and Support Services'];
+                        $insertData['Computer_and_Information_Sciences_and_Support_Services'] = $value['Computer and Information Sciences and Support Services'];
+                        $insertData['Personal_and_Culinary_Services'] = $value['Personal and Culinary Services'];
+                        $insertData['Education'] = $value['Education'];
+                        $insertData['Engineering'] = $value['Engineering'];
+                        $insertData['Engineering_Technologies_and_Engineering_related_Fields'] = $value['Engineering Technologies and Engineering-related Fields'];
+                        $insertData['Foreign_Languages_Literature_and_Linguistics'] = $value['Foreign Languages  Literature\'s  and Linguistics'];
+                        $insertData['Family_and_Consumer_Sciences_Sciences'] = $value['Family and Consumer Sciences/Human Sciences'];
+                        $insertData['Legal_Professions_and_Studies'] = $value['Legal Professions and Studies'];
+                        $insertData['English_Language_and_Literature'] = $value['English Language and Literature/Letters'];
+                        $insertData['Liberal_Arts_and_Sciences_General_Studies_and_Humanities'] = $value['Liberal Arts and Sciences  General Studies and Humanities'];
+                        $insertData['Library_Science'] = $value['Library Science'];
+                        $insertData['Biological_and_Biomedical_Sciences'] = $value['Biological and Biomedical Sciences'];
+                        $insertData['Mathematics_and_Statistics'] = $value['Mathematics and Statistics'];
+                        $insertData['Military_Technologies_and_Applied_Sciences'] = $value['Military Technologies and Applied Sciences'];
+                        $insertData['Multi_Interdisciplinary_Studies'] = $value['Multi/Interdisciplinary Studies'];
+                        $insertData['Parks_Recreation_Leisure_and_Fitness_Studies'] = $value['Parks  Recreation  Leisure and Fitness Studies'];
+                        $insertData['Philosophy_and_Religious_Studies'] = $value['Philosophy and Religious Studies'];
+                        $insertData['Theology_and_Religious_Vocations'] = $value['Theology and Religious Vocations'];
+                        $insertData['Physical_Sciences'] = $value['Physical Sciences'];
+                        $insertData['Science_Technologies'] = $value['Science Technologies/Technicians'];
+                        $insertData['Psychology'] = $value['Psychology'];
+                        $insertData['Homeland_Security_Law_Enforcement_Firefight_Protective_Service'] = $value['Homeland Security  Law Enforcement  Firefighting  and Related Protective Service'];
+                        $insertData['Public_Administration_and_Social_Service_Professions'] = $value['Public Administration and Social Service Professions'];
+                        $insertData['Social_Sciences'] = $value['Social Sciences'];
+                        $insertData['Construction_Trades'] = $value['Construction Trades'];
+                        $insertData['Mechanic_and_Repair_Technologies'] = $value['Mechanic and Repair Technologies/Technicians'];
+                        $insertData['Precision_Production'] = $value['Precision Production'];
+                        $insertData['Transportation_and_Materials_Moving'] = $value['Transportation and Materials Moving'];
+                        $insertData['Visual_and_Performing_Arts'] = $value['Visual and Performing Arts'];
+                        $insertData['Health_Professions_and_Related_Programs'] = $value['Health Professions and Related Programs'];
+                        $insertData['Business_Management_Marketing_Related_Support_Services'] = $value['Business  Management  Marketing  and Related Support Services'];
+                        $insertData['History'] = $value['History'];
+                        $this->schoolRepository->saveSchoolCompletions($insertData);
+                    }
+                } 
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', 'School Completions data imported successfully');
+                exit;
+            }
+            else
+            {
+                return Redirect::to('admin/importSchoolQuickFact')->with('error', 'Invalid file extension');
+                exit;
+            }            
+        }
+    }
 }

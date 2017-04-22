@@ -120,13 +120,14 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         } else {
             SchoolLibrary::create($schoolLibraryDetail);
         }
-        
+    }    
     /**
      * @return school_apply_accepted_detail Object
       Parameters
       @$schoolApplyAcceptedDetail : schoolApplyAcceptedDetail
     */
-    public function save_school_apply_accepted_detail($school_apply_accepted_detail) {
+    public function save_school_apply_accepted_detail($school_apply_accepted_detail)
+    {
         $school_apply_accepted = $this->get_school_apply_accepted_detail_by_unit_id($school_apply_accepted_detail['UnitID']);
        
         $this->objSchoolApplyAccepted = new SchoolApplyAcceptedDetail();

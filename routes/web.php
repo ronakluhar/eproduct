@@ -90,3 +90,6 @@ Route::get('admin/import-school-graduation-rate-time', 'Admin\SchoolController@i
 Route::post('admin/save-school-graduation-rate-time', 'Admin\SchoolController@save_school_graduation_rate_time');
 Route::get('admin/import-school-ROTC', 'Admin\SchoolController@import_ROTC_CSV');
 Route::post('admin/save-school-ROTC', 'Admin\SchoolController@save_school_ROTC');
+
+Route::get('admin/importSchoolCompletion', 'Admin\SchoolDetailController@importSchoolCompletion');
+Route::post('admin/saveSchoolCompletion', 'Admin\SchoolDetailController@saveSchoolCompletion');
