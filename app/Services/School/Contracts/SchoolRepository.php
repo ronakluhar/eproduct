@@ -79,4 +79,39 @@ interface SchoolRepository extends BaseRepository
     public function save_school_teacher_certification_detail($school_teacher_certification_detail);
     
     public function get_school_teacher_certification_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Field Of Study detail passed in $school_field_of_study_detail array
+    */
+    public function save_school_field_of_study_detail($school_field_of_study_detail);
+    
+    public function get_school_field_of_study_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Financial Aid detail passed in $school_financial_aid_detail array
+    */
+    public function save_school_financial_aid_detail($school_financial_aid_detail);
+    
+    public function get_school_financial_aid_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Net Price In State detail passed in $school_net_price_in_state_detail array
+    */
+    public function save_school_net_price_in_state_detail($school_net_price_in_state_detail);
+    
+    public function get_school_net_price_in_state_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Net Price Out State detail passed in $school_net_price_out_state_detail array
+    */
+    public function save_school_net_price_out_state_detail($school_net_price_out_state_detail);
+    
+    public function get_school_net_price_out_state_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Sat Act Scores detail passed in $school_sat_act_scores_detail array
+    */
+    public function save_school_sat_act_scores_detail($school_sat_act_scores_detail);
+    
+    public function get_school_sat_act_scores_detail_by_unit_id($unit_id);
 }
