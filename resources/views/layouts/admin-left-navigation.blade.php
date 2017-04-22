@@ -37,6 +37,9 @@
           <li class="{{ Request::is('admin/import-school-award-level') ? 'active' : '' }}"><a href="{{url('admin/import-school-award-level')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_award_level')}}</a></li>
           <li class="{{ Request::is('admin/import-school-graduation-rate-time') ? 'active' : '' }}"><a href="{{url('admin/import-school-graduation-rate-time')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_graduation_rate_time')}}</a></li>
           <li class="{{ Request::is('admin/import-school-ROTC') ? 'active' : '' }}"><a href="{{url('admin/import-school-ROTC')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_ROTC')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-students-to-faculty') ? 'active' : '' }}"><a href="{{url('admin/import-school-students-to-faculty')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_students_to_faculty')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-study-abroad') ? 'active' : '' }}"><a href="{{url('admin/import-school-study-abroad')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_study_abroad')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-teacher-certification') ? 'active' : '' }}"><a href="{{url('admin/import-school-teacher-certification')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_teacher_certification')}}</a></li>
           <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>
         </ul>
       </li>

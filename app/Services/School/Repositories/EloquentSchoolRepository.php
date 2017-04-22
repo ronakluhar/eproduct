@@ -16,6 +16,10 @@ use App\SchoolApplyAcceptedDetail;
 use App\SchoolAwardLevelDetail;
 use App\SchoolGraduationRateTimeDetail;
 use App\SchoolROTCDetail;
+use App\SchoolStudentsToFacultyDetail;
+use App\SchoolStudyAbroadDetail;
+use App\SchoolTeacherCertificationDetail;
+use App\SchoolCompletion;
 
 class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolRepository {
 
@@ -208,5 +212,84 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         $this->objSchoolROTC = new SchoolROTCDetail();
         $school_ROTC = $this->objSchoolROTC->where([['UnitID', $unit_id]])->first();
         return $school_ROTC;
+    }
+
+    /**
+     * @return school_students_to_faculty_detail Object
+      Parameters
+      @$school_students_to_faculty_detail : school_students_to_faculty_detail
+    */
+    public function save_school_students_to_faculty_detail($school_students_to_faculty_detail) {
+        $school_students_to_faculty = $this->get_school_students_to_faculty_detail_by_unit_id($school_students_to_faculty_detail['UnitID']);
+       
+        $this->objSchoolStudentsToFaculty = new SchoolStudentsToFacultyDetail();
+        if (count($school_students_to_faculty) != null && count($school_students_to_faculty) > 0) {
+            $this->objSchoolStudentsToFaculty->where('UnitID', $school_students_to_faculty_detail['UnitID'])->update($school_students_to_faculty_detail);
+        } else {
+            $this->objSchoolStudentsToFaculty->create($school_students_to_faculty_detail);
+        }
+    }
+    
+    public function get_school_students_to_faculty_detail_by_unit_id($unit_id) {
+        $this->objSchoolStudentsToFaculty = new SchoolStudentsToFacultyDetail();
+        $school_students_to_faculty = $this->objSchoolStudentsToFaculty->where([['UnitID', $unit_id]])->first();
+        return $school_students_to_faculty;
+    }
+
+    /**
+     * @return school_study_abroad_detail Object
+      Parameters
+      @$school_study_abroad_detail : school_study_abroad_detail
+    */
+    public function save_school_study_abroad_detail($school_study_abroad_detail) {
+        $school_study_abroad = $this->get_school_study_abroad_detail_by_unit_id($school_study_abroad_detail['UnitID']);
+       
+        $this->objSchoolStudyAbroad = new SchoolStudyAbroadDetail();
+        if (count($school_study_abroad) != null && count($school_study_abroad) > 0) {
+            $this->objSchoolStudyAbroad->where('UnitID', $school_study_abroad_detail['UnitID'])->update($school_study_abroad_detail);
+        } else {
+            $this->objSchoolStudyAbroad->create($school_study_abroad_detail);
+        }
+    }
+    
+    public function get_school_study_abroad_detail_by_unit_id($unit_id) {
+        $this->objSchoolStudyAbroad = new SchoolStudyAbroadDetail();
+        $school_study_abroad = $this->objSchoolStudyAbroad->where([['UnitID', $unit_id]])->first();
+        return $school_study_abroad;
+    }
+
+    /**
+     * @return school_study_abroad_detail Object
+      Parameters
+      @$school_study_abroad_detail : school_study_abroad_detail
+    */
+    public function save_school_teacher_certification_detail($school_teacher_certification_detail) {
+        $school_teacher_certification = $this->get_school_teacher_certification_detail_by_unit_id($school_teacher_certification_detail['UnitID']);
+       
+        $this->objSchoolTeacherCertification = new SchoolTeacherCertificationDetail();
+        if (count($school_teacher_certification) != null && count($school_teacher_certification) > 0) {
+            $this->objSchoolTeacherCertification->where('UnitID', $school_teacher_certification_detail['UnitID'])->update($school_teacher_certification_detail);
+        } else {
+            $this->objSchoolTeacherCertification->create($school_teacher_certification_detail);
+        }
+    }
+    
+    public function get_school_teacher_certification_detail_by_unit_id($unit_id) {
+        $this->objSchoolTeacherCertification = new SchoolTeacherCertificationDetail();
+        $school_study_abroad = $this->objSchoolTeacherCertification->where([['UnitID', $unit_id]])->first();
+        return $school_study_abroad;
+    }
+    
+    //School Completions import 
+    public function saveSchoolCompletions($schoolCompletionsDetail) 
+    {        
+        $schoolCompletion = SchoolCompletion::where('UnitID',$schoolCompletionsDetail['UnitID'])->first();
+       
+        if (count($schoolCompletion) != null && count($schoolCompletion) > 0) {
+            SchoolCompletion::where('UnitID', $schoolCompletionsDetail['UnitID'])->update($schoolCompletionsDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolCompletion::create($schoolCompletionsDetail);
+        }
     }
 }

@@ -297,4 +297,130 @@ class SchoolController extends Controller {
             }
         }
     }
+
+    public function import_students_to_faculty_CSV() {
+        return view('admin.import-school-students-to-faculty');
+    }
+
+    public function save_school_students_to_faculty() {
+        
+        if (Input::hasFile('school_students_to_faculty')) {
+            $file_data = Input::file('school_students_to_faculty');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_students_to_faculty = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_students_to_faculty)) {
+                    foreach ($school_students_to_faculty as $key => $_school_students_to_faculty) {
+                        
+                        $insert_data['UnitID'] = $_school_students_to_faculty['UnitID'];
+                        $insert_data['Full_time_retention_rate'] = $_school_students_to_faculty['Full-time retention rate 2015'];
+                        $insert_data['Total_students_undergraduate_fall'] = $_school_students_to_faculty['Total entering students at undergraduate level fall 2015'];
+                        $insert_data['Student_to_faculty_ratio'] = $_school_students_to_faculty['Student-to-faculty ratio'];
+                        $this->schoolRepository->save_school_students_to_faculty_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-students-to-faculty')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
+
+    public function import_study_abroad_CSV() {
+        return view('admin.import-school-study-abroad');
+    }
+
+    public function save_school_study_abroad() {
+        
+        if (Input::hasFile('school_study_abroad')) {
+            $file_data = Input::file('school_study_abroad');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 1000);
+                
+                $school_study_abroad = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_study_abroad)) {
+                    foreach ($school_study_abroad as $key => $_school_study_abroad) {
+                        
+                        $insert_data['UnitID'] = $_school_study_abroad['UnitID'];
+                        $insert_data['Study_abroad'] = $_school_study_abroad['Study abroad'];
+                        $insert_data['Weekend_college'] = $_school_study_abroad['Weekend/evening  college'];
+                        $this->schoolRepository->save_school_study_abroad_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-study-abroad')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
+
+    public function import_teacher_certification_CSV() {
+        return view('admin.import-school-teacher-certification');
+    }
+
+    public function save_school_teacher_certification() {
+        
+        if (Input::hasFile('school_teacher_certification')) {
+            $file_data = Input::file('school_teacher_certification');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_teacher_certification = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_teacher_certification)) {
+                    foreach ($school_teacher_certification as $key => $_school_teacher_certification) {
+                        
+                        $insert_data['UnitID'] = $_school_teacher_certification['UnitID'];
+                        $insert_data['Below_postsecondary_level'] = $_school_teacher_certification['TC (below the postsecondary level)'];
+                        $insert_data['Students_can_complete_areas_of_specialization'] = $_school_teacher_certification['TC: Students complete preparation in areas of special'];
+                        $insert_data['Students_must_complete_pre_at_another_inst_areas_of_spe'] = $_school_teacher_certification['TC: Students complete at another institution for  special'];
+                        $insert_data['Approved_by_the_state_initial_certifcation'] = $_school_teacher_certification['TC: Approved by state for initial cert or lic of teachers'];
+                        $this->schoolRepository->save_school_teacher_certification_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-teacher-certification')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
 }

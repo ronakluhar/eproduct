@@ -74,7 +74,6 @@ Class Helpers {
         $header = NULL;
         $data = array();
         if (($handle = fopen($filename, 'r')) !== FALSE) {
-            
             while (($row = fgetcsv($handle, 0, $delimiter)) !== FALSE) {
                 
                 // Trim white spaces of array values

@@ -93,3 +93,10 @@ Route::post('admin/save-school-ROTC', 'Admin\SchoolController@save_school_ROTC')
 
 Route::get('admin/importSchoolCompletion', 'Admin\SchoolDetailController@importSchoolCompletion');
 Route::post('admin/saveSchoolCompletion', 'Admin\SchoolDetailController@saveSchoolCompletion');
+
+Route::get('admin/import-school-students-to-faculty', 'Admin\SchoolController@import_students_to_faculty_CSV');
+Route::post('admin/save-school-students-to-faculty', 'Admin\SchoolController@save_school_students_to_faculty');
+Route::get('admin/import-school-study-abroad', 'Admin\SchoolController@import_study_abroad_CSV');
+Route::post('admin/save-school-study-abroad', 'Admin\SchoolController@save_school_study_abroad');
+Route::get('admin/import-school-teacher-certification', 'Admin\SchoolController@import_teacher_certification_CSV');
+Route::post('admin/save-school-teacher-certification', 'Admin\SchoolController@save_school_teacher_certification');
