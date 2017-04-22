@@ -69,7 +69,7 @@ Class Helpers {
 
     public static function csv_to_array($filename = '', $delimiter = ',') {
         if (!file_exists($filename) || !is_readable($filename))
-            return FALSE;
+        return FALSE;
 
         $header = NULL;
         $data = array();
@@ -83,7 +83,9 @@ Class Helpers {
                 } else {
                     $data[] = array_combine($header, $trimmed_row);
                 }
+               
             }
+           
             fclose($handle);
         }
         return $data;
@@ -104,25 +106,20 @@ Class Helpers {
 
         // store all the occurences of each delimiter in an associative array
         $number_of_delimiter_occurences = array();
-
         $results = array();
 
         $i = 0; // using 'i' for counting the number of actual row parsed
         while ($file->valid() && $i <= $checkLines) {
 
             $line = $file->fgets();
-
             foreach ($delimiters as $idx => $delimiter){
-
                 $regExp = '/['.$delimiter.']/';
                 $fields = preg_split($regExp, $line);
 
                 // construct the array with all the keys as the delimiters
                 // and the values as the number of delimiter occurences
                 $number_of_delimiter_occurences[$delimiter] = count($fields);
-
             }
-
            $i++;
         }
 

@@ -75,6 +75,13 @@ Route::get('admin/delete-cms-template/{id}', 'Admin\CMSManagementController@dele
 Route::get('admin/list-school', 'Admin\SchoolController@index');
 Route::get('admin/importSchoolQuickFact', 'Admin\SchoolController@importCSV');
 Route::post('admin/saveSchoolQuickFact', 'Admin\SchoolController@saveSchoolQuickFact');
+
+Route::get('admin/importSchoolFaculty', 'Admin\SchoolDetailController@importSchoolFaculty');
+Route::post('admin/saveSchoolFaculty', 'Admin\SchoolDetailController@saveSchoolFaculty');
+
+Route::get('admin/importSchoolLibrary', 'Admin\SchoolDetailController@importSchoolLibrary');
+Route::post('admin/saveSchoolLibrary', 'Admin\SchoolDetailController@saveSchoolLibrary');
+
 Route::get('admin/import-school-apply-accepted', 'Admin\SchoolController@import_apply_accepted_CSV');
 Route::post('admin/save-school-apply-accepted', 'Admin\SchoolController@save_school_apply_accepted');
 Route::get('admin/import-school-award-level', 'Admin\SchoolController@import_award_level_CSV');
@@ -83,12 +90,24 @@ Route::get('admin/import-school-graduation-rate-time', 'Admin\SchoolController@i
 Route::post('admin/save-school-graduation-rate-time', 'Admin\SchoolController@save_school_graduation_rate_time');
 Route::get('admin/import-school-ROTC', 'Admin\SchoolController@import_ROTC_CSV');
 Route::post('admin/save-school-ROTC', 'Admin\SchoolController@save_school_ROTC');
+
+Route::get('admin/importSchoolCompletion', 'Admin\SchoolDetailController@importSchoolCompletion');
+Route::post('admin/saveSchoolCompletion', 'Admin\SchoolDetailController@saveSchoolCompletion');
+
 Route::get('admin/import-school-students-to-faculty', 'Admin\SchoolController@import_students_to_faculty_CSV');
 Route::post('admin/save-school-students-to-faculty', 'Admin\SchoolController@save_school_students_to_faculty');
 Route::get('admin/import-school-study-abroad', 'Admin\SchoolController@import_study_abroad_CSV');
 Route::post('admin/save-school-study-abroad', 'Admin\SchoolController@save_school_study_abroad');
 Route::get('admin/import-school-teacher-certification', 'Admin\SchoolController@import_teacher_certification_CSV');
 Route::post('admin/save-school-teacher-certification', 'Admin\SchoolController@save_school_teacher_certification');
+
+
+Route::get('admin/importSchoolDiversity', 'Admin\SchoolDetailController@importSchoolDiversity');
+Route::post('admin/saveSchoolDiversity', 'Admin\SchoolDetailController@saveSchoolDiversity');
+
+Route::get('admin/importSchoolEndowment', 'Admin\SchoolDetailController@importSchoolEndowment');
+Route::post('admin/saveSchoolEndowment', 'Admin\SchoolDetailController@saveSchoolEndowment');
+
 Route::get('admin/import-school-field-of-study', 'Admin\SchoolController@import_field_of_study_CSV');
 Route::post('admin/save-school-field-of-study', 'Admin\SchoolController@save_school_field_of_study');
 Route::get('admin/import-school-financial-aid', 'Admin\SchoolController@import_financial_aid_CSV');

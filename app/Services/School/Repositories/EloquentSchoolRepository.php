@@ -10,6 +10,8 @@ use App\Services\School\Contracts\SchoolRepository;
 use App\Services\Repositories\Eloquent\EloquentBaseRepository;
 use App\Services\School\Entities\School;
 use App\Admin;
+use App\SchoolFaculty;
+use App\SchoolLibrary;
 use App\SchoolApplyAcceptedDetail;
 use App\SchoolAwardLevelDetail;
 use App\SchoolGraduationRateTimeDetail;
@@ -17,6 +19,9 @@ use App\SchoolROTCDetail;
 use App\SchoolStudentsToFacultyDetail;
 use App\SchoolStudyAbroadDetail;
 use App\SchoolTeacherCertificationDetail;
+use App\SchoolCompletion;
+use App\SchoolDiversity;
+use App\SchoolEndowment;
 use App\SchoolFieldOfStudyDetail;
 use App\SchoolFinancialAidDetail;
 use App\SchoolNetPriceInStateDetail;
@@ -102,12 +107,39 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         return $school;
     }
     
+    //School Faculty import 
+    public function saveSchoolFaculty($schoolFacultyDetail) 
+    {        
+        $schoolFaculty = SchoolFaculty::where('UnitID',$schoolFacultyDetail['UnitID'])->first();
+       
+        if (count($schoolFaculty) != null && count($schoolFaculty) > 0) {
+            SchoolFaculty::where('UnitID', $schoolFacultyDetail['UnitID'])->update($schoolFacultyDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolFaculty::create($schoolFacultyDetail);
+        }
+        
+    }
+    
+    //School LIbrary import 
+    public function saveSchoolLibrary($schoolLibraryDetail) 
+    {        
+        $schoolLibrary = SchoolLibrary::where('UnitID',$schoolLibraryDetail['UnitID'])->first();
+       
+        if (count($schoolLibrary) != null && count($schoolLibrary) > 0) {
+            SchoolLibrary::where('UnitID', $schoolLibraryDetail['UnitID'])->update($schoolLibraryDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolLibrary::create($schoolLibraryDetail);
+        }
+    }    
     /**
      * @return school_apply_accepted_detail Object
       Parameters
       @$schoolApplyAcceptedDetail : schoolApplyAcceptedDetail
     */
-    public function save_school_apply_accepted_detail($school_apply_accepted_detail) {
+    public function save_school_apply_accepted_detail($school_apply_accepted_detail)
+    {
         $school_apply_accepted = $this->get_school_apply_accepted_detail_by_unit_id($school_apply_accepted_detail['UnitID']);
        
         $this->objSchoolApplyAccepted = new SchoolApplyAcceptedDetail();
@@ -255,7 +287,46 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         $school_study_abroad = $this->objSchoolTeacherCertification->where([['UnitID', $unit_id]])->first();
         return $school_study_abroad;
     }
-
+    
+    //School Completions import 
+    public function saveSchoolCompletions($schoolCompletionsDetail) 
+    {        
+        $schoolCompletion = SchoolCompletion::where('UnitID',$schoolCompletionsDetail['UnitID'])->first();
+       
+        if (count($schoolCompletion) != null && count($schoolCompletion) > 0) {
+            SchoolCompletion::where('UnitID', $schoolCompletionsDetail['UnitID'])->update($schoolCompletionsDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolCompletion::create($schoolCompletionsDetail);
+        }
+    }
+    
+    //School Diversity import 
+    public function saveSchoolDiversity($schoolDiversityDetail) 
+    {        
+        $schoolDiversity = SchoolDiversity::where('UnitID',$schoolDiversityDetail['UnitID'])->first();
+       
+        if (count($schoolDiversity) != null && count($schoolDiversity) > 0) {
+            SchoolDiversity::where('UnitID', $schoolDiversityDetail['UnitID'])->update($schoolDiversityDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolDiversity::create($schoolDiversityDetail);
+        }
+    }
+    
+    //School Diversity import 
+    public function saveSchoolEndowment($schoolEndowmentDetail) 
+    {        
+        $schoolEndowment = SchoolEndowment::where('UnitID',$schoolEndowmentDetail['UnitID'])->first();
+       
+        if (count($schoolEndowment) != null && count($schoolEndowment) > 0) {
+            SchoolEndowment::where('UnitID', $schoolEndowmentDetail['UnitID'])->update($schoolEndowmentDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolEndowment::create($schoolEndowmentDetail);
+        }
+    }
+    
     /**
      * @return school_field_of_study_detail Object
       Parameters
