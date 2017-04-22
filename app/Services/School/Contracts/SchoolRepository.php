@@ -58,4 +58,25 @@ interface SchoolRepository extends BaseRepository
     public function save_school_ROTC_detail($school_ROTC_detail);
     
     public function get_school_ROTC_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Students To Faculty detail passed in $school_students_to_faculty_detail array
+    */
+    public function save_school_students_to_faculty_detail($school_students_to_faculty_detail);
+    
+    public function get_school_students_to_faculty_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Study Abroad detail passed in $school_study_abroad_detail array
+    */
+    public function save_school_study_abroad_detail($school_study_abroad_detail);
+    
+    public function get_school_study_abroad_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Teacher Certification detail passed in $school_teacher_certification_detail array
+    */
+    public function save_school_teacher_certification_detail($school_teacher_certification_detail);
+    
+    public function get_school_teacher_certification_detail_by_unit_id($unit_id);
 }

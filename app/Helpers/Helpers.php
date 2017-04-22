@@ -74,8 +74,8 @@ Class Helpers {
         $header = NULL;
         $data = array();
         if (($handle = fopen($filename, 'r')) !== FALSE) {
-            while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE) {
-
+            while (($row = fgetcsv($handle, 0, $delimiter)) !== FALSE) {
+                
                 // Trim white spaces of array values
                 $trimmed_row = array_map('trim', $row);
                 if (!$header) {
@@ -129,7 +129,6 @@ Class Helpers {
         // get key of the largest value from the array (comapring only the array values)
         // in our case, the array keys are the delimiters
         $results = array_keys($number_of_delimiter_occurences, max($number_of_delimiter_occurences));
-
 
         // in case the delimiter happens to be a 'tab' character ('\t'), return it in double quotes
         // otherwise when using as delimiter it will give an error,

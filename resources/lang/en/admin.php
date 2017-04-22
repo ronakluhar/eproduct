@@ -155,4 +155,16 @@ return [
     // Import School ROTC Detail Labels
     'lbl_school_ROTC' => 'Import School ROTC',
     'school_ROTC' => 'School ROTC',
+
+    // Import School Students To Faculty Detail Labels
+    'lbl_school_students_to_faculty' => 'Import School Students To Faculty',
+    'school_students_to_faculty' => 'School Students To Faculty',
+
+    // Import School Study Abroad Detail Labels
+    'lbl_school_study_abroad' => 'Import School Study Abroad',
+    'school_study_abroad' => 'School Study Abroad',
+
+    // Import School Teacher Certification Detail Labels
+    'lbl_school_teacher_certification' => 'Import School Teacher Certification',
+    'school_teacher_certification' => 'School Teacher Certification',
  ];

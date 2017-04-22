@@ -83,3 +83,9 @@ Route::get('admin/import-school-graduation-rate-time', 'Admin\SchoolController@i
 Route::post('admin/save-school-graduation-rate-time', 'Admin\SchoolController@save_school_graduation_rate_time');
 Route::get('admin/import-school-ROTC', 'Admin\SchoolController@import_ROTC_CSV');
 Route::post('admin/save-school-ROTC', 'Admin\SchoolController@save_school_ROTC');
+Route::get('admin/import-school-students-to-faculty', 'Admin\SchoolController@import_students_to_faculty_CSV');
+Route::post('admin/save-school-students-to-faculty', 'Admin\SchoolController@save_school_students_to_faculty');
+Route::get('admin/import-school-study-abroad', 'Admin\SchoolController@import_study_abroad_CSV');
+Route::post('admin/save-school-study-abroad', 'Admin\SchoolController@save_school_study_abroad');
+Route::get('admin/import-school-teacher-certification', 'Admin\SchoolController@import_teacher_certification_CSV');
+Route::post('admin/save-school-teacher-certification', 'Admin\SchoolController@save_school_teacher_certification');
