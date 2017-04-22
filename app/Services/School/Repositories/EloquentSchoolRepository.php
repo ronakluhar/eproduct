@@ -20,6 +20,8 @@ use App\SchoolStudentsToFacultyDetail;
 use App\SchoolStudyAbroadDetail;
 use App\SchoolTeacherCertificationDetail;
 use App\SchoolCompletion;
+use App\SchoolDiversity;
+use App\SchoolEndowment;
 
 class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolRepository {
 
@@ -292,4 +294,32 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             SchoolCompletion::create($schoolCompletionsDetail);
         }
     }
+    
+    //School Diversity import 
+    public function saveSchoolDiversity($schoolDiversityDetail) 
+    {        
+        $schoolDiversity = SchoolDiversity::where('UnitID',$schoolDiversityDetail['UnitID'])->first();
+       
+        if (count($schoolDiversity) != null && count($schoolDiversity) > 0) {
+            SchoolDiversity::where('UnitID', $schoolDiversityDetail['UnitID'])->update($schoolDiversityDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolDiversity::create($schoolDiversityDetail);
+        }
+    }
+    
+    //School Diversity import 
+    public function saveSchoolEndowment($schoolEndowmentDetail) 
+    {        
+        $schoolEndowment = SchoolEndowment::where('UnitID',$schoolEndowmentDetail['UnitID'])->first();
+       
+        if (count($schoolEndowment) != null && count($schoolEndowment) > 0) {
+            SchoolEndowment::where('UnitID', $schoolEndowmentDetail['UnitID'])->update($schoolEndowmentDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolEndowment::create($schoolEndowmentDetail);
+        }
+    }
+    
+    
 }

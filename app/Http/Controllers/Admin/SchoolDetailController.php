@@ -204,4 +204,118 @@ class SchoolDetailController extends Controller
             }            
         }
     }
+    
+    public function importSchoolDiversity()
+    {
+        return view('admin.importSchoolDiversity');
+    }
+    
+    public function saveSchoolDiversity()
+    {
+        if (Input::hasFile('schoolDiversity')) 
+        {
+            $fileData = Input::file('schoolDiversity');
+            $extension = $fileData->getClientOriginalExtension();                        
+            if($extension == 'csv')
+            {
+                $name = time().'-'.$fileData->getClientOriginalName();
+                // Moves file to folder on server
+                $fileData->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/'.$name);
+                
+                $delimiter = Helpers::get_file_delimiter($path, 10);                
+                $schoolDiversity = Helpers::csv_to_array($path, $delimiter);
+                
+                $insertData = array();
+                if (!empty($schoolDiversity)) {
+                    foreach($schoolDiversity as $key => $value) {   
+                        $insertData['UnitID'] = $value['UnitID'];
+                        $insertData['Grand_total'] = $value['Grand total'];
+                        $insertData['Grand_total_men'] = $value['Grand total men'];
+                        $insertData['Grand_total_women'] = $value['Grand total women'];
+                        $insertData['American_Indian_or_Alaska_Native_total'] = $value['American Indian or Alaska Native total'];
+                        $insertData['American_Indian_or_Alaska_Native_men'] = $value['American Indian or Alaska Native men'];
+                        $insertData['American_Indian_or_Alaska_Native_women'] = $value['American Indian or Alaska Native women'];
+                        $insertData['Asian_total'] = $value['Asian total'];
+                        $insertData['Asian_men'] = $value['Asian men'];
+                        $insertData['Asian_women'] = $value['Asian women'];
+                        $insertData['Black_or_African_American_total'] = $value['Black or African American total'];
+                        $insertData['Black_or_African_American_men'] = $value['Black or African American men'];
+                        $insertData['Black_or_African_American_women'] = $value['Black or African American women'];
+                        $insertData['Hispanic_total'] = $value['Hispanic total'];
+                        $insertData['Hispanic_men'] = $value['Hispanic men'];
+                        $insertData['Hispanic_women'] = $value['Hispanic women'];
+                        $insertData['Native_Hawaiian_or_Other_Pacific_Islander_total'] = $value['Native Hawaiian or Other Pacific Islander total'];
+                        $insertData['Native_Hawaiian_or_Other_Pacific_Islander_men'] = $value['Native Hawaiian or Other Pacific Islander men'];
+                        $insertData['Native_Hawaiian_or_Other_Pacific_Islander_women'] = $value['Native Hawaiian or Other Pacific Islander women'];
+                        $insertData['White_total'] = $value['White total'];
+                        $insertData['White_men'] = $value['White men'];
+                        $insertData['White_women'] = $value['White women'];
+                        $insertData['Two_or_more_races_total'] = $value['Two or more races total'];
+                        $insertData['Two_or_more_races_men'] = $value['Two or more races men'];
+                        $insertData['Two_or_more_races_women'] = $value['Two or more races women'];
+                        $insertData['Race_ethnicity_unknown_total'] = $value['Race/ethnicity unknown total'];
+                        $insertData['Race_ethnicity_unknown_men'] = $value['Race/ethnicity unknown men'];
+                        $insertData['Race_ethnicity_unknown_women'] = $value['Race/ethnicity unknown women'];
+                        $insertData['Nonresident_alien_total'] = $value['Nonresident alien total'];
+                        $insertData['Nonresident_alien_men'] = $value['Nonresident alien men'];
+                        $insertData['Nonresident_alien_women'] = $value['Nonresident alien women'];
+                        $this->schoolRepository->saveSchoolDiversity($insertData);
+                    }
+                } 
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', 'School Diversity data imported successfully');
+                exit;
+            }
+            else
+            {
+                return Redirect::to('admin/importSchoolQuickFact')->with('error', 'Invalid file extension');
+                exit;
+            }            
+        }
+    }
+    
+    public function importSchoolEndowment()
+    {
+        return view('admin.importSchoolEndowment');
+    }
+    
+    public function saveSchoolEndowment()
+    {
+        if (Input::hasFile('schoolEndowment')) 
+        {
+            $fileData = Input::file('schoolEndowment');
+            $extension = $fileData->getClientOriginalExtension();                        
+            if($extension == 'csv')
+            {
+                $name = time().'-'.$fileData->getClientOriginalName();
+                // Moves file to folder on server
+                $fileData->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/'.$name);
+                
+                $delimiter = Helpers::get_file_delimiter($path, 10);                
+                $schoolEndowment = Helpers::csv_to_array($path, $delimiter);
+                
+                $insertData = array();
+                if (!empty($schoolEndowment)) {
+                    foreach($schoolEndowment as $key => $value) {   
+                        $insertData['UnitID'] = $value['UnitID'];
+                        $insertData['Value_endowment_assets_at_beginning_of_fiscal_year_F2'] = $value['Value of endowment assets at the beginning of the fiscal year (F1415_F2)'];
+                        $insertData['Value_endowment_assets_at_end_of_fiscal_year_F2'] = $value['Value of endowment assets at the end of the fiscal year (F1415_F2)'];
+                        $insertData['Value_endowment_assets_at_beginning_of_fiscal_year_F1A'] = $value['Value of endowment assets at the beginning of the fiscal year (F1415_F1A)'];
+                        $insertData['Value_endowment_assets_at_end_of_fiscal_year_F1A'] = $value['Value of endowment assets at the end of the fiscal year (F1415_F1A)'];                
+                        $this->schoolRepository->saveSchoolEndowment($insertData);
+                    }
+                } 
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', 'School Endowment data imported successfully');
+                exit;
+            }
+            else
+            {
+                return Redirect::to('admin/importSchoolQuickFact')->with('error', 'Invalid file extension');
+                exit;
+            }            
+        }
+    }
 }
