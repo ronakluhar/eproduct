@@ -423,4 +423,313 @@ class SchoolController extends Controller {
             }
         }
     }
+
+    public function import_field_of_study_CSV() {
+        return view('admin.import-school-field-of-study');
+    }
+
+    public function save_school_field_of_study() {
+        
+        if (Input::hasFile('school_field_of_study')) {
+            $file_data = Input::file('school_field_of_study');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_field_of_study = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_field_of_study)) {
+                    foreach ($school_field_of_study as $key => $_school_field_of_study) {
+                        
+                        $insert_data['UnitID'] = $_school_field_of_study['UnitID'];
+                        $insert_data['Education_All_Students_Total'] = $_school_field_of_study['Education  All Students Total'];
+                        $insert_data['Education_Undergraduate_Total'] = $_school_field_of_study['Education  Undergraduate Total'];
+                        $insert_data['Education_Graduate'] = $_school_field_of_study['Education  Graduate'];
+                        $insert_data['Engineering_All_Students_Total'] = $_school_field_of_study['Engineering  All Students Total'];
+                        $insert_data['Engineering_Undergraduate_Total'] = $_school_field_of_study['Engineering  Undergraduate Total'];
+                        $insert_data['Engineering_Graduate'] = $_school_field_of_study['Engineering  Graduate'];
+                        $insert_data['Biological_Sciences_Sciences_All_Students_Total'] = $_school_field_of_study['Biological Sciences/Life Sciences  All Students Total'];
+                        $insert_data['Biological_Sciences_Sciences_Undergraduate_Total'] = $_school_field_of_study['Biological Sciences/Life Sciences  Undergraduate Total'];
+                        $insert_data['Biological_Sciences_Sciences_Graduate'] = $_school_field_of_study['Biological Sciences/Life Sciences  Graduate'];
+                        $insert_data['Mathematics_All_Students_Total'] = $_school_field_of_study['Mathematics  All Students Total'];
+                        $insert_data['Mathematics_Undergraduate_Total'] = $_school_field_of_study['Mathematics  Undergraduate Total'];
+                        $insert_data['Mathematics_Graduate'] = $_school_field_of_study['Mathematics  Graduate'];
+                        $insert_data['Physical_Sciences_All_Students_Total'] = $_school_field_of_study['Physical Sciences  All Students Total'];
+                        $insert_data['Physical_Sciences_Undergraduate_Total'] = $_school_field_of_study['Physical Sciences  Undergraduate Total'];
+                        $insert_data['Physical_Sciences_Graduate'] = $_school_field_of_study['Physical Sciences  Graduate'];
+                        $insert_data['Business_Mgmt_and_Administrative_Services_All_Students_Total'] = $_school_field_of_study['Business Management and Administrative Services  All Students Total'];
+                        $insert_data['Business_Mgmt_and_Administrative_Services_Undergraduate_Total'] = $_school_field_of_study['Business Management and Administrative Services  Undergraduate Total'];
+                        $insert_data['Business_Mgmt_and_Administrative_Services_Graduate'] = $_school_field_of_study['Business Management and Administrative Services  Graduate'];
+                        $insert_data['Law_(LLB_J.D.)_All_Students'] = $_school_field_of_study['Law (LL. B.  J.D.)  All Students'];
+                        $insert_data['Law_(LLB_J.D.)_Full_time'] = $_school_field_of_study['Law (LL. B.  J.D.)  Full time'];
+                        $insert_data['Law_(LLB_J.D.)_Part_time'] = $_school_field_of_study['Law (LL. B.  J.D.)  Part time'];
+                        $insert_data['Dentistry_(D.D.S_D.M.D)_All_Students'] = $_school_field_of_study['Dentistry (D.D.S.  D.M.D)  All Students'];
+                        $insert_data['Dentistry_(D.D.S_D.M.D)_Full_time'] = $_school_field_of_study['Dentistry (D.D.S.  D.M.D)  Full time'];
+                        $insert_data['Dentistry_(D.D.S_D.M.D)_Part_time'] = $_school_field_of_study['Dentistry (D.D.S.  D.M.D)  Part time'];
+                        $insert_data['Medicine_(M.D)_All_Students'] = $_school_field_of_study['Medicine (M.D)  All Students'];
+                        $insert_data['Medicine_(M.D)_Full_time'] = $_school_field_of_study['Medicine (M.D)  Full time'];
+                        $insert_data['Medicine_(M.D)_Part_time'] = $_school_field_of_study['Medicine (M.D)  Part time'];
+                        
+                        $this->schoolRepository->save_school_field_of_study_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-field-of-study')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
+
+    public function import_financial_aid_CSV() {
+        return view('admin.import-school-financial-aid');
+    }
+
+    public function save_school_financial_aid() {
+        
+        if (Input::hasFile('school_financial_aid')) {
+            $file_data = Input::file('school_financial_aid');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_financial_aid = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_financial_aid)) {
+                    foreach ($school_financial_aid as $key => $_school_financial_aid) {
+                        
+                        $insert_data['UnitID'] = $_school_financial_aid['UnitID'];
+                        $insert_data['Total_FTFTU_financial_aid_cohort'] = $_school_financial_aid['Total FTFTU - financial aid cohort'];
+                        $insert_data['Percent_of_FTFTU_awarded_financial_aid'] = $_school_financial_aid['Percent of FTFTU awarded financial aid'];
+                        $insert_data['Percent_awarded_loans/grants_from_fed/state/local/school'] = $_school_financial_aid['Percent awarded loans/grants from fed/state/local/school'];
+                        $insert_data['Percent_FTFTU_awarded_fed/state/local/school_Aid'] = $_school_financial_aid['Percent FTFTU awarded fed/state/local/school Aid'];
+                        $insert_data['Average_amount_fed/state/local_or_IntAid_awarded'] = $_school_financial_aid['Average amount fed/state/local or Int-Aid awarded'];
+                        $insert_data['Percent_FTFTU_awarded_fed_grant_aid'] = $_school_financial_aid['Percent FTFTU awarded fed grant aid'];
+                        $insert_data['Average_amount_fed_grant_aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount fed grant aid awarded to FTFTU'];
+                        $insert_data['Percent_FTFTU_awarded_Pell_grants'] = $_school_financial_aid['Percent FTFTU awarded Pell grants'];
+                        $insert_data['Average_amount_of_Pell_grant_aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of Pell grant aid awarded to FTFTU'];
+                        $insert_data['Percent_FTFTU_awarded_other_fed_grant_aid'] = $_school_financial_aid['Percent FTFTU awarded other fed grant aid'];
+                        $insert_data['Average_amount_of_other_fed_grant_aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of other fed grant aid awarded to FTFTU'];
+                        $insert_data['Percent_of_FTFTU_awarded_state'] = $_school_financial_aid['Percent of FTFTU awarded state/local grant aid'];
+                        $insert_data['Average_amount_state/local_grant_aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount state/local grant aid awarded to FTFTU'];
+                        $insert_data['Percent_of_FTFTU_awarded_Int_Aid'] = $_school_financial_aid['Percent of FTFTU awarded Int-Aid'];
+                        $insert_data['Average_amount_of_Int_Aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of Int-Aid awarded to FTFTU'];
+                        $insert_data['Percent_of_FTFTU_awarded_student_loans'] = $_school_financial_aid['Percent of FTFTU awarded student loans'];
+                        $insert_data['Average_amount_of_student_loans_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of student loans awarded to FTFTU'];
+                        $insert_data['Percent_of_FTFTU_awarded_fed_student_loans'] = $_school_financial_aid['Percent of FTFTU awarded fed student loans'];
+                        $insert_data['Average_amount_of_fed_student_loans_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of fed student loans awarded to FTFTU'];
+                        $insert_data['Percent_of_FTFTU_awarded_other_student_loans'] = $_school_financial_aid['Percent of FTFTU awarded other student loans'];
+                        $insert_data['Average_amount_of_other_student_loans_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of other student loans awarded to FTFTU'];
+                        $insert_data['Total_financial_aid_cohort'] = $_school_financial_aid['Total - financial aid cohort'];
+                        $insert_data['Percent_awarded_fed/state/local/institutional_or_other_aid'] = $_school_financial_aid['Percent awarded fed/state/local/institutional or other aid'];
+                        $insert_data['Average_fed/state/local/institutional_aid_awarded_to_ug_students'] = $_school_financial_aid['Average fed/state/local/institutional aid awarded to undergraduate students'];
+                        $insert_data['Percent_of_undergraduate_students_awarded_Pell_grants'] = $_school_financial_aid['Percent of undergraduate students awarded Pell grants'];
+                        $insert_data['Average_amount_Pell_grant_aid_awarded'] = $_school_financial_aid['Average amount Pell grant aid awarded'];
+                        $insert_data['Percent_awarded_fed_student_loans'] = $_school_financial_aid['Percent awarded fed student loans'];
+                        $insert_data['Average_fed_student_loans_awarded'] = $_school_financial_aid['Average fed student loans awarded'];
+                        
+                        $this->schoolRepository->save_school_financial_aid_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-financial-aid')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
+
+    public function import_net_price_in_state_CSV() {
+        return view('admin.import-school-net-price-in-state');
+    }
+
+    public function save_school_net_price_in_state() {
+        
+        if (Input::hasFile('school_net_price_in_state')) {
+            $file_data = Input::file('school_net_price_in_state');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_net_price_in_state = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_net_price_in_state)) {
+                    foreach ($school_net_price_in_state as $key => $_school_net_price_in_state) {
+                        
+                        $insert_data['UnitID'] = $_school_net_price_in_state['UnitID'];
+                        $insert_data['ANP_awarded_grant_or_scholarship_aid_2014_15'] = $_school_net_price_in_state['ANP awarded grant or scholarship aid 2014-15'];
+                        $insert_data['ANP_awarded_grant_or_scholarship_aid_2013_14'] = $_school_net_price_in_state['ANP awarded grant or scholarship aid 2013-14'];
+                        $insert_data['ANP_awarded_grant_or_scholarship_aid_2012_13'] = $_school_net_price_in_state['ANP awarded grant or scholarship aid 2012-13'];
+                        $insert_data['ANP(0-30000)_ST_AWR_TIV_FFA2014_15'] = $_school_net_price_in_state['ANP(0-30000) ST-AWR TIV FFA2014-15'];
+                        $insert_data['ANP(30001-48000)_ST_AWR_TIV_FFA_2014_15'] = $_school_net_price_in_state['ANP(30001-48000) ST-AWR TIV FFA 2014-15'];
+                        $insert_data['ANP(48001-75000)_ST_AWR_TIV_FFA_2014_15'] = $_school_net_price_in_state['ANP(48001-75000) ST-AWR TIV FFA 2014-15'];
+                        $insert_data['ANP(75001-110000)_ST_AWR_TIV_FFA_2014_15'] = $_school_net_price_in_state['ANP(75001-110000) ST-AWR TIV FFA 2014-15'];
+                        $insert_data['ANP(over_110000)_ST_AWR_TIV_FFA_2014_15'] = $_school_net_price_in_state['ANP(over 110000) ST-AWR TIV FFA 2014-15'];
+                        $insert_data['ANP(0-30000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_in_state['ANP(0-30000) ST-AWR TIV FFA 2013-14'];
+                        $insert_data['ANP(30001-48000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_in_state['ANP(30001-48000) ST-AWR TIV FFA 2013-14'];
+                        $insert_data['ANP(48001-75000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_in_state['ANP(48001-75000) ST-AWR TIV FFA 2013-14'];
+                        $insert_data['ANP(75001-110000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_in_state['ANP(75001-110000) ST-AWR TIV FFA 2013-14'];
+                        $insert_data['ANP(over_110000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_in_state['ANP(over 110000) ST-AWR TIV FFA 2013-14'];
+                        $insert_data['ANP(0-30000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_in_state['ANP(0-30000) ST-AWR TIV FFA 2012-13'];
+                        $insert_data['ANP(30001-48000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_in_state['ANP(30001-48000) ST-AWR TIV FFA 2012-13'];
+                        $insert_data['ANP(48001-75000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_in_state['ANP(48001-75000) ST-AWR TIV FFA 2012-13'];
+                        $insert_data['ANP(75001-110000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_in_state['ANP(75001-110000) ST-AWR TIV FFA 2012-13'];
+                        $insert_data['ANP(over_110000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_in_state['ANP(over 110000) ST-AWR TIV FFA 2012-13'];
+                        
+                        $this->schoolRepository->save_school_net_price_in_state_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-net-price-in-state')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
+
+    public function import_net_price_out_state_CSV() {
+        return view('admin.import-school-net-price-out-state');
+    }
+
+    public function save_school_net_price_out_state() {
+        
+        if (Input::hasFile('school_net_price_out_state')) {
+            $file_data = Input::file('school_net_price_out_state');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_net_price_out_state = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_net_price_out_state)) {
+                    foreach ($school_net_price_out_state as $key => $_school_net_price_out_state) {
+                        
+                        $insert_data['UnitID'] = $_school_net_price_out_state['UnitID'];
+                        $insert_data['ANP_ST_AWR_grant_or_scholarship_aid_2014_15'] = $_school_net_price_out_state['ANP ST-AWR grant or scholarship aid  2014-15'];
+                        $insert_data['ANP_ST_AWR_grant_or_scholarship_aid_2013_14'] = $_school_net_price_out_state['ANP ST-AWR grant or scholarship aid  2013-14'];
+                        $insert_data['ANP_ST_AWR_grant_or_scholarship_aid_2012_13'] = $_school_net_price_out_state['ANP ST-AWR grant or scholarship aid  2012-13'];
+                        $insert_data['ANP(0-30000)_ST_AWR_TIV_FFA2014_15'] = $_school_net_price_out_state['ANP (0-30000) ST-AWR TIV FFA  2014-15'];
+                        $insert_data['ANP(30001-48000)_ST_AWR_TIV_FFA_2014_15'] = $_school_net_price_out_state['ANP (30001-48000) ST-AWR TIV FFA  2014-15'];
+                        $insert_data['ANP(48001-75000)_ST_AWR_TIV_FFA_2014_15'] = $_school_net_price_out_state['ANP (48001-75000) ST-AWR TIV FFA  2014-15'];
+                        $insert_data['ANP(75001-110000)_ST_AWR_TIV_FFA_2014_15'] = $_school_net_price_out_state['ANP (75001-110000) ST-AWR TIV FFA  2014-15'];
+                        $insert_data['ANP(over_110000)_ST_AWR_TIV_FFA_2014_15'] = $_school_net_price_out_state['ANP (over 110000) ST-AWR TIV FFA  2014-15'];
+                        $insert_data['ANP(0-30000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_out_state['ANP (0-30000) ST-AWR TIV FFA  2013-14'];
+                        $insert_data['ANP(30001-48000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_out_state['ANP (30001-48000) ST-AWR TIV FFA  2013-14'];
+                        $insert_data['ANP(48001-75000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_out_state['ANP (48001-75000) ST-AWR TIV FFA  2013-14'];
+                        $insert_data['ANP(75001-110000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_out_state['ANP (75001-110000) ST-AWR TIV FFA  2013-14'];
+                        $insert_data['ANP(over_110000)_ST_AWR_TIV_FFA_2013_14'] = $_school_net_price_out_state['ANP (over 110000) ST-AWR TIV FFA  2013-14'];
+                        $insert_data['ANP(0-30000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_out_state['ANP (0-30000) ST-AWR TIV FFA  2012-13'];
+                        $insert_data['ANP(30001-48000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_out_state['ANP (30001-48000) ST-AWR TIV FFA  2012-13'];
+                        $insert_data['ANP(48001-75000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_out_state['ANP (48001-75000) ST-AWR TIV FFA  2012-13'];
+                        $insert_data['ANP(75001-110000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_out_state['ANP (75001-110000) ST-AWR TIV FFA  2012-13'];
+                        $insert_data['ANP(over_110000)_ST_AWR_TIV_FFA_2012_13'] = $_school_net_price_out_state['ANP (over 110000) ST-AWR TIV FFA  2012-13'];
+                        
+                        $this->schoolRepository->save_school_net_price_out_state_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-net-price-out-state')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
+
+    public function import_sat_act_scores_CSV() {
+        return view('admin.import-school-sat-act-scores');
+    }
+
+    public function save_school_sat_act_scores() {
+        
+        if (Input::hasFile('school_sat_act_scores')) {
+            $file_data = Input::file('school_sat_act_scores');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_sat_act_scores = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_sat_act_scores)) {
+                    foreach ($school_sat_act_scores as $key => $_school_sat_act_scores) {
+                        
+                        $insert_data['UnitID'] = $_school_sat_act_scores['UnitID'];
+                        $insert_data['Number_of_F-T_students_submitting_SAT_scores'] = $_school_sat_act_scores['Number of F-T students submitting SAT scores'];
+                        $insert_data['Percent_of_F-T_students_submitting_SAT_scores'] = $_school_sat_act_scores['Percent of F-T students submitting SAT scores'];
+                        $insert_data['Number_of_F-T_students_submitting_ACT_scores'] = $_school_sat_act_scores['Number of F-T students submitting ACT scores'];
+                        $insert_data['Percent_of_F-T__students_submitting_ACT_scores'] = $_school_sat_act_scores['Percent of F-T  students submitting ACT scores'];
+                        $insert_data['SAT_Critical_Reading_25th_PCT_score'] = $_school_sat_act_scores['SAT Critical Reading 25th PCT score'];
+                        $insert_data['SAT_Critical_Reading_75th_PCT_score'] = $_school_sat_act_scores['SAT Critical Reading 75th PCT score'];
+                        $insert_data['SAT_Math_25th_PCT_score'] = $_school_sat_act_scores['SAT Math 25th PCT score'];
+                        $insert_data['SAT_Math_75th_PCT_score'] = $_school_sat_act_scores['SAT Math 75th PCT score'];
+                        $insert_data['SAT_Writing_25th_PCT_score'] = $_school_sat_act_scores['SAT Writing 25th PCT score'];
+                        $insert_data['SAT_Writing_75th_PCT_score'] = $_school_sat_act_scores['SAT Writing 75th PCT score'];
+                        $insert_data['ACT_Composite_25th_PCT_score'] = $_school_sat_act_scores['ACT Composite 25th PCT score'];
+                        $insert_data['ACT_Composite_75th_PCT_score'] = $_school_sat_act_scores['ACT Composite 75th PCT score'];
+                        $insert_data['ACT_English_25th_PCT_score'] = $_school_sat_act_scores['ACT English 25th PCT score'];
+                        $insert_data['ACT_English_75th_PCT_score'] = $_school_sat_act_scores['ACT English 75th PCT score'];
+                        $insert_data['ACT_Math_25th_PCT_score'] = $_school_sat_act_scores['ACT Math 25th PCT score'];
+                        $insert_data['ACT_Math_75th_PCT_score'] = $_school_sat_act_scores['ACT Math 75th PCT score'];
+                        $insert_data['ACT_Writing_25th_PCT_score'] = $_school_sat_act_scores['ACT Writing 25th PCT score'];
+                        $insert_data['ACT_Writing_75th_PCT_score'] = $_school_sat_act_scores['ACT Writing 75th PCT score'];
+                        
+                        $this->schoolRepository->save_school_sat_act_scores_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-sat-act-scores')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
 }

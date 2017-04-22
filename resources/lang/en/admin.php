@@ -167,4 +167,24 @@ return [
     // Import School Teacher Certification Detail Labels
     'lbl_school_teacher_certification' => 'Import School Teacher Certification',
     'school_teacher_certification' => 'School Teacher Certification',
+
+    // Import School Field Of Study Detail Labels
+    'lbl_school_field_of_study' => 'Import School Field of Study',
+    'school_field_of_study' => 'School Field of Study',
+
+    // Import School Financial Aid Detail Labels
+    'lbl_school_financial_aid' => 'Import School Financial Aid',
+    'school_financial_aid' => 'School Financial Aid',
+
+    // Import School Net Price In State Detail Labels
+    'lbl_school_net_price_in_state' => 'Import School Net Price in State',
+    'school_net_price_in_state' => 'School Net Price in State',
+
+    // Import School Net Price Out State Detail Labels
+    'lbl_school_net_price_out_state' => 'Import School Net Price out State',
+    'school_net_price_out_state' => 'School Net Price out State',
+
+    // Import School Sat Act Scores Detail Labels
+    'lbl_school_sat_act_scores' => 'Import School Sat Act Scores',
+    'school_sat_act_scores' => 'School Sat Act Scores',
  ];

@@ -40,6 +40,11 @@
           <li class="{{ Request::is('admin/import-school-students-to-faculty') ? 'active' : '' }}"><a href="{{url('admin/import-school-students-to-faculty')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_students_to_faculty')}}</a></li>
           <li class="{{ Request::is('admin/import-school-study-abroad') ? 'active' : '' }}"><a href="{{url('admin/import-school-study-abroad')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_study_abroad')}}</a></li>
           <li class="{{ Request::is('admin/import-school-teacher-certification') ? 'active' : '' }}"><a href="{{url('admin/import-school-teacher-certification')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_teacher_certification')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-field-of-study') ? 'active' : '' }}"><a href="{{url('admin/import-school-field-of-study')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_field_of_study')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-financial-aid') ? 'active' : '' }}"><a href="{{url('admin/import-school-financial-aid')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_financial_aid')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-net-price-in-state') ? 'active' : '' }}"><a href="{{url('admin/import-school-net-price-in-state')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_net_price_in_state')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-net-price-out-state') ? 'active' : '' }}"><a href="{{url('admin/import-school-net-price-out-state')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_net_price_out_state')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-sat-act-scores') ? 'active' : '' }}"><a href="{{url('admin/import-school-sat-act-scores')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_sat_act_scores')}}</a></li>
           <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>
         </ul>
       </li>

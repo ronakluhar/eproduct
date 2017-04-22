@@ -107,3 +107,14 @@ Route::post('admin/saveSchoolDiversity', 'Admin\SchoolDetailController@saveSchoo
 
 Route::get('admin/importSchoolEndowment', 'Admin\SchoolDetailController@importSchoolEndowment');
 Route::post('admin/saveSchoolEndowment', 'Admin\SchoolDetailController@saveSchoolEndowment');
+
+Route::get('admin/import-school-field-of-study', 'Admin\SchoolController@import_field_of_study_CSV');
+Route::post('admin/save-school-field-of-study', 'Admin\SchoolController@save_school_field_of_study');
+Route::get('admin/import-school-financial-aid', 'Admin\SchoolController@import_financial_aid_CSV');
+Route::post('admin/save-school-financial-aid', 'Admin\SchoolController@save_school_financial_aid');
+Route::get('admin/import-school-net-price-in-state', 'Admin\SchoolController@import_net_price_in_state_CSV');
+Route::post('admin/save-school-net-price-in-state', 'Admin\SchoolController@save_school_net_price_in_state');
+Route::get('admin/import-school-net-price-out-state', 'Admin\SchoolController@import_net_price_out_state_CSV');
+Route::post('admin/save-school-net-price-out-state', 'Admin\SchoolController@save_school_net_price_out_state');
+Route::get('admin/import-school-sat-act-scores', 'Admin\SchoolController@import_sat_act_scores_CSV');
+Route::post('admin/save-school-sat-act-scores', 'Admin\SchoolController@save_school_sat_act_scores');

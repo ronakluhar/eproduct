@@ -22,6 +22,11 @@ use App\SchoolTeacherCertificationDetail;
 use App\SchoolCompletion;
 use App\SchoolDiversity;
 use App\SchoolEndowment;
+use App\SchoolFieldOfStudyDetail;
+use App\SchoolFinancialAidDetail;
+use App\SchoolNetPriceInStateDetail;
+use App\SchoolNetPriceOutStateDetail;
+use App\SchoolSatActScoresDetail;
 
 class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolRepository {
 
@@ -321,5 +326,113 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         }
     }
     
+    /**
+     * @return school_field_of_study_detail Object
+      Parameters
+      @$school_field_of_study_detail : school_field_of_study_detail
+    */
+    public function save_school_field_of_study_detail($school_field_of_study_detail) {
+        $school_field_of_study = $this->get_school_field_of_study_detail_by_unit_id($school_field_of_study_detail['UnitID']);
+       
+        $this->objSchoolFieldOfStudy = new SchoolFieldOfStudyDetail();
+        if (count($school_field_of_study) != null && count($school_field_of_study) > 0) {
+            $this->objSchoolFieldOfStudy->where('UnitID', $school_field_of_study_detail['UnitID'])->update($school_field_of_study_detail);
+        } else {
+            $this->objSchoolFieldOfStudy->create($school_field_of_study_detail);
+        }
+    }
     
+    public function get_school_field_of_study_detail_by_unit_id($unit_id) {
+        $this->objSchoolFieldOfStudy = new SchoolFieldOfStudyDetail();
+        $school_field_of_study = $this->objSchoolFieldOfStudy->where([['UnitID', $unit_id]])->first();
+        return $school_field_of_study;
+    }
+
+    /**
+     * @return save_school_financial_aid_detail Object
+      Parameters
+      @$save_school_financial_aid_detail : save_school_financial_aid_detail
+    */
+    public function save_school_financial_aid_detail($school_financial_aid_detail) {
+        $school_financial_aid = $this->get_school_financial_aid_detail_by_unit_id($school_financial_aid_detail['UnitID']);
+       
+        $this->objSchoolFinancialAid = new SchoolFinancialAidDetail();
+        if (count($school_financial_aid) != null && count($school_financial_aid) > 0) {
+            $this->objSchoolFinancialAid->where('UnitID', $school_financial_aid_detail['UnitID'])->update($school_financial_aid_detail);
+        } else {
+            $this->objSchoolFinancialAid->create($school_financial_aid_detail);
+        }
+    }
+    
+    public function get_school_financial_aid_detail_by_unit_id($unit_id) {
+        $this->objSchoolFinancialAid = new SchoolFinancialAidDetail();
+        $school_financial_aid = $this->objSchoolFinancialAid->where([['UnitID', $unit_id]])->first();
+        return $school_financial_aid;
+    }
+
+    /**
+     * @return save_school_net_price_in_state_detail Object
+      Parameters
+      @$save_school_net_price_in_state_detail : save_school_net_price_in_state_detail
+    */
+    public function save_school_net_price_in_state_detail($school_net_price_in_state_detail) {
+        $school_net_price_in_state = $this->get_school_net_price_in_state_detail_by_unit_id($school_net_price_in_state_detail['UnitID']);
+       
+        $this->objSchoolNetPriceInState = new SchoolNetPriceInStateDetail();
+        if (count($school_net_price_in_state) != null && count($school_net_price_in_state) > 0) {
+            $this->objSchoolNetPriceInState->where('UnitID', $school_net_price_in_state_detail['UnitID'])->update($school_net_price_in_state_detail);
+        } else {
+            $this->objSchoolNetPriceInState->create($school_net_price_in_state_detail);
+        }
+    }
+    
+    public function get_school_net_price_in_state_detail_by_unit_id($unit_id) {
+        $this->objSchoolNetPriceInState = new SchoolNetPriceInStateDetail();
+        $school_net_price_in_state = $this->objSchoolNetPriceInState->where([['UnitID', $unit_id]])->first();
+        return $school_net_price_in_state;
+    }
+
+    /**
+     * @return save_school_net_price_out_state_detail Object
+      Parameters
+      @$save_school_net_price_out_state_detail : save_school_net_price_out_state_detail
+    */
+    public function save_school_net_price_out_state_detail($school_net_price_out_state_detail) {
+        $school_net_price_out_state = $this->get_school_net_price_out_state_detail_by_unit_id($school_net_price_out_state_detail['UnitID']);
+       
+        $this->objSchoolNetPriceOutState = new SchoolNetPriceOutStateDetail();
+        if (count($school_net_price_out_state) != null && count($school_net_price_out_state) > 0) {
+            $this->objSchoolNetPriceOutState->where('UnitID', $school_net_price_out_state_detail['UnitID'])->update($school_net_price_out_state_detail);
+        } else {
+            $this->objSchoolNetPriceOutState->create($school_net_price_out_state_detail);
+        }
+    }
+    
+    public function get_school_net_price_out_state_detail_by_unit_id($unit_id) {
+        $this->objSchoolNetPriceOutState = new SchoolNetPriceOutStateDetail();
+        $school_net_price_out_state = $this->objSchoolNetPriceOutState->where([['UnitID', $unit_id]])->first();
+        return $school_net_price_out_state;
+    }
+
+    /**
+     * @return save_school_sat_act_scores_detail Object
+      Parameters
+      @$save_school_sat_act_scores_detail : save_school_sat_act_scores_detail
+    */
+    public function save_school_sat_act_scores_detail($school_sat_act_scores_detail) {
+        $school_sat_act_scores = $this->get_school_sat_act_scores_detail_by_unit_id($school_sat_act_scores_detail['UnitID']);
+       
+        $this->objSchoolSatActScores = new SchoolSatActScoresDetail();
+        if (count($school_sat_act_scores) != null && count($school_sat_act_scores) > 0) {
+            $this->objSchoolSatActScores->where('UnitID', $school_sat_act_scores_detail['UnitID'])->update($school_sat_act_scores_detail);
+        } else {
+            $this->objSchoolSatActScores->create($school_sat_act_scores_detail);
+        }
+    }
+    
+    public function get_school_sat_act_scores_detail_by_unit_id($unit_id) {
+        $this->objSchoolSatActScores = new SchoolSatActScoresDetail();
+        $school_sat_act_scores = $this->objSchoolSatActScores->where([['UnitID', $unit_id]])->first();
+        return $school_sat_act_scores;
+    }
 }
