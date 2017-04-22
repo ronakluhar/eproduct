@@ -45,6 +45,7 @@
           <li class="{{ Request::is('admin/import-school-net-price-in-state') ? 'active' : '' }}"><a href="{{url('admin/import-school-net-price-in-state')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_net_price_in_state')}}</a></li>
           <li class="{{ Request::is('admin/import-school-net-price-out-state') ? 'active' : '' }}"><a href="{{url('admin/import-school-net-price-out-state')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_net_price_out_state')}}</a></li>
           <li class="{{ Request::is('admin/import-school-sat-act-scores') ? 'active' : '' }}"><a href="{{url('admin/import-school-sat-act-scores')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_sat_act_scores')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-tuition-fees') ? 'active' : '' }}"><a href="{{url('admin/import-school-tuition-fees')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_tuition_fees')}}</a></li>
           <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>
         </ul>
       </li>

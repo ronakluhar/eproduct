@@ -99,3 +99,5 @@ Route::get('admin/import-school-net-price-out-state', 'Admin\SchoolController@im
 Route::post('admin/save-school-net-price-out-state', 'Admin\SchoolController@save_school_net_price_out_state');
 Route::get('admin/import-school-sat-act-scores', 'Admin\SchoolController@import_sat_act_scores_CSV');
 Route::post('admin/save-school-sat-act-scores', 'Admin\SchoolController@save_school_sat_act_scores');
+Route::get('admin/import-school-tuition-fees', 'Admin\SchoolController@import_tuition_fees_CSV');
+Route::post('admin/save-school-tuition-fees', 'Admin\SchoolController@save_school_tuition_fees');

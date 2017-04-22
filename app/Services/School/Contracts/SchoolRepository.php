@@ -114,4 +114,11 @@ interface SchoolRepository extends BaseRepository
     public function save_school_sat_act_scores_detail($school_sat_act_scores_detail);
     
     public function get_school_sat_act_scores_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Tuition Fees detail passed in $school_tuition_fees_detail array
+    */
+    public function save_school_tuition_fees_detail($school_tuition_fees_detail);
+    
+    public function get_school_tuition_fees_detail_by_unit_id($unit_id);
 }

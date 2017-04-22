@@ -22,6 +22,7 @@ use App\SchoolFinancialAidDetail;
 use App\SchoolNetPriceInStateDetail;
 use App\SchoolNetPriceOutStateDetail;
 use App\SchoolSatActScoresDetail;
+use App\SchoolTuitionFeesDetail;
 
 class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolRepository {
 
@@ -363,5 +364,27 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         $this->objSchoolSatActScores = new SchoolSatActScoresDetail();
         $school_sat_act_scores = $this->objSchoolSatActScores->where([['UnitID', $unit_id]])->first();
         return $school_sat_act_scores;
+    }
+
+    /**
+     * @return save_school_tuition_fees_detail Object
+      Parameters
+      @$save_school_tuition_fees_detail : save_school_tuition_fees_detail
+    */
+    public function save_school_tuition_fees_detail($school_tuition_fees_detail) {
+        $school_tuition_fees = $this->get_school_tuition_fees_detail_by_unit_id($school_tuition_fees_detail['UnitID']);
+       
+        $this->objSchoolTuitionFees = new SchoolTuitionFeesDetail();
+        if (count($school_tuition_fees) != null && count($school_tuition_fees) > 0) {
+            $this->objSchoolTuitionFees->where('UnitID', $school_tuition_fees_detail['UnitID'])->update($school_tuition_fees_detail);
+        } else {
+            $this->objSchoolTuitionFees->create($school_tuition_fees_detail);
+        }
+    }
+    
+    public function get_school_tuition_fees_detail_by_unit_id($unit_id) {
+        $this->objSchoolTuitionFees = new SchoolTuitionFeesDetail();
+        $school_tuition_fees = $this->objSchoolTuitionFees->where([['UnitID', $unit_id]])->first();
+        return $school_tuition_fees;
     }
 }

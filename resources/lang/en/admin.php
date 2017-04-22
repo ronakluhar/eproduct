@@ -187,4 +187,8 @@ return [
     // Import School Sat Act Scores Detail Labels
     'lbl_school_sat_act_scores' => 'Import School Sat Act Scores',
     'school_sat_act_scores' => 'School Sat Act Scores',
+
+    // Import School Tuition Fees Detail Labels
+    'lbl_school_tuition_fees' => 'Import School Tuition Fees',
+    'school_tuition_fees' => 'School Tuition Fees',
  ];

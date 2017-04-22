@@ -732,4 +732,68 @@ class SchoolController extends Controller {
             }
         }
     }
+
+    public function import_tuition_fees_CSV() {
+        return view('admin.import-school-tuition-fees');
+    }
+
+    public function save_school_tuition_fees() {
+        
+        if (Input::hasFile('school_tuition_fees')) {
+            $file_data = Input::file('school_tuition_fees');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_tuition_fees = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_tuition_fees)) {
+                    foreach ($school_tuition_fees as $key => $_school_tuition_fees) {
+                        
+                        $insert_data['UnitID'] = $_school_tuition_fees['UnitID'];
+                        $insert_data['Published_in-state_tuition_2015-16'] = $_school_tuition_fees['Published in-state tuition 2015-16'];
+                        $insert_data['Published_in-state_fees_2015-16'] = $_school_tuition_fees['Published in-state fees 2015-16'];
+                        $insert_data['Published_in-state_tuition_2014-15'] = $_school_tuition_fees['Published in-state tuition 2014-15'];
+                        $insert_data['Published_in-state_fees_2014-15'] = $_school_tuition_fees['Published in-state fees 2014-15'];
+                        $insert_data['Published_in-state_tuition_2013-14'] = $_school_tuition_fees['Published in-state tuition 2013-14'];
+                        $insert_data['Published_in-state_fees_2013-14'] = $_school_tuition_fees['Published in-state fees 2013-14'];
+                        $insert_data['Published_out-of-state_tuition_2015-16'] = $_school_tuition_fees['Published out-of-state tuition 2015-16'];
+                        $insert_data['Published_out-of-state_fees_2015-16'] = $_school_tuition_fees['Published out-of-state fees 2015-16'];
+                        $insert_data['Published_out-of-state_tuition_2014-15'] = $_school_tuition_fees['Published out-of-state tuition 2014-15'];
+                        $insert_data['Published_out-of-state_fees_2014-15'] = $_school_tuition_fees['Published out-of-state fees 2014-15'];
+                        $insert_data['Published_out-of-state_tuition_2013-14'] = $_school_tuition_fees['Published out-of-state tuition 2013-14'];
+                        $insert_data['Published_out-of-state_fees_2013-14'] = $_school_tuition_fees['Published out-of-state fees 2013-14'];
+                        $insert_data['Full-time_first-time_degree-seeking_students_live_campus'] = $_school_tuition_fees['Full-time  first-time degree/certificate-seeking students required to live on campus'];
+                        $insert_data['Institution_provide_on-campus_housing'] = $_school_tuition_fees['Institution provide on-campus housing'];
+                        $insert_data['Total_dormitory_capacity'] = $_school_tuition_fees['Total dormitory capacity'];
+                        $insert_data['Institution_provides_board_or_meal_plan'] = $_school_tuition_fees['Institution provides board or meal plan'];
+                        $insert_data['Number_of_meals_per_week_in_board_charge'] = $_school_tuition_fees['Number of meals per week in board charge'];
+                        $insert_data['Undergraduate_application_fee'] = $_school_tuition_fees['Undergraduate application fee'];
+                        $insert_data['Graduate_application_fee'] = $_school_tuition_fees['Graduate application fee'];
+                        $insert_data['Books_and_supplies_2015-16'] = $_school_tuition_fees['Books and supplies 2015-16'];
+                        $insert_data['On_campus_room_and_board_2015-16'] = $_school_tuition_fees['On campus room and board 2015-16'];
+                        $insert_data['On_campus_other_expenses_2015-16'] = $_school_tuition_fees['On campus other expenses 2015-16'];
+                        $insert_data['Off_campus_(NWF)_room_and_board_2015-16'] = $_school_tuition_fees['Off campus (NWF) room and board 2015-16'];
+                        $insert_data['Off_campus_(NWF)_other_expenses_2015-16'] = $_school_tuition_fees['Off campus (NWF) other expenses 2015-16'];
+                        
+                        $this->schoolRepository->save_school_tuition_fees_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-tuition-fees')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
 }
