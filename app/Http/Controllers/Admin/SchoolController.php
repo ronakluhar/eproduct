@@ -57,7 +57,11 @@ class SchoolController extends Controller {
                 // Moves file to folder on server
                 $fileData->move(public_path() . '/uploads/csv/', $name);
                 $path = public_path('/uploads/csv/' . $name);
-                $schools = Helpers::csv_to_array($path, ';');
+
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $schools = Helpers::csv_to_array($path, $delimiter);
 
                 $insertData = array();
                 if (!empty($schools)) {
@@ -119,7 +123,11 @@ class SchoolController extends Controller {
                 // Moves file to folder on server
                 $file_data->move(public_path() . '/uploads/csv/', $name);
                 $path = public_path('/uploads/csv/' . $name);
-                $schools_apply_accepted = Helpers::csv_to_array($path, ',');
+
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $schools_apply_accepted = Helpers::csv_to_array($path, $delimiter);
                 
                 $insert_data = array();
                 if (!empty($schools_apply_accepted)) {
@@ -168,7 +176,11 @@ class SchoolController extends Controller {
                 // Moves file to folder on server
                 $file_data->move(public_path() . '/uploads/csv/', $name);
                 $path = public_path('/uploads/csv/' . $name);
-                $schools_award_level = Helpers::csv_to_array($path, ',');
+
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $schools_award_level = Helpers::csv_to_array($path, $delimiter);
                 
                 $insert_data = array();
                 if (!empty($schools_award_level)) {
@@ -193,6 +205,94 @@ class SchoolController extends Controller {
                 exit;
             } else {
                 return Redirect::to('admin/import-school-award-level')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
+
+    public function import_graduation_rate_time_CSV() {
+        return view('admin.import-school-graduation-rate-time');
+    }
+
+    public function save_school_graduation_rate_time() {
+        
+        if (Input::hasFile('school_graduation_rate_time')) {
+            $file_data = Input::file('school_graduation_rate_time');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_graduation_rate_time = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_graduation_rate_time)) {
+                    foreach ($school_graduation_rate_time as $key => $_school_graduation_rate_time) {
+                        
+                        $insert_data['UnitID'] = $_school_graduation_rate_time['UnitID'];
+                        $insert_data['Total_cohort'] = $_school_graduation_rate_time['Graduation rate total cohort'];
+                        $insert_data['men'] = $_school_graduation_rate_time['Graduation rate men'];
+                        $insert_data['women'] = $_school_graduation_rate_time['Graduation rate women'];
+                        $insert_data['Bachelor_degree_4_years'] = $_school_graduation_rate_time['Bachelor degree within 4 years  total'];
+                        $insert_data['Bachelor_degree_5_years'] = $_school_graduation_rate_time['Bachelor degree within 5 years  total'];
+                        $insert_data['Bachelor_degree_6_years'] = $_school_graduation_rate_time['Bachelor degree within 6 years  total'];
+                        $this->schoolRepository->save_school_graduation_rate_time_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-graduation-rate-time')->with('error', trans('label.invalid_ext'));
+                exit;
+            }
+        }
+    }
+
+    public function import_ROTC_CSV() {
+        return view('admin.import-school-ROTC');
+    }
+
+    public function save_school_ROTC() {
+        
+        if (Input::hasFile('school_ROTC')) {
+            $file_data = Input::file('school_ROTC');
+            $extension = $file_data->getClientOriginalExtension();
+            if ($extension == 'csv') {
+                $name = time() . '-' . $file_data->getClientOriginalName();
+                
+                // Moves file to folder on server
+                $file_data->move(public_path() . '/uploads/csv/', $name);
+                $path = public_path('/uploads/csv/' . $name);
+                
+                // Find csv file delimiter
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+
+                $school_ROTC = Helpers::csv_to_array($path, $delimiter);
+                
+                $insert_data = array();
+                if (!empty($school_ROTC)) {
+                    foreach ($school_ROTC as $key => $_school_ROTC) {
+                        
+                        $insert_data['UnitID'] = $_school_ROTC['UnitID'];
+                        $insert_data['ROTC'] = $_school_ROTC['ROTC'];
+                        $insert_data['ROTC_Army'] = $_school_ROTC['ROTC - Army'];
+                        $insert_data['ROTC_Navy'] = $_school_ROTC['ROTC - Navy'];
+                        $insert_data['ROTC_Air_Force'] = $_school_ROTC['ROTC - Air Force'];
+                        $this->schoolRepository->save_school_ROTC_detail($insert_data);
+                    }
+                }
+                unlink($path);
+                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                exit;
+            } else {
+                return Redirect::to('admin/import-school-ROTC')->with('error', trans('label.invalid_ext'));
                 exit;
             }
         }

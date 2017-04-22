@@ -79,3 +79,7 @@ Route::get('admin/import-school-apply-accepted', 'Admin\SchoolController@import_
 Route::post('admin/save-school-apply-accepted', 'Admin\SchoolController@save_school_apply_accepted');
 Route::get('admin/import-school-award-level', 'Admin\SchoolController@import_award_level_CSV');
 Route::post('admin/save-school-award-level', 'Admin\SchoolController@save_school_award_level');
+Route::get('admin/import-school-graduation-rate-time', 'Admin\SchoolController@import_graduation_rate_time_CSV');
+Route::post('admin/save-school-graduation-rate-time', 'Admin\SchoolController@save_school_graduation_rate_time');
+Route::get('admin/import-school-ROTC', 'Admin\SchoolController@import_ROTC_CSV');
+Route::post('admin/save-school-ROTC', 'Admin\SchoolController@save_school_ROTC');

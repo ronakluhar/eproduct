@@ -44,4 +44,18 @@ interface SchoolRepository extends BaseRepository
     public function save_school_award_level_detail($school_award_level_detail);
     
     public function get_school_award_level_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School Graduation Rate Time detail passed in $school_graduation_rate_time_detail array
+    */
+    public function save_school_graduation_rate_time_detail($school_graduation_rate_time_detail);
+    
+    public function get_school_graduation_rate_time_detail_by_unit_id($unit_id);
+
+    /**
+     * Save School ROTC detail passed in $school_ROTC_detail array
+    */
+    public function save_school_ROTC_detail($school_ROTC_detail);
+    
+    public function get_school_ROTC_detail_by_unit_id($unit_id);
 }

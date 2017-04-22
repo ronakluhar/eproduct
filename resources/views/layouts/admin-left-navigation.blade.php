@@ -35,6 +35,8 @@
           <li class="{{ Request::is('admin/importSchoolQuickFact') ? 'active' : '' }}"><a href="{{url('admin/importSchoolQuickFact')}}"><i class="fa fa-circle-o"></i>School Fact Import</a></li>
           <li class="{{ Request::is('admin/import-school-apply-accepted') ? 'active' : '' }}"><a href="{{url('admin/import-school-apply-accepted')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_apply_accepted')}}</a></li>
           <li class="{{ Request::is('admin/import-school-award-level') ? 'active' : '' }}"><a href="{{url('admin/import-school-award-level')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_award_level')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-graduation-rate-time') ? 'active' : '' }}"><a href="{{url('admin/import-school-graduation-rate-time')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_graduation_rate_time')}}</a></li>
+          <li class="{{ Request::is('admin/import-school-ROTC') ? 'active' : '' }}"><a href="{{url('admin/import-school-ROTC')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_ROTC')}}</a></li>
           <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>
         </ul>
       </li>

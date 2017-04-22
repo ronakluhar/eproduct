@@ -147,4 +147,12 @@ return [
     // Import School Award Level Detail Labels
     'lbl_school_award_level' => 'Import School Award Level',
     'school_award_level' => 'School Award Level',
+
+    // Import School Graduation Rate Time Detail Labels
+    'lbl_school_graduation_rate_time' => 'Import School Graduation Rate Time',
+    'school_graduation_rate_time' => 'School Graduation Rate Time',
+
+    // Import School ROTC Detail Labels
+    'lbl_school_ROTC' => 'Import School ROTC',
+    'school_ROTC' => 'School ROTC',
  ];
