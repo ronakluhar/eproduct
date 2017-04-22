@@ -75,3 +75,10 @@ Route::get('admin/delete-cms-template/{id}', 'Admin\CMSManagementController@dele
 Route::get('admin/list-school', 'Admin\SchoolController@index');
 Route::get('admin/importSchoolQuickFact', 'Admin\SchoolController@importCSV');
 Route::post('admin/saveSchoolQuickFact', 'Admin\SchoolController@saveSchoolQuickFact');
+
+Route::get('admin/importSchoolFaculty', 'Admin\SchoolDetailController@importSchoolFaculty');
+Route::post('admin/saveSchoolFaculty', 'Admin\SchoolDetailController@saveSchoolFaculty');
+
+Route::get('admin/importSchoolLibrary', 'Admin\SchoolDetailController@importSchoolLibrary');
+Route::post('admin/saveSchoolLibrary', 'Admin\SchoolDetailController@saveSchoolLibrary');
+

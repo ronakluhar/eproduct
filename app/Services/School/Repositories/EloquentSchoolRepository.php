@@ -10,6 +10,8 @@ use App\Services\School\Contracts\SchoolRepository;
 use App\Services\Repositories\Eloquent\EloquentBaseRepository;
 use App\Services\School\Entities\School;
 use App\Admin;
+use App\SchoolFaculty;
+use App\SchoolLibrary;
 
 class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolRepository {
 
@@ -86,5 +88,33 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
     public function getSchoolDetailByUnitId($unitId) {
         $school = $this->model->where([['deleted', '<>', 3],['UnitID', $unitId]])->first();
         return $school;
+    }
+    
+    //School Faculty import 
+    public function saveSchoolFaculty($schoolFacultyDetail) 
+    {        
+        $schoolFaculty = SchoolFaculty::where('UnitID',$schoolFacultyDetail['UnitID'])->first();
+       
+        if (count($schoolFaculty) != null && count($schoolFaculty) > 0) {
+            SchoolFaculty::where('UnitID', $schoolFacultyDetail['UnitID'])->update($schoolFacultyDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolFaculty::create($schoolFacultyDetail);
+        }
+        
+    }
+    
+    //School LIbrary import 
+    public function saveSchoolLibrary($schoolLibraryDetail) 
+    {        
+        $schoolLibrary = SchoolLibrary::where('UnitID',$schoolLibraryDetail['UnitID'])->first();
+       
+        if (count($schoolLibrary) != null && count($schoolLibrary) > 0) {
+            SchoolLibrary::where('UnitID', $schoolLibraryDetail['UnitID'])->update($schoolLibraryDetail);
+            //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
+        } else {
+            SchoolLibrary::create($schoolLibraryDetail);
+        }
+        
     }
 }
