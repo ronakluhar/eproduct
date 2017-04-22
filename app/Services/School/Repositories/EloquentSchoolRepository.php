@@ -12,6 +12,10 @@ use App\Services\School\Entities\School;
 use App\Admin;
 use App\SchoolFaculty;
 use App\SchoolLibrary;
+use App\SchoolApplyAcceptedDetail;
+use App\SchoolAwardLevelDetail;
+use App\SchoolGraduationRateTimeDetail;
+use App\SchoolROTCDetail;
 
 class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolRepository {
 
@@ -21,6 +25,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
     public function getAllSchoolsData()
     {
         $schoolData = $this->model->where('deleted', '<>', 3)->get();
+        
         //$usersData = $this->model->get();
         return $schoolData;
     }
@@ -116,5 +121,91 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             SchoolLibrary::create($schoolLibraryDetail);
         }
         
+    /**
+     * @return school_apply_accepted_detail Object
+      Parameters
+      @$schoolApplyAcceptedDetail : schoolApplyAcceptedDetail
+    */
+    public function save_school_apply_accepted_detail($school_apply_accepted_detail) {
+        $school_apply_accepted = $this->get_school_apply_accepted_detail_by_unit_id($school_apply_accepted_detail['UnitID']);
+       
+        $this->objSchoolApplyAccepted = new SchoolApplyAcceptedDetail();
+        if (count($school_apply_accepted) != null && count($school_apply_accepted) > 0) {
+            $this->objSchoolApplyAccepted->where('UnitID', $school_apply_accepted_detail['UnitID'])->update($school_apply_accepted_detail);
+        } else {
+            $this->objSchoolApplyAccepted->create($school_apply_accepted_detail);
+        }
+    }
+    
+    public function get_school_apply_accepted_detail_by_unit_id($unit_id) {
+        $this->objSchoolApplyAccepted = new SchoolApplyAcceptedDetail();
+        $school_apply_accepted = $this->objSchoolApplyAccepted->where([['UnitID', $unit_id]])->first();
+        return $school_apply_accepted;
+    }
+    
+    /**
+     * @return school_award_level_detail Object
+      Parameters
+      @$school_award_level_detail : school_award_level_detail
+    */
+    public function save_school_award_level_detail($school_award_level_detail) {
+        $school_award_level = $this->get_school_award_level_detail_by_unit_id($school_award_level_detail['UnitID']);
+       
+        $this->objSchoolAwardLevel = new SchoolAwardLevelDetail();
+        if (count($school_award_level) != null && count($school_award_level) > 0) {
+            $this->objSchoolAwardLevel->where('UnitID', $school_award_level_detail['UnitID'])->update($school_award_level_detail);
+        } else {
+            $this->objSchoolAwardLevel->create($school_award_level_detail);
+        }
+    }
+    
+    public function get_school_award_level_detail_by_unit_id($unit_id) {
+        $this->objSchoolAwardLevel = new SchoolAwardLevelDetail();
+        $school_award_level = $this->objSchoolAwardLevel->where([['UnitID', $unit_id]])->first();
+        return $school_award_level;
+    }
+
+    /**
+     * @return school_graduation_rate_time_detail Object
+      Parameters
+      @$school_graduation_rate_time_detail : school_graduation_rate_time_detail
+    */
+    public function save_school_graduation_rate_time_detail($school_graduation_rate_time_detail) {
+        $school_graduation_rate_time = $this->get_school_graduation_rate_time_detail_by_unit_id($school_graduation_rate_time_detail['UnitID']);
+       
+        $this->objSchoolGraduationRateTime = new SchoolGraduationRateTimeDetail();
+        if (count($school_graduation_rate_time) != null && count($school_graduation_rate_time) > 0) {
+            $this->objSchoolGraduationRateTime->where('UnitID', $school_graduation_rate_time_detail['UnitID'])->update($school_graduation_rate_time_detail);
+        } else {
+            $this->objSchoolGraduationRateTime->create($school_graduation_rate_time_detail);
+        }
+    }
+    
+    public function get_school_graduation_rate_time_detail_by_unit_id($unit_id) {
+        $this->objSchoolGraduationRateTime = new SchoolGraduationRateTimeDetail();
+        $school_graduation_rate_time = $this->objSchoolGraduationRateTime->where([['UnitID', $unit_id]])->first();
+        return $school_graduation_rate_time;
+    }
+
+    /**
+     * @return school_ROTC_detail Object
+      Parameters
+      @$school_ROTC_detail : school_ROTC_detail
+    */
+    public function save_school_ROTC_detail($school_ROTC_detail) {
+        $school_ROTC = $this->get_school_ROTC_detail_by_unit_id($school_ROTC_detail['UnitID']);
+       
+        $this->objSchoolROTC = new SchoolROTCDetail();
+        if (count($school_ROTC) != null && count($school_ROTC) > 0) {
+            $this->objSchoolROTC->where('UnitID', $school_ROTC_detail['UnitID'])->update($school_ROTC_detail);
+        } else {
+            $this->objSchoolROTC->create($school_ROTC_detail);
+        }
+    }
+    
+    public function get_school_ROTC_detail_by_unit_id($unit_id) {
+        $this->objSchoolROTC = new SchoolROTCDetail();
+        $school_ROTC = $this->objSchoolROTC->where([['UnitID', $unit_id]])->first();
+        return $school_ROTC;
     }
 }

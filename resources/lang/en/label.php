@@ -147,5 +147,7 @@ return [
     'about_us' => "About Us",    
     'press' => "Press",    
     'contactus' => 'Contact Us',
-    'login_to_continue' => 'Please login to continue...'
+    'login_to_continue' => 'Please login to continue...',
+    'import_success_msg' => 'School data imported successfully.',
+    'invalid_ext' => 'Invalid file extension.',
 ];
