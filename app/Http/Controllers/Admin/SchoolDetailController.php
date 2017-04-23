@@ -54,7 +54,8 @@ class SchoolDetailController extends Controller
                 // Moves file to folder on server
                 $fileData->move(public_path() . '/uploads/csv/', $name);
                 $path = public_path('/uploads/csv/'.$name);
-                $schoolFaculties = Helpers::csv_to_array($path, ';');
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+                $schoolFaculties = Helpers::csv_to_array($path, $delimiter);
                
                 $insertData = array();
                 if (!empty($schoolFaculties)) {
@@ -98,7 +99,8 @@ class SchoolDetailController extends Controller
                 // Moves file to folder on server
                 $fileData->move(public_path() . '/uploads/csv/', $name);
                 $path = public_path('/uploads/csv/'.$name);
-                $schoolLibraries = Helpers::csv_to_array($path, ';');
+                $delimiter = Helpers::get_file_delimiter($path, 10);
+                $schoolLibraries = Helpers::csv_to_array($path, $delimiter);
                 
                 $insertData = array();
                 if (!empty($schoolLibraries)) {

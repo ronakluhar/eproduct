@@ -36,7 +36,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
     */
     public function getAllSchoolsData()
     {
-        $schoolData = $this->model->where('deleted', '<>', 3)->get();
+        $schoolData = $this->model->where('deleted', '<>', 3)->paginate(10);
         
         //$usersData = $this->model->get();
         return $schoolData;
