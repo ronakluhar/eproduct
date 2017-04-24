@@ -31,7 +31,7 @@
                 </div>
                 @endif
 
-                <form id="add_school_field_of_study" class="form-horizontal" method="post" action="{{ url('/admin/save-school-field-of-study') }}" enctype="multipart/form-data">
+                <form id="add_school_field_of_Study_detail" class="form-horizontal" method="post" action="{{ url('/admin/save-school-field-of-study') }}" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="box-body">
                         <div class="form-group">
@@ -54,7 +54,23 @@
 @stop
 
 @section('script')
+<script src="{{ asset('js/front/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+      var fileRules = {
+          school_field_of_study : {
+            required : true,           
+          }
+      };
+      $("#add_school_field_of_Study_detail").validate({
+          rules: fileRules,
+          messages: {
+              school_field_of_study: {
+                  required: "Please upload valid csv file",                  
+              },
+          }
+      });
+    });
 </script>
 @stop
 

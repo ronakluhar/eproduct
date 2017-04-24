@@ -54,7 +54,23 @@
 @stop
 
 @section('script')
+<script src="{{ asset('js/front/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+      var fileRules = {
+          school_tuition_fees : {
+            required : true,           
+          }
+      };
+      $("#add_school_tuition_fees").validate({
+          rules: fileRules,
+          messages: {
+              school_tuition_fees: {
+                  required: "Please upload valid csv file",                  
+              },
+          }
+      });
+    });
 </script>
 @stop
 
