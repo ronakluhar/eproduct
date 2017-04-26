@@ -54,7 +54,23 @@
 @stop
 
 @section('script')
+<script src="{{ asset('js/front/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+      var fileRules = {
+          school_graduation_rate_time : {
+            required : true,           
+          }
+      };
+      $("#add_school_graduation_rate_time").validate({
+          rules: fileRules,
+          messages: {
+              school_graduation_rate_time: {
+                  required: "Please upload valid csv file",                  
+              },
+          }
+      });
+    });
 </script>
 @stop
 

@@ -54,7 +54,23 @@
 @stop
 
 @section('script')
+<script src="{{ asset('js/front/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+      var fileRules = {
+          school_students_to_faculty : {
+            required : true,           
+          }
+      };
+      $("#add_school_students_to_faculty").validate({
+          rules: fileRules,
+          messages: {
+              school_students_to_faculty: {
+                  required: "Please upload valid csv file",                  
+              },
+          }
+      });
+    });
 </script>
 @stop
 

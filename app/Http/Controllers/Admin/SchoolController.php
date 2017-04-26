@@ -528,7 +528,7 @@ class SchoolController extends Controller {
                         $insert_data['Average_amount_of_Pell_grant_aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of Pell grant aid awarded to FTFTU'];
                         $insert_data['Percent_FTFTU_awarded_other_fed_grant_aid'] = $_school_financial_aid['Percent FTFTU awarded other fed grant aid'];
                         $insert_data['Average_amount_of_other_fed_grant_aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of other fed grant aid awarded to FTFTU'];
-                        $insert_data['Percent_of_FTFTU_awarded_state'] = $_school_financial_aid['Percent of FTFTU awarded state/local grant aid'];
+                        $insert_data['Percent_of_FTFTU_awarded_state/local_grant_aid'] = $_school_financial_aid['Percent of FTFTU awarded state/local grant aid'];
                         $insert_data['Average_amount_state/local_grant_aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount state/local grant aid awarded to FTFTU'];
                         $insert_data['Percent_of_FTFTU_awarded_Int_Aid'] = $_school_financial_aid['Percent of FTFTU awarded Int-Aid'];
                         $insert_data['Average_amount_of_Int_Aid_awarded_to_FTFTU'] = $_school_financial_aid['Average amount of Int-Aid awarded to FTFTU'];

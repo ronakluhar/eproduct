@@ -31,7 +31,7 @@
                 </div>
                 @endif
 
-                <form id="addEmailTemplate" class="form-horizontal" method="post" action="{{ url('/admin/saveSchoolLibrary') }}" enctype="multipart/form-data">
+                <form id="add_school_library" class="form-horizontal" method="post" action="{{ url('/admin/saveSchoolLibrary') }}" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <div class="box-body">
                         <div class="form-group">
@@ -54,7 +54,23 @@
 @stop
 
 @section('script')
+<script src="{{ asset('js/front/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+      var fileRules = {
+          schoolLibrary : {
+            required : true,           
+          }
+      };
+      $("#add_school_library").validate({
+          rules: fileRules,
+          messages: {
+              schoolLibrary: {
+                  required: "Please upload valid csv file",                  
+              },
+          }
+      });
+    });
 </script>
 @stop
 
