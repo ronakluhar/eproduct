@@ -121,4 +121,16 @@ interface SchoolRepository extends BaseRepository
     public function save_school_tuition_fees_detail($school_tuition_fees_detail);
     
     public function get_school_tuition_fees_detail_by_unit_id($unit_id);
+
+    /**
+     * @return array of all logo of active School in the application
+    */
+    public function getAllSchoolsLogo();
+
+    /**
+     * Save School Logo detail passed in $logo_detail array
+    */
+    public function save_school_logo($logo_detail);
+    
+    public function get_school_logo_by_unit_id($unit_id);
 }

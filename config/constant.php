@@ -37,6 +37,8 @@ return [
     'PROPERTY_MAIN_IMAGE_WIDTH' => '120',
     'PROPERTY_ORIGINAL_IMAGE_HEIGHT' => '100',
     'PROPERTY_ORIGINAL_IMAGE_WIDTH' => '100',
+    
+    'SCHOOL_ORIGINAL_LOGO_PATH' => 'uploads/logo/original/',
 
     'LANGUAGE' => array('en' => '1', 'fr' => '2', 'gr' => '3'),
     'PROPERTY_ACTION_TYPE' => array('1' => 'Group', '2' => 'Deal', '3' => 'Development'),

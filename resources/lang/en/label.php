@@ -150,4 +150,8 @@ return [
     'login_to_continue' => 'Please login to continue...',
     'import_success_msg' => 'School data imported successfully.',
     'invalid_ext' => 'Invalid file extension.',
+    'namerequired' => 'This field is required.',
+    'imagefilerequired' => 'Upload file must be image file.',
+    'mimenotvalid' => 'It support only jpeg, bmp& png image file.',
+    'upload_success_msg' => 'File uploaded successfully'
 ];

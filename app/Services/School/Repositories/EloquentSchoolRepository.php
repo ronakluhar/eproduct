@@ -28,6 +28,7 @@ use App\SchoolNetPriceInStateDetail;
 use App\SchoolNetPriceOutStateDetail;
 use App\SchoolSatActScoresDetail;
 use App\SchoolTuitionFeesDetail;
+use App\SchoolLogoDetail;
 
 class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolRepository {
 
@@ -458,4 +459,38 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         $school_tuition_fees = $this->objSchoolTuitionFees->where([['UnitID', $unit_id]])->first();
         return $school_tuition_fees;
     }
+    
+    /**
+     * @return SchoolLogoDetail Object
+    */
+    public function getAllSchoolsLogo()
+    {
+        $this->objSchoolLogo = new SchoolLogoDetail();
+        $school_logo_data = $this->objSchoolLogo->get_logo_detail();
+        
+        return $school_logo_data;
+    }
+
+    /**
+     * @return logo_detail Object
+      Parameters
+      @$logo_detail : save_school_logo
+    */
+    public function save_school_logo($logo_detail) {
+        $school_logo = $this->get_school_logo_by_unit_id($logo_detail['UnitID']);
+       
+        $this->objSchoolLogo = new SchoolLogoDetail();
+        if (count($school_logo) != null && count($school_logo) > 0) {
+            $this->objSchoolLogo->where('UnitID', $logo_detail['UnitID'])->update($logo_detail);
+        } else {
+            $this->objSchoolLogo->create($logo_detail);
+        }
+    }
+    
+    public function get_school_logo_by_unit_id($unit_id) {
+        $this->objSchoolLogo = new SchoolLogoDetail();
+        $school_logo = $this->objSchoolLogo->where([['UnitID', $unit_id]])->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
+        return $school_logo;
+    }
+    
 }

@@ -120,3 +120,10 @@ Route::get('admin/import-school-sat-act-scores', 'Admin\SchoolController@import_
 Route::post('admin/save-school-sat-act-scores', 'Admin\SchoolController@save_school_sat_act_scores');
 Route::get('admin/import-school-tuition-fees', 'Admin\SchoolController@import_tuition_fees_CSV');
 Route::post('admin/save-school-tuition-fees', 'Admin\SchoolController@save_school_tuition_fees');
+
+// Admin School Logo
+Route::get('admin/list-school-logo', 'Admin\FileManagementController@index');
+Route::get('admin/upload-school-logo', 'Admin\FileManagementController@upload_school_logo');
+Route::post('admin/upload-school-logo', 'Admin\FileManagementController@upload_school_logo_post');
+Route::get('admin/update-school-logo/{UnitID}', 'Admin\FileManagementController@update_school_logo');
+Route::get('admin/delete-school-logo/{UnitID}', 'Admin\FileManagementController@delete_school_logo');

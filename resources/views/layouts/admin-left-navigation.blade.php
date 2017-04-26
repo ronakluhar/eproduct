@@ -49,6 +49,19 @@
           <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>
         </ul>
       </li>
+      <li class="{{ (Request::is('admin/upload-school-logo') || Request::is('admin/list-school-logo')) ? 'active treeview' : 'treeview' }}">
+        <a href="#">
+          <i class="fa fa-dashboard"></i> <span>{{trans('admin.schoolmanagement')}}</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li class="{{ Request::is('admin/upload-school-logo') ? 'active' : '' }}"><a href="{{url('admin/upload-school-logo')}}"><i class="fa fa-circle-o"></i>{{trans('admin.lbl_upload_logo')}}</a></li>
+          <li class="{{ Request::is('admin/list-school-logo') ? 'active' : '' }}"><a href="{{url('admin/list-school-logo')}}"><i class="fa fa-circle-o"></i> {{trans('admin.lbl_school_logo_list')}}</a></li>
+        </ul>
+      </li>
+
 <!--      <li class="{{ (Request::is('admin/create-email-template') || Request::is('admin/list-email-template')) ? 'active treeview' : 'treeview' }}">
         <a href="#">
           <i class="fa fa-dashboard"></i> <span>{{trans('admin.emailtemplate')}}</span>

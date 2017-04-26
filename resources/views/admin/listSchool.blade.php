@@ -47,7 +47,7 @@
                      @forelse($schools as $school)
                         <tr>
                             <td>{{$school->UnitID}}</td>
-                            <td>{{ucfirst($school->Name)}}</td>
+                            <td>{{ucfirst($school->Institution_Name)}}</td>
                             <td>{{$school->City or "------" }}</td>
                             <td>{{$school->State or "------" }}</td>
                             <td>{{$school->Web_Address or "------" }}</td>

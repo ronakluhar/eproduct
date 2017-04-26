@@ -138,7 +138,9 @@ return [
     'cmsupdatesuccess' => 'CMS Template updated successfully',
     'cmsdeletesuccess' => 'CMS Template deleted successfully',
     'select_csv_file' => 'Select CSV file',
+    'select_image_file' => 'Select Image file',
     'import' => 'Import',
+    'school' => 'School',
     
     // Import School Apply Accepted Labels
     'lbl_school_apply_accepted' => 'Import School Apply Accepted',
@@ -191,4 +193,13 @@ return [
     // Import School Tuition Fees Detail Labels
     'lbl_school_tuition_fees' => 'Import School Tuition Fees',
     'school_tuition_fees' => 'School Tuition Fees',
+
+    // School Logo Labels
+    'schoolmanagement' => 'School Logo Management',
+    'upload' => 'Upload',
+    'lbl_upload_logo' => 'Upload School Logo',
+    'lbl_school_logo_list' => 'School Logo List',
+    'school_logo' => 'School Logo',
+    'schoollogodeletesuccess' => 'Logo Deleted Successfully',
+    'logonotfoundonyourrequest' => "Logo is not found on your request",
  ];
