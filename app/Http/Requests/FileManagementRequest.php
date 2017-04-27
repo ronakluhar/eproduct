@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Input;
 
 class FileManagementRequest extends FormRequest
 {
@@ -38,9 +39,9 @@ class FileManagementRequest extends FormRequest
         $messages = [
             'school_logo' => trans('label.namerequired'),
         ];
-
-        if($this->input('school_logo')) {
-            $logos = $this->input('school_logo');
+        
+        if(Input::hasFile('school_logo')) {
+            $logos = Input::file('school_logo');
             foreach ($logos as $key => $logo) {
                 $messages['school_logo.' . $key . '.image'] = 'The logo ' . $logo->getClientOriginalName() . ' must be an image.';
                 $messages['school_logo.' . $key . '.mimes'] = 'The logo ' . $logo->getClientOriginalName() . ' must be a file of type: :values.';
@@ -48,15 +49,7 @@ class FileManagementRequest extends FormRequest
             }
         }
 
-//        $v = $factory->make($this->all(), $this->rules(),$messages);
-//        $v->each('doc', ['required','mimes:pdf,doc,docx,jpg,jpeg,png|max:2048']);
         return $messages;        
-        
-//        return [
-//            'school_logo' => trans('label.namerequired'),
-//            'school_logo[].image' => trans('label.imagefilerequired'),
-//            'school_logo[].mimes' => trans('label.mimenotvalid')
-//        ];
     }
     
 }
