@@ -62,7 +62,7 @@ class FileManagementController extends Controller {
 
                 $file_name = pathinfo($original_name, PATHINFO_FILENAME); // file
 
-                $name_array = explode("_", $file_name, 2);
+                $name_array = explode(",", $file_name, 2);
                 $unit_id = $name_array[0];
                 
                 if($update_unit_id == null && !is_numeric($unit_id)) continue;
