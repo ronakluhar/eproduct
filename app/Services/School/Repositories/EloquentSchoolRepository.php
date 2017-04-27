@@ -481,6 +481,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
        
         $this->objSchoolLogo = new SchoolLogoDetail();
         if (count($school_logo) != null && count($school_logo) > 0) {
+            $this->delete_image_from_dir($school_logo);
             $this->objSchoolLogo->where('UnitID', $logo_detail['UnitID'])->update($logo_detail);
         } else {
             $this->objSchoolLogo->create($logo_detail);
@@ -491,6 +492,22 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         $this->objSchoolLogo = new SchoolLogoDetail();
         $school_logo = $this->objSchoolLogo->where([['UnitID', $unit_id]])->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
         return $school_logo;
+    }
+    
+    /**
+     * @return 
+      Parameters
+      $school_logo : object
+    */
+    public function delete_image_from_dir($school_logo) {
+        if(!empty($school_logo)) {
+            $logo_path = public_path(Config::get('constant.SCHOOL_ORIGINAL_LOGO_PATH').$school_logo->image_path);
+            
+            // Unlink logo from directory
+            if ($school_logo->image_path != '' && file_exists($logo_path)) {
+                unlink($logo_path);
+            }
+        }
     }
     
 }

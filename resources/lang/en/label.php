@@ -153,5 +153,7 @@ return [
     'namerequired' => 'This field is required.',
     'imagefilerequired' => 'Upload file must be image file.',
     'mimenotvalid' => 'It support only jpeg, bmp& png image file.',
-    'upload_success_msg' => 'File uploaded successfully'
+    'upload_success_msg' => 'File uploaded successfully.',
+    'logo_update_success_msg' => 'Logo updated successfully.',
+    'upload_error_msg' => 'Error occured while uploading or incorrect image name format.'
 ];

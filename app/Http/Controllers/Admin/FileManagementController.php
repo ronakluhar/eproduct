@@ -27,33 +27,68 @@ class FileManagementController extends Controller {
         return view('admin.list-school-logo', compact('school_logo', 'logo_path'));
     }
 
+    // Upload new logos
     public function upload_school_logo() {
         return view('admin.upload-logo');
     }
     
+    // Edit school logo
+    public function update_school_logo($unit_id) {
+        $logo_path = $this->logo_original_path;
+        $logo_detail = $this->objSchoolLogo->with('school')->where('UnitID', $unit_id)->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
+        
+        if(!isset($logo_detail) || (isset($logo_detail) && !isset($logo_detail->school)) || (isset($logo_detail) && empty($logo_detail))) {
+            return Redirect::to('admin/list-school-logo')->with('error', trans('admin.logonotfoundonyourrequest'));
+        }
+        return view('admin.upload-logo', compact('logo_detail', 'logo_path'));
+    }
+
     public function upload_school_logo_post(FileManagementRequest $request) {
         
+        $update_unit_id = null;
+        $i = 0; // To get number of file upload
+        if(isset($request->id) && $request->id != '' && $request->id > 0) {
+            if(count($request->school_logo) > 1) {
+                return Redirect::back()->withErrors(['You can\'t upload multiple file while updating logo.']);
+            }
+            $update_unit_id = $request->id;
+        }
         if($request->hasFile('school_logo')) {
             foreach ($request->school_logo as $logo) {
-                
-                $filename = $logo->getClientOriginalName();
-                
-                $name_array = explode("_", $filename, 2);
+
+                $original_name = $logo->getClientOriginalName();
+
+                $extension = '.' . $logo->getClientOriginalExtension();
+
+                $file_name = pathinfo($original_name, PATHINFO_FILENAME); // file
+
+                $name_array = explode("_", $file_name, 2);
                 $unit_id = $name_array[0];
                 
-                $destinationDirectory = 'uploads/logo/original/';
-                if (!file_exists($destinationDirectory)) {
-                    File::makeDirectory($destinationDirectory, 0777, true, true);
+                if($update_unit_id == null && !is_numeric($unit_id)) continue;
+                $file_name = $unit_id . '_' . str_random(5);
+
+                if (!file_exists($this->logo_original_path)) {
+                    File::makeDirectory($this->logo_original_path, 0777, true, true);
                 }
-                $logo->move($destinationDirectory, $filename);
-                
+                $logo->move($this->logo_original_path, $file_name.$extension);
+
                 $insert_data = array(
-                    'UnitID' => $unit_id,
-                    'image_path' => $filename
+                    'UnitID' => ($update_unit_id) ? $update_unit_id : $unit_id,
+                    'image_path' => $file_name.$extension
                 );
                 $this->schoolRepository->save_school_logo($insert_data);
+                $i++;
             }
-            return Redirect::to('admin/list-school-logo')->with('success', trans('label.upload_success_msg'));
+            
+            // Multiple File uploaded successfully
+            if(!$update_unit_id && $i > 0) {
+                return Redirect::to('admin/list-school-logo')->with('success', $i . ' '. trans('label.upload_success_msg'));
+            } else if($update_unit_id && $i > 0) { // Logo updated successfully
+                return Redirect::to('admin/list-school-logo')->with('success', trans('label.logo_update_success_msg'));
+            } else { // Error or incorrect logo name
+                return Redirect::to('admin/list-school-logo')->with('error', trans('label.upload_error_msg'));
+            }
             exit;
         }
     }

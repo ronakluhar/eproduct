@@ -52,6 +52,7 @@
                             </td>
                             <td>
                                 <a onclick="return confirm('<?php echo trans('admin.confirmdelete'); ?>')" href="{{ url('/admin/delete-school-logo') }}/{{$_school_logo->UnitID}}"><i class="i_delete fa fa-trash"></i>&nbsp;&nbsp;</a>
+                                <a href="{{ url('/admin/update-school-logo') }}/{{$_school_logo->UnitID}}"><i class="edit fa fa-edit"></i>&nbsp;&nbsp;</a>
                             </td>
                         </tr>
                         @empty
