@@ -36,7 +36,7 @@
                             <td>{{ucfirst($_school_logo->Institution_Name)}}</td>
                             <td>
                                 @if(file_exists(public_path($logo_path.$_school_logo->image_path)))
-                                    <img src="{{ public_path($logo_path.$_school_logo->image_path) }}" alt="{{ $_school_logo->image_path }}"/>
+                                <img width="70px" height="70px" src="{{ asset($logo_path.$_school_logo->image_path) }}" alt="{{ $_school_logo->image_path }}"/>
                                 @else
                                     {{ '----' }}
                                 @endif
