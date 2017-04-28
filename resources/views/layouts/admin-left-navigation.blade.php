@@ -12,7 +12,7 @@
     <ul class="sidebar-menu">
       <li class="header"><center>=================================</center></li>
       <li class="{{ Request::is('admin/dashboard') ? 'active' : '' }}"><a href="{{url('admin/dashboard')}}"><i class="fa fa-circle-o text-red"></i> <span>Dashboard</span></a></li>
-      <li class="{{ (Request::is('admin/create-user') || Request::is('admin/list-user')) ? 'active treeview' : 'treeview' }}">
+<!--      <li class="{{ (Request::is('admin/create-user') || Request::is('admin/list-user')) ? 'active treeview' : 'treeview' }}">
         <a href="#">
           <i class="fa fa-dashboard"></i> <span>{{trans('admin.usermanagement')}}</span>
           <span class="pull-right-container">
@@ -23,7 +23,7 @@
           <li class="{{ Request::is('admin/create-user') ? 'active' : '' }}"><a href="{{url('admin/create-user')}}"><i class="fa fa-circle-o"></i>{{trans('admin.createuser')}}</a></li>
           <li class="{{ Request::is('admin/list-user') ? 'active' : '' }}"><a href="{{url('admin/list-user')}}"><i class="fa fa-circle-o"></i> {{trans('admin.userlist')}}</a></li>
         </ul>
-      </li>
+      </li>-->
       <li class="{{ (Request::is('admin/importSchoolQuickFact') || Request::is('admin/list-school')) ? 'active treeview' : 'treeview' }}">
         <a href="#">
           <i class="fa fa-dashboard"></i> <span>School Management</span>
