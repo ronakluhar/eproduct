@@ -24,9 +24,11 @@ class FileManagementRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [
-            'school_logo' => 'required'
-        ];
+        if($this->input('id') > 0 && $this->input('school_logo') != '') {
+            $rules = [
+                'school_logo' => 'required'
+            ];
+        }
         $logos = count($this->input('school_logo'));
         foreach(range(0, $logos) as $index) {
             $rules['school_logo.' . $index] = 'image|mimes:jpeg,bmp,png|max:5024';

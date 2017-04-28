@@ -477,15 +477,19 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
       @$logo_detail : save_school_logo
     */
     public function save_school_logo($logo_detail) {
+        $response = [];
         $school_logo = $this->get_school_logo_by_unit_id($logo_detail['UnitID']);
        
         $this->objSchoolLogo = new SchoolLogoDetail();
         if (count($school_logo) != null && count($school_logo) > 0) {
             $this->delete_image_from_dir($school_logo);
             $this->objSchoolLogo->where('UnitID', $logo_detail['UnitID'])->update($logo_detail);
+            $response['action'] = 'Update';
         } else {
             $this->objSchoolLogo->create($logo_detail);
+            $response['action'] = 'Create';
         }
+        return $response;
     }
     
     public function get_school_logo_by_unit_id($unit_id) {
