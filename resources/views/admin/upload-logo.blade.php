@@ -25,7 +25,8 @@
                 
                 <form id="add_school_logo" class="form-horizontal" method="post" action="{{ url('/admin/upload-school-logo') }}" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="id" value="@if(isset($logo_detail) && !empty($logo_detail)){{ $logo_detail->school->UnitID }} @endif">
+                    <input type="hidden" name="id" value="@if(isset($logo_detail) && !empty($logo_detail) && isset($logo_detail->school)){{ $logo_detail->school->UnitID }} @endif">
+                    <input type="hidden" name="school_image" value="@if(isset($logo_detail) && !empty($logo_detail)){{$logo_detail->image_path}}@endif">
 
                     @if(isset($logo_detail) && !empty($logo_detail) && isset($logo_detail->school))
                     <div class="box-body">
@@ -41,7 +42,7 @@
                         <div class="form-group">
                             <label for="school_image" class="col-sm-2 control-label">{{trans('admin.school_image')}}</label>
                             <div class="col-sm-10">
-                                <img src="{{ public_path($logo_path.$logo_detail->image_path) }}" alt="{{ $logo_detail->image_path }}" height="100" width="100"/>
+                                <img src="{{ asset($logo_path.$logo_detail->image_path) }}" alt="{{ $logo_detail->image_path }}" height="100" width="100"/>
                             </div>
                         </div>                       
                     </div>

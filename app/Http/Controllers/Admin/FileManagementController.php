@@ -48,8 +48,14 @@ class FileManagementController extends Controller {
         $update_unit_id = null;
         $i = 0; // To get number of file upload
         if(isset($request->id) && $request->id != '' && $request->id > 0) {
+            // If user try to upload multiple file
             if(count($request->school_logo) > 1) {
                 return Redirect::back()->withErrors(['You can\'t upload multiple file while updating logo.']);
+            }
+
+            // If existing image not exist in directory
+            if(!$request->hasFile('school_logo') && !file_exists(public_path($this->logo_original_path.$request->school_image))) {
+                return Redirect::back()->withErrors(['Image for this school not found in directory. Please select to update.']);
             }
             $update_unit_id = $request->id;
         }
@@ -77,8 +83,12 @@ class FileManagementController extends Controller {
                     'UnitID' => ($update_unit_id) ? $update_unit_id : $unit_id,
                     'image_path' => $file_name.$extension
                 );
-                $this->schoolRepository->save_school_logo($insert_data);
-                $i++;
+                $response = $this->schoolRepository->save_school_logo($insert_data);
+                if(!empty($response) && $response['action'] == 'Create') {
+                    $i++;
+                } else {
+                    $i=1;
+                }
             }
             
             // Multiple File uploaded successfully
@@ -90,6 +100,8 @@ class FileManagementController extends Controller {
                 return Redirect::to('admin/list-school-logo')->with('error', trans('label.upload_error_msg'));
             }
             exit;
+        } else {
+            return ($update_unit_id > 0) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.logo_update_success_msg')) : Redirect::back()->withErrors([trans('label.select_file_msg')]);
         }
     }
 
