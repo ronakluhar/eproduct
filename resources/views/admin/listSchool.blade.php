@@ -24,23 +24,16 @@
                 <tr>
                   <th>UnitID</th>
                   <th>Name</th>
+                  <th>Institution Alias</th>
+                  <th>Address</th>
                   <th>City</th>
                   <th>State</th>
+                  <th>Zip Code</th>
+                  <th>Chief Administrator</th>
+                  <th>Title of Administrator</th>
+                  <th>General Info Number</th>
                   <th>Web Address</th>
-                  <th>OPEID</th>
-                  <th>Title IV Institution</th>
-                  <th>Control</th>
-                  <th>Level</th>
-                  <th>Institution Category</th>
-                  <th>Carnegie Classification</th>
-                  <th>Award levels</th>
-                  <th>Religious Affiliation</th>
-                  <th>Calendar System</th>
-                  <th>Reporting Method</th>
-                  <th>Campus Setting</th>
-                  <th>Distance Learning</th>
-                  <th>Status</th>
-                  <th>Action</th>
+                  <th>County Name</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,33 +41,16 @@
                         <tr>
                             <td>{{$school->UnitID}}</td>
                             <td>{{ucfirst($school->Institution_Name)}}</td>
+                            <td>{{$school->Institution_alias or "------" }}</td>
+                            <td>{{$school->Post_office_box or "------" }}</td>
                             <td>{{$school->City or "------" }}</td>
                             <td>{{$school->State or "------" }}</td>
-                            <td>{{$school->Web_Address or "------" }}</td>
-                            <td>{{$school->OPEID}}</td>
-                            <td>{{$school->Title_IV_Institution}}</td>
-                            <td>{{$school->Control}}</td>
-                            <td>{{$school->Level}}</td>
-                            <td>{{$school->Institution_Category}}</td>
-                            <td>{{$school->Carnegie_Classification}}</td>
-                            <td>{{$school->Award_levels}}</td>
-                            <td>{{$school->Religious_Affiliation}}</td>
-                            <td>{{$school->Calendar_System}}</td>
-                            <td>{{$school->Reporting_Method}}</td>
-                            <td>{{$school->Campus_Setting}}</td>
-                            <td>{{$school->Distance_Learning}}</td>
-                            <td>
-                                @if ($school->deleted == 1)
-                                    <i class="s_active fa fa-square"></i>
-                                @elseif($school->deleted == 2)
-                                    <i class="s_inactive fa fa-square"></i>
-                                @else
-                                    <i class="s_deleted fa fa-square"></i>
-                                @endif
-                            </td>
-                            <td>
-                                <a onclick="return confirm('<?php echo trans('admin.confirmdelete'); ?>')" href="{{ url('/admin/deleteuser') }}/{{$school->id}}"><i class="i_delete fa fa-trash"></i>&nbsp;&nbsp;</a>
-                            </td>
+                            <td>{{$school->ZIP_code or "------" }}</td>                            
+                            <td>{{$school->Name_chief_administrator or "------" }}</td>                            
+                            <td>{{$school->Title_chief_administrator or "------" }}</td>                            
+                            <td>{{$school->General_information_number or "------" }}</td>                            
+                            <td>{{$school->Internet_web_address or "------" }}</td>                            
+                            <td>{{$school->County_name or "------" }}</td>                            
                         </tr>
                         @empty
                         <tr>

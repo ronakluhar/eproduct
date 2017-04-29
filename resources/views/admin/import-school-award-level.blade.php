@@ -6,7 +6,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        {{trans('admin.lbl_school_award_level')}}
+        {{trans('admin.lbl_school_award_level')}}&nbsp;&nbsp;
+        <small><a href="{{asset('uploads/sample/college-award-level-sample.csv')}}" style="color:black;font-weight: bold;">(View Sample File)</a></small>    
     </h1>
 </section>
 

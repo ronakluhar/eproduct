@@ -6,7 +6,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        {{trans('admin.lbl_school_financial_aid')}}
+        {{trans('admin.lbl_school_financial_aid')}}&nbsp;&nbsp;
+        <small><a href="{{asset('uploads/sample/college-financial-aid-sample.csv')}}" style="color:black;font-weight: bold;">(View Sample File)</a></small>
     </h1>
 </section>
 

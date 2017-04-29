@@ -6,7 +6,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Import School Endowment 
+        Import School Endowment&nbsp;&nbsp;
+        <small><a href="{{asset('uploads/sample/college-endowment-sample.csv')}}" style="color:black;font-weight: bold;">(View Sample File)</a></small> 
     </h1>
 </section>
 
