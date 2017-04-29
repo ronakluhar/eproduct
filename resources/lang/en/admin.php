@@ -198,12 +198,13 @@ return [
     // School Logo Labels
     'schoolmanagement' => 'School Logo Management',
     'upload' => 'Upload',
-    'lbl_upload_logo' => 'Upload School Logo',
-    'lbl_update_logo' => 'Update School Logo',
+    'lbl_upload_logo' => 'Upload Single School Image',
+    'lbl_update_logo' => 'Update School Images',
     'lbl_school_logo_list' => 'School Logo List',
     'school_logo' => 'School Logo',
     'school_name' => 'School Name',
     'school_image' => 'School Logo',
     'schoollogodeletesuccess' => 'Logo Deleted Successfully',
     'logonotfoundonyourrequest' => "Logo or school detail is not found on your request",
+    'lbl_upload_bulk_logo' => 'Upload Bulk School Image',
  ];

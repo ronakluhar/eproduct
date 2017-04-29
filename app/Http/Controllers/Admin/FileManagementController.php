@@ -29,18 +29,20 @@ class FileManagementController extends Controller {
 
     // Upload new logos
     public function upload_school_logo() {
-        return view('admin.upload-logo');
+        $schoolDatas = $this->schoolRepository->getSchoolUnitIdName();
+        return view('admin.upload-logo',compact('schoolDatas'));
     }
     
     // Edit school logo
     public function update_school_logo($unit_id) {
         $logo_path = $this->logo_original_path;
-        $logo_detail = $this->objSchoolLogo->with('school')->where('UnitID', $unit_id)->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
         
+        $logo_detail = $this->objSchoolLogo->with('school')->where('UnitID', $unit_id)->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
+        $schoolDatas = $this->schoolRepository->getSchoolUnitIdName();
         if(!isset($logo_detail) || (isset($logo_detail) && !isset($logo_detail->school)) || (isset($logo_detail) && empty($logo_detail))) {
             return Redirect::to('admin/list-school-logo')->with('error', trans('admin.logonotfoundonyourrequest'));
         }
-        return view('admin.upload-logo', compact('logo_detail', 'logo_path'));
+        return view('admin.upload-logo', compact('logo_detail', 'logo_path','schoolDatas'));
     }
 
     public function upload_school_logo_post(FileManagementRequest $request) {
@@ -119,4 +121,8 @@ class FileManagementController extends Controller {
         }
     }
 
+    public function multipleImageUpload()
+    {
+        return view('admin.multiple-image-upload');
+    }
 }

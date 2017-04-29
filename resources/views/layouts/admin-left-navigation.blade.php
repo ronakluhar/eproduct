@@ -54,7 +54,7 @@
           <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>
         </ul>
       </li>
-      <li class="{{ (Request::is('admin/upload-school-logo') || Request::is('admin/list-school-logo')) ? 'active treeview' : 'treeview' }}">
+      <li class="{{ (Request::is('admin/upload-school-logo') || Request::is('admin/list-school-logo') || Request::is('admin/multiple-upload-image')) ? 'active treeview' : 'treeview' }}">
         <a href="#">
           <i class="fa fa-dashboard"></i> <span>{{trans('admin.schoolmanagement')}}</span>
           <span class="pull-right-container">
@@ -62,6 +62,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
+          <li class="{{ Request::is('admin/multiple-upload-image') ? 'active' : '' }}"><a href="{{url('admin/multiple-upload-image')}}"><i class="fa fa-circle-o"></i>{{trans('admin.lbl_upload_bulk_logo')}}</a></li>
           <li class="{{ Request::is('admin/upload-school-logo') ? 'active' : '' }}"><a href="{{url('admin/upload-school-logo')}}"><i class="fa fa-circle-o"></i>{{trans('admin.lbl_upload_logo')}}</a></li>
           <li class="{{ Request::is('admin/list-school-logo') ? 'active' : '' }}"><a href="{{url('admin/list-school-logo')}}"><i class="fa fa-circle-o"></i> {{trans('admin.lbl_school_logo_list')}}</a></li>
         </ul>

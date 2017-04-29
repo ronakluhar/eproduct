@@ -514,4 +514,13 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         }
     }
     
+    /**
+     * @return getSchool UnitId and name
+    */
+    public function getSchoolUnitIdName()
+    {
+        $schoolData = $this->model->where('deleted', '<>', 3)->select('UnitID', 'Institution_Name')->get()->toArray();
+       
+        return $schoolData;
+    }
 }
