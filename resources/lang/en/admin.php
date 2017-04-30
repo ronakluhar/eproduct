@@ -205,6 +205,7 @@ return [
     'school_name' => 'School Name',
     'school_image' => 'School Logo',
     'schoollogodeletesuccess' => 'Logo Deleted Successfully',
+    'schoolimagesdeletesuccess' => 'Images Deleted Successfully',
     'logonotfoundonyourrequest' => "Logo or school detail is not found on your request",
     'imagenotfoundonyourrequest' => "Image or school detail is not found on your request",
     'lbl_upload_bulk_logo' => 'Upload Bulk School Image',

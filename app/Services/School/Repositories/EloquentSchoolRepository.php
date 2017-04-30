@@ -34,22 +34,22 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
 
     /**
      * @return UserDetail Object
-    */
-    public function getAllSchoolsData()
-    {
+     */
+    public function getAllSchoolsData() {
         $schoolData = $this->model->where('deleted', '<>', 3)->get();
-        
+
         //$usersData = $this->model->get();
         return $schoolData;
     }
+
     /**
      * @return UserDetail Object
       Parameters
       @$userDetail : userDetail
-    */
+     */
     public function saveSchoolDetail($schoolDetail) {
         $school = $this->getSchoolDetailByUnitId($schoolDetail['UnitID']);
-        
+
         $response = [];
         if (count($school) != null && count($school) > 0) {
             $response = $this->model->where('UnitID', $schoolDetail['UnitID'])->update($schoolDetail);
@@ -57,7 +57,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         } else {
             $response = $this->model->create($schoolDetail);
         }
-        
+
         return $response;
     }
 
@@ -68,9 +68,9 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      */
     public function checkSchoolIdExist($email, $id = '') {
         if ($id != '') {
-            $user = $this->model->where([['deleted', '<>', 3],['email','=', $email],['id', '!=', $id]])->first();
+            $user = $this->model->where([['deleted', '<>', 3], ['email', '=', $email], ['id', '!=', $id]])->first();
         } else {
-            $user = $this->model->where([['deleted', '<>', 3],['email','=', $email]])->first();
+            $user = $this->model->where([['deleted', '<>', 3], ['email', '=', $email]])->first();
         }
 
         if (count($user) > 0) {
@@ -79,8 +79,6 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             return false;
         }
     }
-
-   
 
     /**
      * @return Boolean True/False
@@ -106,45 +104,42 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
     }
 
     public function getSchoolDetailByUnitId($unitId) {
-        $school = $this->model->where([['deleted', '<>', 3],['UnitID', $unitId]])->first();
+        $school = $this->model->where([['deleted', '<>', 3], ['UnitID', $unitId]])->first();
         return $school;
     }
-    
+
     //School Faculty import 
-    public function saveSchoolFaculty($schoolFacultyDetail) 
-    {        
-        $schoolFaculty = SchoolFaculty::where('UnitID',$schoolFacultyDetail['UnitID'])->first();
-       
+    public function saveSchoolFaculty($schoolFacultyDetail) {
+        $schoolFaculty = SchoolFaculty::where('UnitID', $schoolFacultyDetail['UnitID'])->first();
+
         if (count($schoolFaculty) != null && count($schoolFaculty) > 0) {
             SchoolFaculty::where('UnitID', $schoolFacultyDetail['UnitID'])->update($schoolFacultyDetail);
             //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
         } else {
             SchoolFaculty::create($schoolFacultyDetail);
         }
-        
     }
-    
+
     //School LIbrary import 
-    public function saveSchoolLibrary($schoolLibraryDetail) 
-    {        
-        $schoolLibrary = SchoolLibrary::where('UnitID',$schoolLibraryDetail['UnitID'])->first();
-       
+    public function saveSchoolLibrary($schoolLibraryDetail) {
+        $schoolLibrary = SchoolLibrary::where('UnitID', $schoolLibraryDetail['UnitID'])->first();
+
         if (count($schoolLibrary) != null && count($schoolLibrary) > 0) {
             SchoolLibrary::where('UnitID', $schoolLibraryDetail['UnitID'])->update($schoolLibraryDetail);
             //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
         } else {
             SchoolLibrary::create($schoolLibraryDetail);
         }
-    }    
+    }
+
     /**
      * @return school_apply_accepted_detail Object
       Parameters
       @$schoolApplyAcceptedDetail : schoolApplyAcceptedDetail
-    */
-    public function save_school_apply_accepted_detail($school_apply_accepted_detail)
-    {
+     */
+    public function save_school_apply_accepted_detail($school_apply_accepted_detail) {
         $school_apply_accepted = $this->get_school_apply_accepted_detail_by_unit_id($school_apply_accepted_detail['UnitID']);
-       
+
         $this->objSchoolApplyAccepted = new SchoolApplyAcceptedDetail();
         if (count($school_apply_accepted) != null && count($school_apply_accepted) > 0) {
             $this->objSchoolApplyAccepted->where('UnitID', $school_apply_accepted_detail['UnitID'])->update($school_apply_accepted_detail);
@@ -152,21 +147,21 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolApplyAccepted->create($school_apply_accepted_detail);
         }
     }
-    
+
     public function get_school_apply_accepted_detail_by_unit_id($unit_id) {
         $this->objSchoolApplyAccepted = new SchoolApplyAcceptedDetail();
         $school_apply_accepted = $this->objSchoolApplyAccepted->where([['UnitID', $unit_id]])->first();
         return $school_apply_accepted;
     }
-    
+
     /**
      * @return school_award_level_detail Object
       Parameters
       @$school_award_level_detail : school_award_level_detail
-    */
+     */
     public function save_school_award_level_detail($school_award_level_detail) {
         $school_award_level = $this->get_school_award_level_detail_by_unit_id($school_award_level_detail['UnitID']);
-       
+
         $this->objSchoolAwardLevel = new SchoolAwardLevelDetail();
         if (count($school_award_level) != null && count($school_award_level) > 0) {
             $this->objSchoolAwardLevel->where('UnitID', $school_award_level_detail['UnitID'])->update($school_award_level_detail);
@@ -174,7 +169,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolAwardLevel->create($school_award_level_detail);
         }
     }
-    
+
     public function get_school_award_level_detail_by_unit_id($unit_id) {
         $this->objSchoolAwardLevel = new SchoolAwardLevelDetail();
         $school_award_level = $this->objSchoolAwardLevel->where([['UnitID', $unit_id]])->first();
@@ -185,10 +180,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return school_graduation_rate_time_detail Object
       Parameters
       @$school_graduation_rate_time_detail : school_graduation_rate_time_detail
-    */
+     */
     public function save_school_graduation_rate_time_detail($school_graduation_rate_time_detail) {
         $school_graduation_rate_time = $this->get_school_graduation_rate_time_detail_by_unit_id($school_graduation_rate_time_detail['UnitID']);
-       
+
         $this->objSchoolGraduationRateTime = new SchoolGraduationRateTimeDetail();
         if (count($school_graduation_rate_time) != null && count($school_graduation_rate_time) > 0) {
             $this->objSchoolGraduationRateTime->where('UnitID', $school_graduation_rate_time_detail['UnitID'])->update($school_graduation_rate_time_detail);
@@ -196,7 +191,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolGraduationRateTime->create($school_graduation_rate_time_detail);
         }
     }
-    
+
     public function get_school_graduation_rate_time_detail_by_unit_id($unit_id) {
         $this->objSchoolGraduationRateTime = new SchoolGraduationRateTimeDetail();
         $school_graduation_rate_time = $this->objSchoolGraduationRateTime->where([['UnitID', $unit_id]])->first();
@@ -207,10 +202,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return school_ROTC_detail Object
       Parameters
       @$school_ROTC_detail : school_ROTC_detail
-    */
+     */
     public function save_school_ROTC_detail($school_ROTC_detail) {
         $school_ROTC = $this->get_school_ROTC_detail_by_unit_id($school_ROTC_detail['UnitID']);
-       
+
         $this->objSchoolROTC = new SchoolROTCDetail();
         if (count($school_ROTC) != null && count($school_ROTC) > 0) {
             $this->objSchoolROTC->where('UnitID', $school_ROTC_detail['UnitID'])->update($school_ROTC_detail);
@@ -218,7 +213,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolROTC->create($school_ROTC_detail);
         }
     }
-    
+
     public function get_school_ROTC_detail_by_unit_id($unit_id) {
         $this->objSchoolROTC = new SchoolROTCDetail();
         $school_ROTC = $this->objSchoolROTC->where([['UnitID', $unit_id]])->first();
@@ -229,10 +224,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return school_students_to_faculty_detail Object
       Parameters
       @$school_students_to_faculty_detail : school_students_to_faculty_detail
-    */
+     */
     public function save_school_students_to_faculty_detail($school_students_to_faculty_detail) {
         $school_students_to_faculty = $this->get_school_students_to_faculty_detail_by_unit_id($school_students_to_faculty_detail['UnitID']);
-       
+
         $this->objSchoolStudentsToFaculty = new SchoolStudentsToFacultyDetail();
         if (count($school_students_to_faculty) != null && count($school_students_to_faculty) > 0) {
             $this->objSchoolStudentsToFaculty->where('UnitID', $school_students_to_faculty_detail['UnitID'])->update($school_students_to_faculty_detail);
@@ -240,7 +235,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolStudentsToFaculty->create($school_students_to_faculty_detail);
         }
     }
-    
+
     public function get_school_students_to_faculty_detail_by_unit_id($unit_id) {
         $this->objSchoolStudentsToFaculty = new SchoolStudentsToFacultyDetail();
         $school_students_to_faculty = $this->objSchoolStudentsToFaculty->where([['UnitID', $unit_id]])->first();
@@ -251,10 +246,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return school_study_abroad_detail Object
       Parameters
       @$school_study_abroad_detail : school_study_abroad_detail
-    */
+     */
     public function save_school_study_abroad_detail($school_study_abroad_detail) {
         $school_study_abroad = $this->get_school_study_abroad_detail_by_unit_id($school_study_abroad_detail['UnitID']);
-       
+
         $this->objSchoolStudyAbroad = new SchoolStudyAbroadDetail();
         if (count($school_study_abroad) != null && count($school_study_abroad) > 0) {
             $this->objSchoolStudyAbroad->where('UnitID', $school_study_abroad_detail['UnitID'])->update($school_study_abroad_detail);
@@ -262,7 +257,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolStudyAbroad->create($school_study_abroad_detail);
         }
     }
-    
+
     public function get_school_study_abroad_detail_by_unit_id($unit_id) {
         $this->objSchoolStudyAbroad = new SchoolStudyAbroadDetail();
         $school_study_abroad = $this->objSchoolStudyAbroad->where([['UnitID', $unit_id]])->first();
@@ -273,10 +268,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return school_study_abroad_detail Object
       Parameters
       @$school_study_abroad_detail : school_study_abroad_detail
-    */
+     */
     public function save_school_teacher_certification_detail($school_teacher_certification_detail) {
         $school_teacher_certification = $this->get_school_teacher_certification_detail_by_unit_id($school_teacher_certification_detail['UnitID']);
-       
+
         $this->objSchoolTeacherCertification = new SchoolTeacherCertificationDetail();
         if (count($school_teacher_certification) != null && count($school_teacher_certification) > 0) {
             $this->objSchoolTeacherCertification->where('UnitID', $school_teacher_certification_detail['UnitID'])->update($school_teacher_certification_detail);
@@ -284,18 +279,17 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolTeacherCertification->create($school_teacher_certification_detail);
         }
     }
-    
+
     public function get_school_teacher_certification_detail_by_unit_id($unit_id) {
         $this->objSchoolTeacherCertification = new SchoolTeacherCertificationDetail();
         $school_study_abroad = $this->objSchoolTeacherCertification->where([['UnitID', $unit_id]])->first();
         return $school_study_abroad;
     }
-    
+
     //School Completions import 
-    public function saveSchoolCompletions($schoolCompletionsDetail) 
-    {        
-        $schoolCompletion = SchoolCompletion::where('UnitID',$schoolCompletionsDetail['UnitID'])->first();
-       
+    public function saveSchoolCompletions($schoolCompletionsDetail) {
+        $schoolCompletion = SchoolCompletion::where('UnitID', $schoolCompletionsDetail['UnitID'])->first();
+
         if (count($schoolCompletion) != null && count($schoolCompletion) > 0) {
             SchoolCompletion::where('UnitID', $schoolCompletionsDetail['UnitID'])->update($schoolCompletionsDetail);
             //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
@@ -303,12 +297,11 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             SchoolCompletion::create($schoolCompletionsDetail);
         }
     }
-    
+
     //School Diversity import 
-    public function saveSchoolDiversity($schoolDiversityDetail) 
-    {        
-        $schoolDiversity = SchoolDiversity::where('UnitID',$schoolDiversityDetail['UnitID'])->first();
-       
+    public function saveSchoolDiversity($schoolDiversityDetail) {
+        $schoolDiversity = SchoolDiversity::where('UnitID', $schoolDiversityDetail['UnitID'])->first();
+
         if (count($schoolDiversity) != null && count($schoolDiversity) > 0) {
             SchoolDiversity::where('UnitID', $schoolDiversityDetail['UnitID'])->update($schoolDiversityDetail);
             //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
@@ -316,12 +309,11 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             SchoolDiversity::create($schoolDiversityDetail);
         }
     }
-    
+
     //School Diversity import 
-    public function saveSchoolEndowment($schoolEndowmentDetail) 
-    {        
-        $schoolEndowment = SchoolEndowment::where('UnitID',$schoolEndowmentDetail['UnitID'])->first();
-       
+    public function saveSchoolEndowment($schoolEndowmentDetail) {
+        $schoolEndowment = SchoolEndowment::where('UnitID', $schoolEndowmentDetail['UnitID'])->first();
+
         if (count($schoolEndowment) != null && count($schoolEndowment) > 0) {
             SchoolEndowment::where('UnitID', $schoolEndowmentDetail['UnitID'])->update($schoolEndowmentDetail);
             //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
@@ -329,15 +321,15 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             SchoolEndowment::create($schoolEndowmentDetail);
         }
     }
-    
+
     /**
      * @return school_field_of_study_detail Object
       Parameters
       @$school_field_of_study_detail : school_field_of_study_detail
-    */
+     */
     public function save_school_field_of_study_detail($school_field_of_study_detail) {
         $school_field_of_study = $this->get_school_field_of_study_detail_by_unit_id($school_field_of_study_detail['UnitID']);
-       
+
         $this->objSchoolFieldOfStudy = new SchoolFieldOfStudyDetail();
         if (count($school_field_of_study) != null && count($school_field_of_study) > 0) {
             $this->objSchoolFieldOfStudy->where('UnitID', $school_field_of_study_detail['UnitID'])->update($school_field_of_study_detail);
@@ -345,7 +337,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolFieldOfStudy->create($school_field_of_study_detail);
         }
     }
-    
+
     public function get_school_field_of_study_detail_by_unit_id($unit_id) {
         $this->objSchoolFieldOfStudy = new SchoolFieldOfStudyDetail();
         $school_field_of_study = $this->objSchoolFieldOfStudy->where([['UnitID', $unit_id]])->first();
@@ -356,10 +348,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return save_school_financial_aid_detail Object
       Parameters
       @$save_school_financial_aid_detail : save_school_financial_aid_detail
-    */
+     */
     public function save_school_financial_aid_detail($school_financial_aid_detail) {
         $school_financial_aid = $this->get_school_financial_aid_detail_by_unit_id($school_financial_aid_detail['UnitID']);
-       
+
         $this->objSchoolFinancialAid = new SchoolFinancialAidDetail();
         if (count($school_financial_aid) != null && count($school_financial_aid) > 0) {
             $this->objSchoolFinancialAid->where('UnitID', $school_financial_aid_detail['UnitID'])->update($school_financial_aid_detail);
@@ -367,7 +359,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolFinancialAid->create($school_financial_aid_detail);
         }
     }
-    
+
     public function get_school_financial_aid_detail_by_unit_id($unit_id) {
         $this->objSchoolFinancialAid = new SchoolFinancialAidDetail();
         $school_financial_aid = $this->objSchoolFinancialAid->where([['UnitID', $unit_id]])->first();
@@ -378,10 +370,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return save_school_net_price_in_state_detail Object
       Parameters
       @$save_school_net_price_in_state_detail : save_school_net_price_in_state_detail
-    */
+     */
     public function save_school_net_price_in_state_detail($school_net_price_in_state_detail) {
         $school_net_price_in_state = $this->get_school_net_price_in_state_detail_by_unit_id($school_net_price_in_state_detail['UnitID']);
-       
+
         $this->objSchoolNetPriceInState = new SchoolNetPriceInStateDetail();
         if (count($school_net_price_in_state) != null && count($school_net_price_in_state) > 0) {
             $this->objSchoolNetPriceInState->where('UnitID', $school_net_price_in_state_detail['UnitID'])->update($school_net_price_in_state_detail);
@@ -389,7 +381,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolNetPriceInState->create($school_net_price_in_state_detail);
         }
     }
-    
+
     public function get_school_net_price_in_state_detail_by_unit_id($unit_id) {
         $this->objSchoolNetPriceInState = new SchoolNetPriceInStateDetail();
         $school_net_price_in_state = $this->objSchoolNetPriceInState->where([['UnitID', $unit_id]])->first();
@@ -400,10 +392,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return save_school_net_price_out_state_detail Object
       Parameters
       @$save_school_net_price_out_state_detail : save_school_net_price_out_state_detail
-    */
+     */
     public function save_school_net_price_out_state_detail($school_net_price_out_state_detail) {
         $school_net_price_out_state = $this->get_school_net_price_out_state_detail_by_unit_id($school_net_price_out_state_detail['UnitID']);
-       
+
         $this->objSchoolNetPriceOutState = new SchoolNetPriceOutStateDetail();
         if (count($school_net_price_out_state) != null && count($school_net_price_out_state) > 0) {
             $this->objSchoolNetPriceOutState->where('UnitID', $school_net_price_out_state_detail['UnitID'])->update($school_net_price_out_state_detail);
@@ -411,7 +403,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolNetPriceOutState->create($school_net_price_out_state_detail);
         }
     }
-    
+
     public function get_school_net_price_out_state_detail_by_unit_id($unit_id) {
         $this->objSchoolNetPriceOutState = new SchoolNetPriceOutStateDetail();
         $school_net_price_out_state = $this->objSchoolNetPriceOutState->where([['UnitID', $unit_id]])->first();
@@ -422,10 +414,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return save_school_sat_act_scores_detail Object
       Parameters
       @$save_school_sat_act_scores_detail : save_school_sat_act_scores_detail
-    */
+     */
     public function save_school_sat_act_scores_detail($school_sat_act_scores_detail) {
         $school_sat_act_scores = $this->get_school_sat_act_scores_detail_by_unit_id($school_sat_act_scores_detail['UnitID']);
-       
+
         $this->objSchoolSatActScores = new SchoolSatActScoresDetail();
         if (count($school_sat_act_scores) != null && count($school_sat_act_scores) > 0) {
             $this->objSchoolSatActScores->where('UnitID', $school_sat_act_scores_detail['UnitID'])->update($school_sat_act_scores_detail);
@@ -433,7 +425,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolSatActScores->create($school_sat_act_scores_detail);
         }
     }
-    
+
     public function get_school_sat_act_scores_detail_by_unit_id($unit_id) {
         $this->objSchoolSatActScores = new SchoolSatActScoresDetail();
         $school_sat_act_scores = $this->objSchoolSatActScores->where([['UnitID', $unit_id]])->first();
@@ -444,10 +436,10 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return save_school_tuition_fees_detail Object
       Parameters
       @$save_school_tuition_fees_detail : save_school_tuition_fees_detail
-    */
+     */
     public function save_school_tuition_fees_detail($school_tuition_fees_detail) {
         $school_tuition_fees = $this->get_school_tuition_fees_detail_by_unit_id($school_tuition_fees_detail['UnitID']);
-       
+
         $this->objSchoolTuitionFees = new SchoolTuitionFeesDetail();
         if (count($school_tuition_fees) != null && count($school_tuition_fees) > 0) {
             $this->objSchoolTuitionFees->where('UnitID', $school_tuition_fees_detail['UnitID'])->update($school_tuition_fees_detail);
@@ -455,20 +447,19 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
             $this->objSchoolTuitionFees->create($school_tuition_fees_detail);
         }
     }
-    
+
     public function get_school_tuition_fees_detail_by_unit_id($unit_id) {
         $this->objSchoolTuitionFees = new SchoolTuitionFeesDetail();
         $school_tuition_fees = $this->objSchoolTuitionFees->where([['UnitID', $unit_id]])->first();
         return $school_tuition_fees;
     }
-    
+
     /**
      * @return SchoolLogoDetail Object
-    */
-    public function getAllSchoolsLogo()
-    {
+     */
+    public function getAllSchoolsLogo() {
         $school_image_data = $this->model->has('school')->with('school')->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->paginate(10);
-        
+
         return $school_image_data;
     }
 
@@ -476,11 +467,11 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return logo_detail Object
       Parameters
       @$logo_detail : save_school_logo
-    */
+     */
     public function save_school_logo($logo_detail) {
         $response = [];
         $school_image = $this->get_school_logo_by_unit_id($logo_detail['UnitID'], $logo_detail['image_type']);
-       
+
         $this->objSchoolLogo = new SchoolLogoDetail();
         if (count($school_image) != null && count($school_image) > 0) {
             $this->delete_image_from_dir($school_image);
@@ -492,36 +483,53 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         }
         return $response;
     }
-    
+
     public function get_school_logo_by_unit_id($unit_id, $image_type) {
         $this->objSchoolLogo = new SchoolLogoDetail();
         $school_logo = $this->objSchoolLogo->where([['UnitID', $unit_id], ['image_type', $image_type]])->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
         return $school_logo;
     }
-    
+
     /**
      * @return 
       Parameters
       $school_logo : object
-    */
+     */
     public function delete_image_from_dir($school_logo) {
-        if(!empty($school_logo)) {
-            $logo_path = public_path(Config::get('constant.SCHOOL_ORIGINAL_LOGO_PATH').$school_logo->image_path);
-            
+        if (!empty($school_logo)) {
+            $logo_path = public_path(Config::get('constant.SCHOOL_ORIGINAL_LOGO_PATH') . $school_logo->image_path);
+
             // Unlink logo from directory
             if ($school_logo->image_path != '' && file_exists($logo_path)) {
                 unlink($logo_path);
             }
         }
     }
-    
+
     /**
      * @return getSchool UnitId and name
-    */
-    public function getSchoolUnitIdName()
-    {
+     */
+    public function getSchoolUnitIdName() {
         $schoolData = $this->model->where('deleted', '<>', 3)->select('UnitID', 'Institution_Name')->get()->toArray();
-       
+
         return $schoolData;
     }
+
+    public function delete_school_images($unit_id) {
+        $get_school_images = DB::table('collage_logo')->where('UnitID', $unit_id)->get();
+        
+        $response = [];
+        if($get_school_images) {
+            foreach($get_school_images as $_school_image_data) {
+                $this->delete_image_from_dir($_school_image_data);
+                DB::table('collage_logo')->where('id', $_school_image_data->id)->delete();
+            }
+            $response['status'] = 'OK';
+        } else {
+            $response['status'] = 'error';
+        }
+        
+        return $response;
+    }
+
 }
