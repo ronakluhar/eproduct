@@ -458,7 +458,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return SchoolLogoDetail Object
      */
     public function getAllSchoolsLogo() {
-        $school_image_data = $this->model->has('school')->with('school')->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->paginate(10);
+        $school_image_data = $this->model->has('school')->with('school')->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->get();
 
         return $school_image_data;
     }
