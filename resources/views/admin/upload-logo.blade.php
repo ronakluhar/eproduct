@@ -35,7 +35,7 @@
                             <label for="school_name" class="col-md-3">Select School</label>
                             <div class="col-md-9">
                                 @if(!empty($schoolDatas))                                    
-                                    <select id="school_id" name="school_id" class="form-control">
+                                    <select id="school_id" name="school_id" class="form-control chosen-select">
                                         @foreach($schoolDatas as $key=>$data)
                                             <option value="{{$data['UnitID']}}">{{$data['UnitID']}} - {{$data['Institution_Name']}}</option>
                                         @endforeach
@@ -133,6 +133,18 @@
 
 @section('script')
 <script type="text/javascript">
+    jQuery(document).ready(function() {
+    var config = {
+      '.chosen-select'           : {},
+      '.chosen-select-deselect'  : {allow_single_deselect:true},
+      '.chosen-select-no-single' : {disable_search_threshold:10},
+      '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+      '.chosen-select-width'     : {width:"95%"}
+    }
+    for (var selector in config) {
+      $(selector).chosen(config[selector]);
+    }
+    });
 </script>
 @stop
 

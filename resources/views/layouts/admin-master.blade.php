@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="{{asset('css/admin/dist/css/AdminLTE.min.css')}}">
         <link rel="stylesheet" href="{{asset('css/admin/plugins/iCheck/square/blue.css')}}">
         <link rel="stylesheet" href="{{asset('css/admin/dist/css/skins/_all-skins.min.css')}}">
+        <link rel="stylesheet" href="{{ asset('css/admin/chosen.css')}}">
         <link rel="stylesheet" href="{{asset('css/admin/custom.css')}}">
         @yield('header')
     </head>
@@ -82,6 +83,7 @@
         <script src="{{asset('css/admin/plugins/slimScroll/jquery.slimscroll.min.js')}}"></script>
         <script src="{{asset('css/admin/plugins/chartjs/Chart.min.js')}}"></script>
         <script src="{{asset('css/admin/dist/js/demo.js')}}"></script>
+        <script src="{{ asset('js/admin/chosen.jquery.js')}}"></script>
         <script src="{{asset('js/front/jquery.validate.min.js')}}"></script>
         
         @yield('script')
