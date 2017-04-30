@@ -5,7 +5,7 @@
 /public/storage
 /storage/*.key
 /.env.example
-/vendor
+/vendor/
 /.netbeans
 /public/uploads/logo/
 /public/uploads/csv/
