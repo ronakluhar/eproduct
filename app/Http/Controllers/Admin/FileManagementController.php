@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\FileManagementRequest;
+use App\Http\Requests\ImageRequest;
 use App\Http\Controllers\Controller;
 use App\Services\School\Contracts\SchoolRepository;
 use File;
 use Config;
 use Redirect;
 use App\SchoolLogoDetail;
+use App\School;
 
 class FileManagementController extends Controller {
 
@@ -23,6 +25,7 @@ class FileManagementController extends Controller {
     public function index() {
         //get all school data
         $school_logo = $this->schoolRepository->getAllSchoolsLogo();
+        
         $logo_path = $this->logo_original_path;
         return view('admin.list-school-logo', compact('school_logo', 'logo_path'));
     }
@@ -37,30 +40,121 @@ class FileManagementController extends Controller {
     public function update_school_logo($unit_id) {
         $logo_path = $this->logo_original_path;
         
-        $logo_detail = $this->objSchoolLogo->with('school')->where('UnitID', $unit_id)->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
-        $schoolDatas = $this->schoolRepository->getSchoolUnitIdName();
-        if(!isset($logo_detail) || (isset($logo_detail) && !isset($logo_detail->school)) || (isset($logo_detail) && empty($logo_detail))) {
-            return Redirect::to('admin/list-school-logo')->with('error', trans('admin.logonotfoundonyourrequest'));
+        $school_image_detail = School::with('school')->where('UnitID', $unit_id)->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
+        
+        if(!isset($school_image_detail) || empty($school_image_detail) || (!isset($school_image_detail->school) || count($school_image_detail->school) == 0)) {
+            return Redirect::to('admin/list-school-logo')->with('error', trans('admin.imagenotfoundonyourrequest'));
         }
-        return view('admin.upload-logo', compact('logo_detail', 'logo_path','schoolDatas'));
+        return view('admin.upload-logo', compact('school_image_detail', 'logo_path'));
+    }
+    
+    public function upload_school_images_post(ImageRequest $request) {
+        
+        $unit_id = ($request->school_id) ? $request->school_id : $request->id;
+        $image_credit_link = $request->school_credit_link;
+        
+        $unit_id = (int) $unit_id;
+        
+        $school = School::where('UnitID', $unit_id)->first();
+        
+        if(!$school) {
+            return Redirect::back()->withInput()->withErrors(['Something went wrong. Please try again.']);
+        }
+        
+        try {
+            // Upload logo image
+            if($request->hasFile('school_logo')) {
+                $school_logo = $request->school_logo;
+
+                $extension = '.' . $school_logo->getClientOriginalExtension();
+
+                $file_name = $unit_id . '_logo_' . str_random(5);
+
+                if (!file_exists($this->logo_original_path)) {
+                    File::makeDirectory($this->logo_original_path, 0777, true, true);
+                }
+                $school_logo->move($this->logo_original_path, $file_name.$extension);
+
+                $insert_data = array(
+                    'UnitID' => $unit_id,
+                    'image_path' => $file_name.$extension,
+                    'image_type' => Config::get('constant.LOGO_IMAGE_FLAG')
+                );
+                $response = $this->schoolRepository->save_school_logo($insert_data);
+            }
+        } catch (Exception $ex) {
+            Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
+        }
+        
+        try {
+            // Upload main image
+            if($request->hasFile('school_main_image')) {
+                $school_main_image = $request->school_main_image;
+
+                $extension = '.' . $school_main_image->getClientOriginalExtension();
+
+                $file_name = $unit_id . '_main_' . str_random(5);
+
+                if (!file_exists($this->logo_original_path)) {
+                    File::makeDirectory($this->logo_original_path, 0777, true, true);
+                }
+                $school_main_image->move($this->logo_original_path, $file_name.$extension);
+
+                $insert_data = array(
+                    'UnitID' => $unit_id,
+                    'image_path' => $file_name.$extension,
+                    'image_type' => Config::get('constant.MAIN_IMAGE_FLAG')
+                );
+                $response = $this->schoolRepository->save_school_logo($insert_data);
+            }
+        } catch (Exception $ex) {
+            Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
+        }
+        
+        try {
+            // Upload seal image
+            if($request->hasFile('school_seal_image')) {
+                $school_seal_image = $request->school_seal_image;
+
+                $extension = '.' . $school_main_image->getClientOriginalExtension();
+
+                $file_name = $unit_id . '_seal_' . str_random(5);
+
+                if (!file_exists($this->logo_original_path)) {
+                    File::makeDirectory($this->logo_original_path, 0777, true, true);
+                }
+                $school_seal_image->move($this->logo_original_path, $file_name.$extension);
+
+                $insert_data = array(
+                    'UnitID' => $unit_id,
+                    'image_path' => $file_name.$extension,
+                    'image_type' => Config::get('constant.SEAL_IMAGE_FLAG')
+                );
+                $response = $this->schoolRepository->save_school_logo($insert_data);
+            }
+        } catch (Exception $ex) {
+            Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
+        }
+
+        // Update school data
+        $update_school_data = array(
+            'UnitID' => $unit_id,
+            'image_credit_link' => $image_credit_link,
+        );
+        $response = $this->schoolRepository->saveSchoolDetail($update_school_data);
+        
+        return ($response) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.image_upload_success_msg')) : Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
     }
 
     public function upload_school_logo_post(FileManagementRequest $request) {
         
-        $update_unit_id = null;
         $i = 0; // To get number of file upload
-        if(isset($request->id) && $request->id != '' && $request->id > 0) {
-            // If user try to upload multiple file
-            if(count($request->school_logo) > 1) {
-                return Redirect::back()->withErrors(['You can\'t upload multiple file while updating logo.']);
-            }
+        $image_type_array = array(
+            'logo',
+            'main',
+            'seal'
+        );
 
-            // If existing image not exist in directory
-            if(!$request->hasFile('school_logo') && !file_exists(public_path($this->logo_original_path.$request->school_image))) {
-                return Redirect::back()->withErrors(['Image for this school not found in directory. Please select to update.']);
-            }
-            $update_unit_id = $request->id;
-        }
         if($request->hasFile('school_logo')) {
             foreach ($request->school_logo as $logo) {
 
@@ -72,38 +166,35 @@ class FileManagementController extends Controller {
 
                 $name_array = explode(",", $file_name, 2);
                 $unit_id = $name_array[0];
+                $image_type = strtolower($name_array[1]);
                 
-                if($update_unit_id == null && !is_numeric($unit_id)) continue;
-                $file_name = $unit_id . '_' . str_random(5);
+                if(!is_numeric($unit_id) || !in_array($image_type, $image_type_array)) continue;
+                $file_name = $unit_id . '_' . $image_type . '_' . str_random(5);
 
                 if (!file_exists($this->logo_original_path)) {
                     File::makeDirectory($this->logo_original_path, 0777, true, true);
                 }
                 $logo->move($this->logo_original_path, $file_name.$extension);
-
+                
+                $image_type_id = (($image_type == 'logo') ? Config::get('constant.LOGO_IMAGE_FLAG') : (($image_type == 'main') ? Config::get('constant.MAIN_IMAGE_FLAG') : Config::get('constant.SEAL_IMAGE_FLAG')));
+                
                 $insert_data = array(
-                    'UnitID' => ($update_unit_id) ? $update_unit_id : $unit_id,
-                    'image_path' => $file_name.$extension
+                    'UnitID' => $unit_id,
+                    'image_path' => $file_name.$extension,
+                    'image_type' => $image_type_id
                 );
+                
                 $response = $this->schoolRepository->save_school_logo($insert_data);
                 if(!empty($response) && $response['action'] == 'Create') {
                     $i++;
-                } else {
-                    $i=1;
                 }
             }
             
             // Multiple File uploaded successfully
-            if(!$update_unit_id && $i > 0) {
-                return Redirect::to('admin/list-school-logo')->with('success', $i . ' '. trans('label.upload_success_msg'));
-            } else if($update_unit_id && $i > 0) { // Logo updated successfully
-                return Redirect::to('admin/list-school-logo')->with('success', trans('label.logo_update_success_msg'));
-            } else { // Error or incorrect logo name
-                return Redirect::to('admin/list-school-logo')->with('error', trans('label.upload_error_msg'));
-            }
+            return ($i > 0) ? Redirect::to('admin/list-school-logo')->with('success', $i . ' '. trans('label.upload_success_msg')) : edirect::to('admin/list-school-logo')->with('error', trans('label.upload_error_msg'));
             exit;
         } else {
-            return ($update_unit_id > 0) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.logo_update_success_msg')) : Redirect::back()->withErrors([trans('label.select_file_msg')]);
+            return Redirect::back()->withErrors([trans('label.select_file_msg')]);
         }
     }
 

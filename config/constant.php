@@ -38,7 +38,11 @@ return [
     'PROPERTY_ORIGINAL_IMAGE_HEIGHT' => '100',
     'PROPERTY_ORIGINAL_IMAGE_WIDTH' => '100',
     
+    // School Image Upload
     'SCHOOL_ORIGINAL_LOGO_PATH' => 'uploads/logo/original/',
+    'LOGO_IMAGE_FLAG' => 1,
+    'MAIN_IMAGE_FLAG' => 2,
+    'SEAL_IMAGE_FLAG' => 3,
 
     'LANGUAGE' => array('en' => '1', 'fr' => '2', 'gr' => '3'),
     'PROPERTY_ACTION_TYPE' => array('1' => 'Group', '2' => 'Deal', '3' => 'Development'),

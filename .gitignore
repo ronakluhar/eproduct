@@ -5,3 +5,6 @@
 /public/storage
 /storage/*.key
 /.env.example
+/vendor
+/.netbeans
+/public/uploads

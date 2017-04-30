@@ -14,6 +14,7 @@ class SchoolLogoDetail extends Model {
         'id',
         'UnitID',
         'image_path',
+        'image_type',
         'created_at',
         'updated_at',
         'deleted'

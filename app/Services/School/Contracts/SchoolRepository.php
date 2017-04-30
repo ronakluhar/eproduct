@@ -132,5 +132,5 @@ interface SchoolRepository extends BaseRepository
     */
     public function save_school_logo($logo_detail);
     
-    public function get_school_logo_by_unit_id($unit_id);
+    public function get_school_logo_by_unit_id($unit_id, $image_type);
 }

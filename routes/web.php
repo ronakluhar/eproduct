@@ -124,7 +124,8 @@ Route::post('admin/save-school-tuition-fees', 'Admin\SchoolController@save_schoo
 // Admin School Logo
 Route::get('admin/list-school-logo', 'Admin\FileManagementController@index');
 Route::get('admin/upload-school-logo', 'Admin\FileManagementController@upload_school_logo');
-Route::post('admin/upload-school-logo', 'Admin\FileManagementController@upload_school_logo_post');
+Route::post('admin/upload-school-logo', 'Admin\FileManagementController@upload_school_images_post');
+Route::post('admin/upload-multiple-school-logo', 'Admin\FileManagementController@upload_school_logo_post');
 Route::get('admin/update-school-logo/{UnitID}', 'Admin\FileManagementController@update_school_logo');
 Route::get('admin/delete-school-logo/{UnitID}', 'Admin\FileManagementController@delete_school_logo');
 Route::get('admin/multiple-upload-image', 'Admin\FileManagementController@multipleImageUpload');

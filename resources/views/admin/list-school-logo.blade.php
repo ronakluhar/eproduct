@@ -41,14 +41,38 @@
                             <td>{{$_school_logo->UnitID}}</td>
                             <td>{{ucfirst($_school_logo->Institution_Name)}}</td>
                             <td>
-                                @if(file_exists(public_path($logo_path.$_school_logo->image_path)))
-                                <img width="70px" height="70px" src="{{ asset($logo_path.$_school_logo->image_path) }}" alt="{{ $_school_logo->image_path }}"/>
+                                @if(isset($_school_logo->school) && !empty($_school_logo->school))
+                                    @foreach($_school_logo->school as $_school_image)
+                                        @if(!empty($_school_image->image_path) && $_school_image->image_type == Config::get('constant.LOGO_IMAGE_FLAG'))
+                                        <img src="{{ asset($logo_path.$_school_image->image_path) }}" alt="{{ $_school_image->image_path }}" height="70" width="70"/>
+                                        @endif
+                                    @endforeach
                                 @else
-                                    {{ '----' }}
+                                {{ '----' }}
                                 @endif
                             </td>
-                            <td>-</td>
-                            <td>-</td>                            
+                            <td>
+                                @if(isset($_school_logo->school) && !empty($_school_logo->school))
+                                    @foreach($_school_logo->school as $_school_image)
+                                        @if(!empty($_school_image->image_path) && $_school_image->image_type == Config::get('constant.MAIN_IMAGE_FLAG'))
+                                        <img src="{{ asset($logo_path.$_school_image->image_path) }}" alt="{{ $_school_image->image_path }}" height="70" width="70"/>
+                                        @endif
+                                    @endforeach
+                                @else
+                                {{ '----' }}
+                                @endif
+                            </td>
+                            <td>
+                                @if(isset($_school_logo->school) && !empty($_school_logo->school))
+                                    @foreach($_school_logo->school as $_school_image)
+                                        @if(!empty($_school_image->image_path) && $_school_image->image_type == Config::get('constant.SEAL_IMAGE_FLAG'))
+                                        <img src="{{ asset($logo_path.$_school_image->image_path) }}" alt="{{ $_school_image->image_path }}" height="70" width="70"/>
+                                        @endif
+                                    @endforeach
+                                @else
+                                {{ '----' }}
+                                @endif
+                            </td>                            
                             
                             <td>
                                 <a onclick="return confirm('<?php echo trans('admin.confirmdelete'); ?>')" href="{{ url('/admin/delete-school-logo') }}/{{$_school_logo->UnitID}}"><i class="i_delete fa fa-trash"></i>&nbsp;&nbsp;</a>

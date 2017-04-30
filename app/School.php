@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Config;
 
 class School extends Model {
 
@@ -12,5 +13,12 @@ class School extends Model {
         'Net_price_calculator_web_address', 'Veteran_Military_web_address', 'County_name', 'Longitude', 'Latitude', 'Open_to_general_public', 'Status_of_institution',
         'Control_of_institution', 'Carnegie_Classification', 'Religious_Affiliation', 'Historically_Black_College', 'Tribal_college',
         'Degree_of_urbanization', 'Institution_size_category', 'Credit_for_life_experiences', 'Advanced_placement_AP_credits', 'created_at', 'updated_at', 'deleted'];
-
+    
+    /**
+     * Get the school data that owns the logo.
+     */
+    public function school() {
+        return $this->hasMany('App\SchoolLogoDetail', 'UnitID', 'UnitID')->where('deleted', '<>', Config::get('constant.DELETED_FLAG'));
+    }
+    
 }

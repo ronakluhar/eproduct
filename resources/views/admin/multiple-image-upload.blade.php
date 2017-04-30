@@ -23,7 +23,7 @@
                      </h3>
                 </div><!-- /.box-header -->
                 
-                <form id="add_school_logo" class="form-horizontal" method="post" action="{{ url('/admin/upload-school-logo') }}" enctype="multipart/form-data">
+                <form id="add_school_logo" class="form-horizontal" method="post" action="{{ url('/admin/upload-multiple-school-logo') }}" enctype="multipart/form-data">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="id" value="@if(isset($logo_detail) && !empty($logo_detail) && isset($logo_detail->school)){{ $logo_detail->school->UnitID }} @endif">
                     <input type="hidden" name="school_image" value="@if(isset($logo_detail) && !empty($logo_detail)){{$logo_detail->image_path}}@endif">

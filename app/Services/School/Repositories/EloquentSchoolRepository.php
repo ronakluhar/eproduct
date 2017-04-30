@@ -49,14 +49,16 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
     */
     public function saveSchoolDetail($schoolDetail) {
         $school = $this->getSchoolDetailByUnitId($schoolDetail['UnitID']);
-       
+        
+        $response = [];
         if (count($school) != null && count($school) > 0) {
-            $this->model->where('UnitID', $schoolDetail['UnitID'])->update($schoolDetail);
+            $response = $this->model->where('UnitID', $schoolDetail['UnitID'])->update($schoolDetail);
             //$this->model->where('UnitID', $schoolDetail['UnitID'])->first();
         } else {
-            $this->model->create($schoolDetail);
+            $response = $this->model->create($schoolDetail);
         }
         
+        return $response;
     }
 
     /**
@@ -465,10 +467,9 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
     */
     public function getAllSchoolsLogo()
     {
-        $this->objSchoolLogo = new SchoolLogoDetail();
-        $school_logo_data = $this->objSchoolLogo->get_logo_detail();
+        $school_image_data = $this->model->has('school')->with('school')->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->paginate(10);
         
-        return $school_logo_data;
+        return $school_image_data;
     }
 
     /**
@@ -478,12 +479,12 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
     */
     public function save_school_logo($logo_detail) {
         $response = [];
-        $school_logo = $this->get_school_logo_by_unit_id($logo_detail['UnitID']);
+        $school_image = $this->get_school_logo_by_unit_id($logo_detail['UnitID'], $logo_detail['image_type']);
        
         $this->objSchoolLogo = new SchoolLogoDetail();
-        if (count($school_logo) != null && count($school_logo) > 0) {
-            $this->delete_image_from_dir($school_logo);
-            $this->objSchoolLogo->where('UnitID', $logo_detail['UnitID'])->update($logo_detail);
+        if (count($school_image) != null && count($school_image) > 0) {
+            $this->delete_image_from_dir($school_image);
+            $this->objSchoolLogo->where('id', $school_image['id'])->update($logo_detail);
             $response['action'] = 'Update';
         } else {
             $this->objSchoolLogo->create($logo_detail);
@@ -492,9 +493,9 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         return $response;
     }
     
-    public function get_school_logo_by_unit_id($unit_id) {
+    public function get_school_logo_by_unit_id($unit_id, $image_type) {
         $this->objSchoolLogo = new SchoolLogoDetail();
-        $school_logo = $this->objSchoolLogo->where([['UnitID', $unit_id]])->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
+        $school_logo = $this->objSchoolLogo->where([['UnitID', $unit_id], ['image_type', $image_type]])->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
         return $school_logo;
     }
     
