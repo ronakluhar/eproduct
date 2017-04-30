@@ -30,7 +30,6 @@ class ImageRequest extends FormRequest
                 'school_logo' => 'required|image|mimes:jpeg,bmp,png|max:5024',
                 'school_main_image' => 'required|image|mimes:jpeg,bmp,png|max:5024',
                 'school_seal_image' => 'required|image|mimes:jpeg,bmp,png|max:5024',
-                'school_credit_link' => 'required'
             ];
         }
         return $rules;        
