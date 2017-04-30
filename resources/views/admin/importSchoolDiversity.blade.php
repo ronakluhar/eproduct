@@ -6,7 +6,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Import School Diversity 
+        Import School Diversity&nbsp;&nbsp;
+        <small><a href="{{asset('uploads/sample/college-diversity-sample.csv')}}" style="color:black;font-weight: bold;">(View Sample File)</a></small> 
     </h1>
 </section>
 

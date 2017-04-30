@@ -32,6 +32,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
+          <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>        
           <li class="{{ Request::is('admin/import-school-apply-accepted') ? 'active' : '' }}"><a href="{{url('admin/import-school-apply-accepted')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_apply_accepted')}}</a></li>
           <li class="{{ Request::is('admin/import-school-award-level') ? 'active' : '' }}"><a href="{{url('admin/import-school-award-level')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_award_level')}}</a></li>
           <li class="{{ Request::is('admin/importSchoolCompletion') ? 'active' : '' }}"><a href="{{url('admin/importSchoolCompletion')}}"><i class="fa fa-circle-o"></i>School Completions</a></li>
@@ -51,7 +52,6 @@
           <li class="{{ Request::is('admin/import-school-study-abroad') ? 'active' : '' }}"><a href="{{url('admin/import-school-study-abroad')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_study_abroad')}}</a></li>
           <li class="{{ Request::is('admin/import-school-teacher-certification') ? 'active' : '' }}"><a href="{{url('admin/import-school-teacher-certification')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_teacher_certification')}}</a></li>
           <li class="{{ Request::is('admin/import-school-tuition-fees') ? 'active' : '' }}"><a href="{{url('admin/import-school-tuition-fees')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_tuition_fees')}}</a></li>
-          <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>
         </ul>
       </li>
       <li class="{{ (Request::is('admin/upload-school-logo') || Request::is('admin/list-school-logo') || Request::is('admin/multiple-upload-image')) ? 'active treeview' : 'treeview' }}">

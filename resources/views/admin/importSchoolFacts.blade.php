@@ -6,7 +6,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Import School Quick Facts
+        Import School Quick Facts&nbsp;&nbsp;
+        <small><a href="{{asset('uploads/sample/college-quick-facts-sample.csv')}}" style="color:black;font-weight: bold;">(View Sample File)</a></small>
     </h1>
 </section>
 

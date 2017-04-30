@@ -6,7 +6,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        {{trans('admin.lbl_school_sat_act_scores')}}
+        {{trans('admin.lbl_school_sat_act_scores')}}&nbsp;&nbsp;
+        <small><a href="{{asset('uploads/sample/college-sat-act-scores-sample.csv')}}" style="color:black;font-weight: bold;">(View Sample File)</a></small>
     </h1>
 </section>
 

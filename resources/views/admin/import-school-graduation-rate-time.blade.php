@@ -6,7 +6,8 @@
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        {{trans('admin.lbl_school_graduation_rate_time')}}
+        {{trans('admin.lbl_school_graduation_rate_time')}}&nbsp;&nbsp;
+        <small><a href="{{asset('uploads/sample/college-graduation-rate-time-sample.csv')}}" style="color:black;font-weight: bold;">(View Sample File)</a></small>
     </h1>
 </section>
 
