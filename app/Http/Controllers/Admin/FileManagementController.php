@@ -103,7 +103,8 @@ class FileManagementController extends Controller {
                 $insert_data = array(
                     'UnitID' => $unit_id,
                     'image_path' => $file_name . $extension,
-                    'image_type' => Config::get('constant.MAIN_IMAGE_FLAG')
+                    'image_type' => Config::get('constant.MAIN_IMAGE_FLAG'),
+                    'image_credit_link' => $image_credit_link
                 );
                 $response = $this->schoolRepository->save_school_logo($insert_data);
             }
@@ -135,13 +136,6 @@ class FileManagementController extends Controller {
         } catch (Exception $ex) {
             Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
         }
-
-        // Update school data
-        $update_school_data = array(
-            'UnitID' => $unit_id,
-            'image_credit_link' => $image_credit_link,
-        );
-        $response = $this->schoolRepository->saveSchoolDetail($update_school_data);
 
         return ($response) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.image_upload_success_msg')) : Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
     }
@@ -178,7 +172,7 @@ class FileManagementController extends Controller {
                 $logo->move($this->logo_original_path, $file_name . $extension);
 
                 $image_type_id = (($image_type == 'logo') ? Config::get('constant.LOGO_IMAGE_FLAG') : (($image_type == 'main') ? Config::get('constant.MAIN_IMAGE_FLAG') : Config::get('constant.SEAL_IMAGE_FLAG')));
-
+                
                 $insert_data = array(
                     'UnitID' => $unit_id,
                     'image_path' => $file_name . $extension,
