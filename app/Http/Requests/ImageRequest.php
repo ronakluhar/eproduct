@@ -33,7 +33,6 @@ class ImageRequest extends FormRequest
                 'school_credit_link' => 'required'
             ];
         }
-        $rules['school_credit_link'] = 'required';
         return $rules;        
     }
     
