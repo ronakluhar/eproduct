@@ -157,5 +157,6 @@ return [
     'logo_update_success_msg' => 'Logo updated successfully.',
     'upload_error_msg' => 'Error occured while uploading or incorrect image name format.',
     'select_file_msg' => 'Select atleast one file to upload.',
-    'image_upload_success_msg' => 'Images uploaded successfully.'
+    'image_upload_success_msg' => 'Images uploaded successfully.',
+    'image_update_success_msg' => 'Images updated successfully.'
 ];

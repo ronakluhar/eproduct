@@ -107,6 +107,13 @@ class FileManagementController extends Controller {
                     'image_credit_link' => $image_credit_link
                 );
                 $response = $this->schoolRepository->save_school_logo($insert_data);
+            } else {
+                $insert_data = array(
+                    'UnitID' => $unit_id,
+                    'image_type' => Config::get('constant.MAIN_IMAGE_FLAG'),
+                    'image_credit_link' => $image_credit_link
+                );
+                $response = $this->schoolRepository->save_school_logo($insert_data);
             }
         } catch (Exception $ex) {
             Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
@@ -117,7 +124,7 @@ class FileManagementController extends Controller {
             if ($request->hasFile('school_seal_image')) {
                 $school_seal_image = $request->school_seal_image;
 
-                $extension = '.' . $school_main_image->getClientOriginalExtension();
+                $extension = '.' . $school_seal_image->getClientOriginalExtension();
 
                 $file_name = $unit_id . '_seal_' . str_random(5);
 
@@ -136,8 +143,7 @@ class FileManagementController extends Controller {
         } catch (Exception $ex) {
             Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
         }
-
-        return ($response) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.image_upload_success_msg')) : Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
+        return (($response && isset($request->school_id)) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.image_upload_success_msg')) : (($response && isset($request->id)) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.image_update_success_msg')) : Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')])));
     }
 
     public function upload_school_logo_post(FileManagementRequest $request) {

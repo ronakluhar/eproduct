@@ -49,15 +49,17 @@
                         <div class="form-group">
                             <label for="school_logo" class="col-md-3">Update school Logo</label>
                             <div class="col-md-3">
-                                <input type="file" class="form-control" name="school_logo" @if(!isset($logo_detail)) @endif>
+                                <input type="file" class="form-control" name="school_logo">
                             </div>
                             <div class="col-md-3">
                                 @if(isset($school_image_detail->school) && !empty($school_image_detail->school))
                                     @foreach($school_image_detail->school as $_school_images)
                                         @if($_school_images->image_type == Config::get('constant.LOGO_IMAGE_FLAG'))
                                         <img src="{{ asset($logo_path.$_school_images->image_path) }}" alt="{{ $_school_images->image_path }}" height="70" width="70"/>
+                                        <?php $logo_image = $_school_images->image_path; ?>
                                         @endif
                                     @endforeach
+                                    <input type="hidden" name="school_logo_image" value="@if(isset($logo_image) && !empty($logo_image)){{$logo_image}}@endif">
                                 @endif
                             </div>
                         </div>               
@@ -65,15 +67,17 @@
                         <div class="form-group">
                             <label for="school_main_image" class="col-md-3">Update school Main Image</label>
                             <div class="col-md-3">
-                                <input type="file" class="form-control" name="school_main_image" @if(!isset($logo_detail))  @endif>
+                                <input type="file" class="form-control" name="school_main_image">
                             </div>
                             <div class="col-md-3">
                                 @if(isset($school_image_detail->school) && !empty($school_image_detail->school))
                                     @foreach($school_image_detail->school as $_school_images)
                                         @if($_school_images->image_type == Config::get('constant.MAIN_IMAGE_FLAG'))
                                         <img src="{{ asset($logo_path.$_school_images->image_path) }}" alt="{{ $_school_images->image_path }}" height="70" width="70"/>
+                                        <?php $main_image = $_school_images->image_path; ?>
                                         @endif
                                     @endforeach
+                                    <input type="hidden" name="school_main" value="@if(isset($main_image) && !empty($main_image)){{$main_image}}@endif">
                                 @endif
                             </div>
                         </div>                       
@@ -81,23 +85,33 @@
                         <div class="form-group">
                             <label for="school_seal_image" class="col-md-3">Update school Seal Image</label>
                             <div class="col-md-3">
-                                <input type="file" class="form-control" name="school_seal_image" @if(!isset($logo_detail))  @endif>
+                                <input type="file" class="form-control" name="school_seal_image">
                             </div>
                             <div class="col-md-3">
                                 @if(isset($school_image_detail->school) && !empty($school_image_detail->school))
                                     @foreach($school_image_detail->school as $_school_images)
                                         @if($_school_images->image_type == Config::get('constant.SEAL_IMAGE_FLAG'))
                                         <img src="{{ asset($logo_path.$_school_images->image_path) }}" alt="{{ $_school_images->image_path }}" height="70" width="70"/>
+                                        <?php $seal_image = $_school_images->image_path; ?>
                                         @endif
                                     @endforeach
+                                    <input type="hidden" name="school_seal" value="@if(isset($seal_image) && !empty($seal_image)){{$seal_image}}@endif">
                                 @endif
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label for="school_credit_link" class="col-md-3">Add Main Image Credit</label>
+                            @if(isset($school_image_detail->school) && !empty($school_image_detail->school))
+                                @foreach($school_image_detail->school as $_school_images)
+                                    @if($_school_images->image_type == Config::get('constant.MAIN_IMAGE_FLAG'))
+                                    <?php $link = $_school_images->image_credit_link; ?>
+                                    @endif
+                                @endforeach
+                            @endif
+                            
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="school_credit_link" value="@if(isset($school_image_detail) && !empty($school_image_detail)){{$school_image_detail->image_credit_link}}@endif">
+                                <input type="text" class="form-control" name="school_credit_link" value="@if(isset($link) && !empty($link)){{$link}}@endif">
                             </div>
                             
                         </div>

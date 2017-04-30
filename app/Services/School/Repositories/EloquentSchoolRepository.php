@@ -474,7 +474,9 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
 
         $this->objSchoolLogo = new SchoolLogoDetail();
         if (count($school_image) != null && count($school_image) > 0) {
-            $this->delete_image_from_dir($school_image);
+            if(isset($logo_detail->image_path) && !empty($logo_detail->image_path)) {
+                $this->delete_image_from_dir($school_image);
+            }
             $this->objSchoolLogo->where('id', $school_image['id'])->update($logo_detail);
             $response['action'] = 'Update';
         } else {
