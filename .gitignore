@@ -7,4 +7,5 @@
 /.env.example
 /vendor
 /.netbeans
-/public/uploads
+/public/uploads/logo/
+/public/uploads/csv/
