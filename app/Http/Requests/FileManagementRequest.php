@@ -31,7 +31,7 @@ class FileManagementRequest extends FormRequest
         }
         $logos = count($this->input('school_logo'));
         foreach(range(0, $logos) as $index) {
-            $rules['school_logo.' . $index] = 'image|mimes:jpeg,bmp,png|max:5024';
+            $rules['school_logo.' . $index] = 'image|mimes:jpeg,jpg,gif,JPG,bmp,png|max:5024';
         }
  
         return $rules;        
