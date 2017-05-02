@@ -165,9 +165,9 @@ class FileManagementController extends Controller {
                 $file_name = pathinfo($original_name, PATHINFO_FILENAME); // file
 
                 $name_array = explode(",", $file_name, 2);
-                $unit_id = $name_array[0];
+                $unit_id = (int)$name_array[0];
                 $image_type = strtolower($name_array[1]);
-
+                
                 if (!is_numeric($unit_id) || !in_array($image_type, $image_type_array))
                     continue;
                 $file_name = $unit_id . '_' . $image_type . '_' . str_random(5);
