@@ -159,13 +159,22 @@ class FileManagementController extends Controller {
             foreach ($request->school_logo as $logo) {
 
                 $original_name = $logo->getClientOriginalName();
-
+                
                 $extension = '.' . $logo->getClientOriginalExtension();
 
                 $file_name = pathinfo($original_name, PATHINFO_FILENAME); // file
-
+                
                 $name_array = explode(",", $file_name, 2);
+                
+               
                 $unit_id = (int)$name_array[0];
+                
+                //check if this is valid school id 
+                $school = School::where('UnitID', $unit_id)->first();
+                if(!($school)){
+                    continue;
+                }
+                
                 $image_type = strtolower($name_array[1]);
                 
                 if (!is_numeric($unit_id) || !in_array($image_type, $image_type_array))
