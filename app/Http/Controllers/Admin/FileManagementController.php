@@ -10,6 +10,7 @@ use App\Services\School\Contracts\SchoolRepository;
 use File;
 use Config;
 use Redirect;
+use Input;
 use App\SchoolLogoDetail;
 use App\School;
 
@@ -23,11 +24,85 @@ class FileManagementController extends Controller {
     }
 
     public function index() {
-        //get all school data
-        $school_logo = $this->schoolRepository->getAllSchoolsLogo();
+        return view('admin.list-school-logo');
+    }
 
-        $logo_path = $this->logo_original_path;
-        return view('admin.list-school-logo', compact('school_logo', 'logo_path'));
+    /**
+     * get_school_logo_list_ajax
+     * To get School logo list from server side processing
+     * @return (json) ($data) school logo list in json_encode
+     */
+    public function get_school_logo_list_ajax() {
+        $columns = Input::get('columns');
+        $order = Input::get('order');
+        $search = Input::get('search');
+        $search_list = 0;
+        $records = array();
+        $records["data"] = array();
+        
+        $total_records = $this->schoolRepository->getAllSchoolsLogo()->count();
+        $display_length = ((intval(Input::get('length')) < 0) ? $total_records : intval(Input::get('length')));
+        $display_start = intval(Input::get('start'));
+        $draw = intval(Input::get('draw'));
+        $records["data"] = $this->schoolRepository->getAllSchoolsLogo();
+        
+        if (!empty($search['value'])) {
+            $val = $search['value'];
+            $records["data"]->where(function($query) use ($val) {
+                    $query->where('UnitID', 'LIKE', "%{$val}%")
+                    ->orWhere('Institution_Name', 'LIKE', "%{$val}%");
+            });
+        }
+        
+        //order by
+        foreach ($order as $o) {
+            $records["data"] = $records["data"]->orderBy($columns[$o['column']]['name'], $o['dir']);
+        }
+        
+        //limit
+        if ($display_length > 0) {
+            $records["data"] = $records["data"]
+                    ->take($display_length)
+                    ->offset($display_start)
+                    ->get([
+                        'UnitID',
+                        'Institution_Name'
+                    ]);
+        }
+        foreach ($records["data"] as $key => $record) {
+
+            $records["data"][$key]->logo_image = '';
+            $records["data"][$key]->main_image = '';
+            $records["data"][$key]->seal_image = '';
+            
+            if(isset($record) && !empty($record) && isset($record->school) && count($record->school)> 0) {
+                foreach ($record->school as $school_images) {
+                    if($school_images->image_type == Config::get('constant.LOGO_IMAGE_FLAG')) {
+                        
+                        $records["data"][$key]->logo_image = '<img style="height:70px;width:70px;" alt="' . $school_images->image_path . '" src="'.asset($this->logo_original_path.$school_images->image_path).'">';
+                    } else if($school_images->image_type == Config::get('constant.MAIN_IMAGE_FLAG')) {
+                        $records["data"][$key]->main_image = '<img style="height:70px;width:70px;" alt="' . $school_images->image_path . '" src="'.asset($this->logo_original_path.$school_images->image_path).'">';
+                    } else if($school_images->image_type == Config::get('constant.SEAL_IMAGE_FLAG')) {
+                        $records["data"][$key]->seal_image = '<img style="height:70px;width:70px;" alt="' . $school_images->image_path . '" src="'.asset($this->logo_original_path.$school_images->image_path).'">';
+                    }
+                }
+            }
+            
+            $records["data"][$key]->action = '<a href="'.url('/admin/delete-school-logo').'/'.$record->UnitID.'"><i class="i_delete fa fa-trash"></i>&nbsp;&nbsp;</a>' .
+                    '<a href="'.url('/admin/update-school-logo').'/'.$record->UnitID.'"><i class="edit fa fa-edit"></i>&nbsp;&nbsp;</a>';
+            unset($record->school);
+            $search_list++;
+        }
+
+        if (!empty($search['value'])) {
+            $total_records = $search_list;
+        }
+        $records["draw"] = $draw;
+        $records["recordsTotal"] = $total_records;
+        $records["recordsFiltered"] = $total_records;
+
+        echo json_encode($records);         
+        exit;
     }
 
     // Upload new logos
@@ -43,7 +118,7 @@ class FileManagementController extends Controller {
         $school_image_detail = School::with('school')->where('UnitID', $unit_id)->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->first();
 
         if (!isset($school_image_detail) || empty($school_image_detail) || (!isset($school_image_detail->school) || count($school_image_detail->school) == 0)) {
-            return Redirect::to('admin/list-school-logo')->with('error', trans('admin.imagenotfoundonyourrequest'));
+            return Redirect::to('admin/school-logo-list')->with('error', trans('admin.imagenotfoundonyourrequest'));
         }
         return view('admin.upload-logo', compact('school_image_detail', 'logo_path'));
     }
@@ -143,7 +218,7 @@ class FileManagementController extends Controller {
         } catch (Exception $ex) {
             Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')]);
         }
-        return (($response && isset($request->school_id)) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.image_upload_success_msg')) : (($response && isset($request->id)) ? Redirect::to('admin/list-school-logo')->with('success', trans('label.image_update_success_msg')) : Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')])));
+        return (($response && isset($request->school_id)) ? Redirect::to('admin/school-logo-list')->with('success', trans('label.image_upload_success_msg')) : (($response && isset($request->id)) ? Redirect::to('admin/school-logo-list')->with('success', trans('label.image_update_success_msg')) : Redirect::back()->withInput()->withErrors([trans('label.default_error_msg')])));
     }
 
     public function upload_school_logo_post(FileManagementRequest $request) {
@@ -192,7 +267,7 @@ class FileManagementController extends Controller {
             }
 
             // Multiple File uploaded successfully
-            return ($i > 0) ? Redirect::to('admin/list-school-logo')->with('success', $i . ' ' . trans('label.upload_success_msg')) : Redirect::to('admin/list-school-logo')->with('error', trans('label.upload_error_msg'));
+            return ($i > 0) ? Redirect::to('admin/school-logo-list')->with('success', $i . ' ' . trans('label.upload_success_msg')) : Redirect::to('admin/school-logo-list')->with('error', trans('label.upload_error_msg'));
         } else {
             return Redirect::back()->withErrors([trans('label.select_file_msg')]);
         }
@@ -204,9 +279,9 @@ class FileManagementController extends Controller {
         if ($school) {
             
             $response = $this->schoolRepository->delete_school_images($unit_id);
-            return ($response && !empty($response) && $response['status'] == 'OK') ? Redirect::to("admin/list-school-logo")->with('success', trans('admin.schoolimagesdeletesuccess')) : Redirect::to("admin/list-school-logo")->with('error', trans('admin.commonerrormessage'));
+            return ($response && !empty($response) && $response['status'] == 'OK') ? Redirect::to("admin/school-logo-list")->with('success', trans('admin.schoolimagesdeletesuccess')) : Redirect::to("admin/school-logo-list")->with('error', trans('admin.commonerrormessage'));
         } else {
-            return Redirect::to('admin/list-school-logo')->with('error', trans('admin.imagenotfoundonyourrequest'));
+            return Redirect::to('admin/school-logo-list')->with('error', trans('admin.imagenotfoundonyourrequest'));
         }
     }
 

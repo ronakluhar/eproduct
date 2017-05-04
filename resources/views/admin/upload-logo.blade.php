@@ -118,7 +118,7 @@
                         
                     </div> 
                     <div class="box-footer">
-                        <a class="btn btn-default" href="{{ url('admin/list-school-logo') }}">{{trans('admin.cancelbtn')}}</a>
+                        <a class="btn btn-default" href="{{ url('admin/school-logo-list') }}">{{trans('admin.cancelbtn')}}</a>
                         <button type="submit" class="btn btn-info">@if(isset($school_image_detail) && !empty($school_image_detail)) {{trans('admin.updatebtn')}} @else {{trans('admin.upload')}} @endif</button>
                     </div><!-- /.box-footer -->
                 </form>

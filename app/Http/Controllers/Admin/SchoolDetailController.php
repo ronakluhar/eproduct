@@ -30,13 +30,6 @@ class SchoolDetailController extends Controller
         $this->objAdmin  = new Admin();
     }
 
-    public function index()
-    {
-       //get all school data
-       $schools = $this->schoolRepository->getAllSchoolsData();
-       return view('admin.listSchool',compact('schools'));               
-    }
-
     public function importSchoolFaculty()
     {
         return view('admin.importSchoolFaculty');
@@ -71,7 +64,7 @@ class SchoolDetailController extends Controller
                     }
                 } 
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', 'School Faculty data imported successfully');
+                return Redirect::to('admin/school-list')->with('success', 'School Faculty data imported successfully');
                 exit;
             }
             else
@@ -117,7 +110,7 @@ class SchoolDetailController extends Controller
                     }
                 } 
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', 'School Faculty data imported successfully');
+                return Redirect::to('admin/school-list')->with('success', 'School Faculty data imported successfully');
                 exit;
             }
             else
@@ -196,7 +189,7 @@ class SchoolDetailController extends Controller
                     }
                 } 
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', 'School Completions data imported successfully');
+                return Redirect::to('admin/school-list')->with('success', 'School Completions data imported successfully');
                 exit;
             }
             else
@@ -266,7 +259,7 @@ class SchoolDetailController extends Controller
                     }
                 } 
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', 'School Diversity data imported successfully');
+                return Redirect::to('admin/school-list')->with('success', 'School Diversity data imported successfully');
                 exit;
             }
             else
@@ -310,7 +303,7 @@ class SchoolDetailController extends Controller
                     }
                 } 
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', 'School Endowment data imported successfully');
+                return Redirect::to('admin/school-list')->with('success', 'School Endowment data imported successfully');
                 exit;
             }
             else

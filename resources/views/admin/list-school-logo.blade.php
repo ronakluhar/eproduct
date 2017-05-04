@@ -26,65 +26,15 @@
             <div class="box-body">
               <table id="list_school_logo" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
                 <thead>
-                <tr>
-                  <th>UnitID</th>
-                  <th>School Name</th>
-                  <th>Logo</th>
-                  <th>Main Image</th>
-                  <th>Seal Image</th>
-                  <th>Action</th>
-                </tr>
+                    <tr>
+                        <th>UnitID</th>
+                        <th>School Name</th>
+                        <th>Logo</th>
+                        <th>Main Image</th>
+                        <th>Seal Image</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
-                <tbody>
-                     @forelse($school_logo as $_school_logo)
-                        <tr>
-                            <td>{{$_school_logo->UnitID}}</td>
-                            <td>{{ucfirst($_school_logo->Institution_Name)}}</td>
-                            <td>
-                                @if(isset($_school_logo->school) && !empty($_school_logo->school))
-                                    @foreach($_school_logo->school as $_school_image)
-                                        @if(!empty($_school_image->image_path) && $_school_image->image_type == Config::get('constant.LOGO_IMAGE_FLAG'))
-                                        <img src="{{ asset($logo_path.$_school_image->image_path) }}" alt="{{ $_school_image->image_path }}" height="70" width="70"/>
-                                        @endif
-                                    @endforeach
-                                @else
-                                {{ '----' }}
-                                @endif
-                            </td>
-                            <td>
-                                @if(isset($_school_logo->school) && !empty($_school_logo->school))
-                                    @foreach($_school_logo->school as $_school_image)
-                                        @if(!empty($_school_image->image_path) && $_school_image->image_type == Config::get('constant.MAIN_IMAGE_FLAG'))
-                                        <img src="{{ asset($logo_path.$_school_image->image_path) }}" alt="{{ $_school_image->image_path }}" height="70" width="70"/>
-                                        @endif
-                                    @endforeach
-                                @else
-                                {{ '----' }}
-                                @endif
-                            </td>
-                            <td>
-                                @if(isset($_school_logo->school) && !empty($_school_logo->school))
-                                    @foreach($_school_logo->school as $_school_image)
-                                        @if(!empty($_school_image->image_path) && $_school_image->image_type == Config::get('constant.SEAL_IMAGE_FLAG'))
-                                        <img src="{{ asset($logo_path.$_school_image->image_path) }}" alt="{{ $_school_image->image_path }}" height="70" width="70"/>
-                                        @endif
-                                    @endforeach
-                                @else
-                                {{ '----' }}
-                                @endif
-                            </td>                            
-                            
-                            <td>
-                                <a onclick="return confirm('<?php echo trans('admin.confirmdelete'); ?>')" href="{{ url('/admin/delete-school-logo') }}/{{$_school_logo->UnitID}}"><i class="i_delete fa fa-trash"></i>&nbsp;&nbsp;</a>
-                                <a href="{{ url('/admin/update-school-logo') }}/{{$_school_logo->UnitID}}"><i class="edit fa fa-edit"></i>&nbsp;&nbsp;</a>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5"><center>{{trans('admin.norecordfound')}}</center></td>
-                        </tr>
-                        @endforelse
-                </tbody>
               </table>
             </div>
             <!-- /.box-body -->
@@ -101,8 +51,36 @@
 @section('script')
 
 <script>
-  $(function () {
-    $("#list_school_logo").DataTable();
-  });
+    $(document).ready(function () {
+        var _order = [1, "asc"];
+        $('#list_school_logo').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax":{
+                "url": "{{ url('admin/school-logo-list-ajax.json') }}",
+                "dataType": "json",
+                "type": "POST",
+                "data":{ _token: "{{csrf_token()}}"}
+            },
+            "language": {
+                "emptyTable": "School logo data not available."
+            },
+            "columns": [
+                { "name": "UnitID", "data": "UnitID" },
+                { "name": "Institution_Name", "data": "Institution_Name" },
+                { "name": "logo_image","data": "logo_image", "orderable": false },
+                { "name": "main_image", "data": "main_image", "orderable": false },
+                { "name": "seal_image", "data": "seal_image", "orderable": false },
+                { "name": "action", "data": "action", "orderable": false }
+            ],
+            "order": [_order] // set column as a default sort by asc
+        });
+        $(document).on('click', '.i_delete', function(){
+            if (confirm('Are you sure! you want to delete this record?')) {
+                return true;
+            }
+            return false;
+        });
+    });
 </script>
 @endsection

@@ -30,9 +30,74 @@ class SchoolController extends Controller {
     }
 
     public function index() {
-        //get all school data
-        $schools = $this->schoolRepository->getAllSchoolsData();
-        return view('admin.listSchool', compact('schools'));
+        return view('admin.listSchool');
+    }
+    
+    /**
+     * get_school_list_ajax
+     * To get School list from server side processing
+     * @return (json) ($data) school list in json_encode
+     */
+    public function get_school_list_ajax() {
+        
+        $columns = Input::get('columns');
+        $order = Input::get('order');
+        $search = Input::get('search');
+        $records = array();
+        $records["data"] = array();
+        
+        $total_records = $this->schoolRepository->getAllSchoolsData()->count();
+        $display_length = ((intval(Input::get('length')) < 0) ? $total_records : intval(Input::get('length')));
+        $display_start = intval(Input::get('start'));
+        $draw = intval(Input::get('draw'));
+        $records["data"] = $this->schoolRepository->getAllSchoolsData();
+        
+        if (!empty($search['value'])) {
+            $val = $search['value'];
+            $records["data"]->where(function($query) use ($val) {
+                    $query->where('UnitID', 'LIKE', "%{$val}%")
+                    ->orWhere('Institution_Name', 'LIKE', "%{$val}%")
+                    ->orWhere('Post_office_box', 'LIKE', "%{$val}%")
+                    ->orWhere('City', 'LIKE', "%{$val}%")
+                    ->orWhere('County_name', 'LIKE', "%{$val}%");
+            });
+        }
+        
+        //order by
+        foreach ($order as $o) {
+            $records["data"] = $records["data"]->orderBy($columns[$o['column']]['name'], $o['dir']);
+        }
+        
+        //limit
+        if ($display_length > 0) {
+            $records["data"] = $records["data"]
+                    ->take($display_length)
+                    ->offset($display_start)
+                    ->get([
+                        'UnitID',
+                        'Institution_Name',
+                        'Institution_alias',
+                        'Post_office_box',
+                        'City',
+                        'State',
+                        'ZIP_code',
+                        'Name_chief_administrator',
+                        'Title_chief_administrator',
+                        'General_information_number',
+                        'Internet_web_address',
+                        'County_name'
+                    ]);
+        }
+
+        if (!empty($search['value'])) {
+            $total_records = count($records["data"]);
+        }
+        $records["draw"] = $draw;
+        $records["recordsTotal"] = $total_records;
+        $records["recordsFiltered"] = $total_records;
+
+        echo json_encode($records);         
+        exit;
     }
 
     public function importCSV() {
@@ -45,15 +110,7 @@ class SchoolController extends Controller {
             $extension = $fileData->getClientOriginalExtension();
             if ($extension == 'csv') {
                 $name = time() . '-' . $fileData->getClientOriginalName();
-//                Excel::selectSheetsByIndex(0)->load($fileData, function($reader) {  
-//                    echo "<pre>";
-//                    print_r($reader->toArray());
-//                    exit;
-//                    foreach ($reader->toArray() as $row) 
-//                    {
-//                        
-//                    }
-//                });
+
                 // Moves file to folder on server
                 $fileData->move(public_path() . '/uploads/csv/', $name);
                 $path = public_path('/uploads/csv/' . $name);
@@ -100,7 +157,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', 'School data imported successfully');
+                return Redirect::to('admin/school-list')->with('success', 'School data imported successfully');
                 exit;
             } else {
                 return Redirect::to('admin/importSchoolQuickFact')->with('error', 'Invalid file extension');
@@ -153,7 +210,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-apply-accepted')->with('error', trans('label.invalid_ext'));
@@ -201,7 +258,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-award-level')->with('error', trans('label.invalid_ext'));
@@ -246,7 +303,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-graduation-rate-time')->with('error', trans('label.invalid_ext'));
@@ -289,7 +346,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-ROTC')->with('error', trans('label.invalid_ext'));
@@ -331,7 +388,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-students-to-faculty')->with('error', trans('label.invalid_ext'));
@@ -372,7 +429,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-study-abroad')->with('error', trans('label.invalid_ext'));
@@ -415,7 +472,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-teacher-certification')->with('error', trans('label.invalid_ext'));
@@ -482,7 +539,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-field-of-study')->with('error', trans('label.invalid_ext'));
@@ -550,7 +607,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-financial-aid')->with('error', trans('label.invalid_ext'));
@@ -608,7 +665,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-net-price-in-state')->with('error', trans('label.invalid_ext'));
@@ -666,7 +723,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-net-price-out-state')->with('error', trans('label.invalid_ext'));
@@ -724,7 +781,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-sat-act-scores')->with('error', trans('label.invalid_ext'));
@@ -788,7 +845,7 @@ class SchoolController extends Controller {
                     }
                 }
                 unlink($path);
-                return Redirect::to('admin/list-school')->with('success', trans('label.import_success_msg'));
+                return Redirect::to('admin/school-list')->with('success', trans('label.import_success_msg'));
                 exit;
             } else {
                 return Redirect::to('admin/import-school-tuition-fees')->with('error', trans('label.invalid_ext'));

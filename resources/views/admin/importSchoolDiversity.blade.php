@@ -43,7 +43,7 @@
                         </div>                       
                     </div>
                     <div class="box-footer">
-                        <a class="btn btn-default" href="{{ url('admin/list-school') }}">{{trans('admin.cancelbtn')}}</a>
+                        <a class="btn btn-default" href="{{ url('admin/school-list') }}">{{trans('admin.cancelbtn')}}</a>
                         <button type="submit" class="btn btn-info">Import</button>
                     </div><!-- /.box-footer -->
                 </form>

@@ -36,7 +36,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return UserDetail Object
      */
     public function getAllSchoolsData() {
-        $schoolData = $this->model->where('deleted', '<>', 3)->get();
+        $schoolData = $this->model->where('deleted', '<>', 3);
 
         //$usersData = $this->model->get();
         return $schoolData;
@@ -458,7 +458,7 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
      * @return SchoolLogoDetail Object
      */
     public function getAllSchoolsLogo() {
-        $school_image_data = $this->model->has('school')->with('school')->where('deleted', '<>', Config::get('constant.DELETED_FLAG'))->get();
+        $school_image_data = $this->model->has('school')->with('school')->where('deleted', '<>', Config::get('constant.DELETED_FLAG'));
 
         return $school_image_data;
     }

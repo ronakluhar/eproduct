@@ -72,7 +72,8 @@ Route::get('admin/edit-cms-template/{id}', 'Admin\CMSManagementController@editCM
 Route::get('admin/delete-cms-template/{id}', 'Admin\CMSManagementController@deleteCMSTemplate');
 
 // Admin School management
-Route::get('admin/list-school', 'Admin\SchoolController@index');
+Route::get('admin/school-list', 'Admin\SchoolController@index');
+Route::post('admin/school-list-ajax.json', 'Admin\SchoolController@get_school_list_ajax');
 Route::get('admin/importSchoolQuickFact', 'Admin\SchoolController@importCSV');
 Route::post('admin/saveSchoolQuickFact', 'Admin\SchoolController@saveSchoolQuickFact');
 
@@ -122,7 +123,8 @@ Route::get('admin/import-school-tuition-fees', 'Admin\SchoolController@import_tu
 Route::post('admin/save-school-tuition-fees', 'Admin\SchoolController@save_school_tuition_fees');
 
 // Admin School Logo
-Route::get('admin/list-school-logo', 'Admin\FileManagementController@index');
+Route::get('admin/school-logo-list', 'Admin\FileManagementController@index');
+Route::post('admin/school-logo-list-ajax.json', 'Admin\FileManagementController@get_school_logo_list_ajax');
 Route::get('admin/upload-school-logo', 'Admin\FileManagementController@upload_school_logo');
 Route::post('admin/upload-school-logo', 'Admin\FileManagementController@upload_school_images_post');
 Route::post('admin/upload-multiple-school-logo', 'Admin\FileManagementController@upload_school_logo_post');

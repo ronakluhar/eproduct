@@ -36,28 +36,6 @@
                   <th>County Name</th>
                 </tr>
                 </thead>
-                <tbody>
-                     @forelse($schools as $school)
-                        <tr>
-                            <td>{{$school->UnitID}}</td>
-                            <td>{{ucfirst($school->Institution_Name)}}</td>
-                            <td>{{$school->Institution_alias or "------" }}</td>
-                            <td>{{$school->Post_office_box or "------" }}</td>
-                            <td>{{$school->City or "------" }}</td>
-                            <td>{{$school->State or "------" }}</td>
-                            <td>{{$school->ZIP_code or "------" }}</td>                            
-                            <td>{{$school->Name_chief_administrator or "------" }}</td>                            
-                            <td>{{$school->Title_chief_administrator or "------" }}</td>                            
-                            <td>{{$school->General_information_number or "------" }}</td>                            
-                            <td>{{$school->Internet_web_address or "------" }}</td>                            
-                            <td>{{$school->County_name or "------" }}</td>                            
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="4"><center>{{trans('admin.norecordfound')}}</center></td>
-                        </tr>
-                        @endforelse
-                </tbody>
               </table>
             </div>
             <!-- /.box-body -->
@@ -74,8 +52,36 @@
 @section('script')
 
 <script>
-  $(function () {
-    $("#listSchool").DataTable();
-  });
+    $(document).ready(function () {
+        var _order = [1, "asc"];
+        $('#listSchool').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax":{
+                "url": "{{ url('admin/school-list-ajax.json') }}",
+                "dataType": "json",
+                "type": "POST",
+                "data":{ _token: "{{csrf_token()}}"}
+            },
+            "language": {
+                "emptyTable": "School data not available."
+            },
+            "columns": [
+                { "name": "UnitID", "data": "UnitID" },
+                { "name": "Institution_Name", "data": "Institution_Name" },
+                { "name": "Institution_alias","data": "Institution_alias" },
+                { "name": "Post_office_box", "data": "Post_office_box" },
+                { "name": "City", "data": "City" },
+                { "name": "State", "data": "State" },
+                { "name": "ZIP_code", "data": "ZIP_code" },
+                { "name": "Name_chief_administrator", "data": "Name_chief_administrator" },
+                { "name": "Title_chief_administrator", "data": "Title_chief_administrator" },
+                { "name": "General_information_number", "data": "General_information_number" },
+                { "name": "Internet_web_address", "data": "Internet_web_address" },
+                { "name": "County_name", "data": "County_name" }
+            ],
+            "order": [_order] // set column as a default sort by asc
+        });
+    });
 </script>
 @endsection

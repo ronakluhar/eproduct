@@ -32,7 +32,7 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li class="{{ Request::is('admin/list-school') ? 'active' : '' }}"><a href="{{url('admin/list-school')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>        
+          <li class="{{ Request::is('admin/school-list') ? 'active' : '' }}"><a href="{{url('admin/school-list')}}"><i class="fa fa-circle-o"></i>Schools List</a></li>        
           <li class="{{ Request::is('admin/import-school-apply-accepted') ? 'active' : '' }}"><a href="{{url('admin/import-school-apply-accepted')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_apply_accepted')}}</a></li>
           <li class="{{ Request::is('admin/import-school-award-level') ? 'active' : '' }}"><a href="{{url('admin/import-school-award-level')}}"><i class="fa fa-circle-o"></i>{{trans('admin.school_award_level')}}</a></li>
           <li class="{{ Request::is('admin/importSchoolCompletion') ? 'active' : '' }}"><a href="{{url('admin/importSchoolCompletion')}}"><i class="fa fa-circle-o"></i>School Completions</a></li>
@@ -64,7 +64,7 @@
         <ul class="treeview-menu">
           <li class="{{ Request::is('admin/multiple-upload-image') ? 'active' : '' }}"><a href="{{url('admin/multiple-upload-image')}}"><i class="fa fa-circle-o"></i>{{trans('admin.lbl_upload_bulk_logo')}}</a></li>
           <li class="{{ Request::is('admin/upload-school-logo') ? 'active' : '' }}"><a href="{{url('admin/upload-school-logo')}}"><i class="fa fa-circle-o"></i>{{trans('admin.lbl_upload_logo')}}</a></li>
-          <li class="{{ Request::is('admin/list-school-logo') ? 'active' : '' }}"><a href="{{url('admin/list-school-logo')}}"><i class="fa fa-circle-o"></i> {{trans('admin.lbl_school_logo_list')}}</a></li>
+          <li class="{{ Request::is('admin/school-logo-list') ? 'active' : '' }}"><a href="{{url('admin/school-logo-list')}}"><i class="fa fa-circle-o"></i> {{trans('admin.lbl_school_logo_list')}}</a></li>
         </ul>
       </li>
 
