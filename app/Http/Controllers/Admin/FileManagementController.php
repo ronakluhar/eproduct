@@ -127,13 +127,17 @@ class FileManagementController extends Controller {
 
         $unit_id = ($request->school_id) ? $request->school_id : $request->id;
         $image_credit_link = $request->school_credit_link;
-
+        
         $unit_id = (int) $unit_id;
 
         $school = School::where('UnitID', $unit_id)->first();
 
         if (!$school) {
             return Redirect::back()->withInput()->withErrors(['Something went wrong. Please try again.']);
+        }
+        
+        if(isset($request->school_id) && !$request->hasFile('school_logo') && !$request->hasFile('school_main_image') && !$request->hasFile('school_seal_image')) {
+            return Redirect::back()->withInput()->withErrors([trans('label.select_file_msg')]);
         }
 
         try {
@@ -224,6 +228,7 @@ class FileManagementController extends Controller {
     public function upload_school_logo_post(FileManagementRequest $request) {
 
         $i = 0; // To get number of file upload
+        $j = 0; // To get number of file updated
         $image_type_array = array(
             'logo',
             'main',
@@ -272,11 +277,22 @@ class FileManagementController extends Controller {
                 $response = $this->schoolRepository->save_school_logo($insert_data);
                 if (!empty($response) && $response['action'] == 'Create') {
                     $i++;
+                } else if(!empty($response) && $response['action'] == 'Update') {
+                    $j++;
                 }
             }
-
+            
+            $msgArray = [];
+            if($i > 0) {
+                array_push($msgArray, $i . ' ' . trans('label.upload_success_msg'));
+            }
+            if($j > 0) {
+                array_push($msgArray, $j . ' ' . trans('label.update_success_msg'));
+            }
+            
+            $msg = (!empty($msgArray) ? implode(' ', $msgArray) : '');
             // Multiple File uploaded successfully
-            return ($i > 0) ? Redirect::to('admin/school-logo-list')->with('success', $i . ' ' . trans('label.upload_success_msg')) : Redirect::to('admin/school-logo-list')->with('error', trans('label.upload_error_msg'));
+            return ($i > 0 || $j > 0) ? Redirect::to('admin/school-logo-list')->with('success', $msg) : Redirect::to('admin/school-logo-list')->with('error', trans('label.upload_error_msg'));
         } else {
             return Redirect::back()->withErrors([trans('label.select_file_msg')]);
         }

@@ -29,9 +29,9 @@ class ImageRequest extends FormRequest
         if($this->input('school_id')) {
             $rules = [
                 'school_id' => 'required',
-                'school_logo' => 'required|image|max:5024',
-                'school_main_image' => 'required|image|max:5024',
-                'school_seal_image' => 'required|image|max:5024',
+                'school_logo' => 'image|max:5024',
+                'school_main_image' => 'image|max:5024',
+                'school_seal_image' => 'image|max:5024',
             ];
         }
         
@@ -41,13 +41,13 @@ class ImageRequest extends FormRequest
             $seal_exists_in_directory = file_exists(public_path(Config::get('constant.SCHOOL_ORIGINAL_LOGO_PATH').$this->input('school_seal')));
             
             if(!$logo_exists_in_directory || empty($this->input('school_logo_image')) ){
-                $rules['school_logo'] = 'required|image|max:5024';
+                $rules['school_logo'] = 'image|max:5024';
             }            
             if(!$main_exists_in_directory || empty($this->input('school_main')) ){
-                $rules['school_main_image'] = 'required|image|max:5024';
+                $rules['school_main_image'] = 'image|max:5024';
             }      
             if(!$seal_exists_in_directory || empty($this->input('school_seal')) ){
-                $rules['school_seal_image'] = 'required|image|max:5024';
+                $rules['school_seal_image'] = 'image|max:5024';
             }            
         } 
         return $rules;        
