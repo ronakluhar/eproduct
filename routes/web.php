@@ -13,6 +13,7 @@
 //Front
 Route::get('/', ['as' => 'home', 'uses' => 'Front\IndexController@index']);
 Route::get('/home', ['as' => 'home', 'uses' => 'Front\IndexController@index']);
+Route::get('/index.html', ['as' => 'home', 'uses' => 'Front\IndexController@home']);
 Route::get('/login', ['as' => 'login', 'uses' => 'Front\LoginController@login']);
 Route::get('/signup', ['as' => 'signup', 'uses' => 'Front\SignupController@signup']);
 Route::post('/doSignup', ['as' => 'doSignup', 'uses' => 'Front\SignupController@doSignup']);

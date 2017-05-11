@@ -29,4 +29,8 @@ class IndexController extends Controller
     {
         return view('front.home');
     }
+    
+    public function home() {
+        return view('front.index');
+    }
 }
