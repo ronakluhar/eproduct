@@ -138,7 +138,7 @@
                         <div class="col-md-9 collage_container">
                             <div class="row">
                                 <div class="col-md-8 col-sm-6 result_count">
-                                    <h5 class="text-primary">4025 Results</h5>
+                                    <h5 class="text-primary">{{$no_of_result}} Results</h5>
                                 </div>
                                 <div class="col-md-4 col-sm-6">
                                     <div class="grid_section_header">
@@ -161,91 +161,30 @@
                             </div>
                             <hr class="hr bg-blue-gray">
                             <div class="box_body_container">
+                                @forelse($school_data as $_school_data)
                                 <div class="collage_box post-modern">
-                                    <div class="collage-logo"><img src="{{asset('images/front/clg-logo.jpg')}}" alt=""></div>
+                                    <div class="collage-logo"><img src="@if(!empty($_school_data['image_path'])){{asset($logo_path.$_school_data['image_path'])}}@else{{asset('images/front/clg-logo.jpg')}}@endif" alt=""></div>
                                     <hr class="hr hr-gradient">
                                     <div class="collage-name">
-                                        <h5 class="text-info">ABC XYZ</h5>
+                                        <h5 class="text-info">{{$_school_data['Institution_Name']}}</h5>
                                     </div>
                                     <div class="collage-name">
-                                        <h6 class="text-muted"><small class="text-dark">Address</small></h6>
+                                        <h6 class="text-muted"><small class="text-dark">{{$_school_data['Post_office_box']}}</small></h6>
                                     </div>
                                     <div class="button_collection clearfix">
                                         <button class="btn-default btn-sm btn btn-anis-effect pull-left" type="button">Compare</button>
                                         <button class="add-to-fav pull-right"><span class="text-middle icon"><i class="fa fa-heart"></i></span></button>
                                     </div>
                                 </div>
-                                <div class="collage_box post-modern">
-                                    <div class="collage-logo"><img src="{{asset('images/front/clg-logo.jpg')}}" alt=""></div>
-                                    <hr class="hr hr-gradient">
-                                    <div class="collage-name">
-                                        <h5 class="text-info">ABC XYZ</h5>
-                                    </div>
-                                    <div class="collage-name">
-                                        <h6 class="text-muted"><small class="text-dark">Address</small></h6>
-                                    </div>
-                                    <div class="button_collection clearfix">
-                                        <button class="btn-default btn-sm btn btn-anis-effect pull-left" type="button">Compare</button>
-                                        <button class="add-to-fav pull-right"><span class="text-middle icon"><i class="fa fa-heart"></i></span></button>
-                                    </div>
-                                </div>
-                                <div class="collage_box post-modern">
-                                    <div class="collage-logo"><img src="{{asset('images/front/clg-logo.jpg')}}" alt=""></div>
-                                    <hr class="hr hr-gradient">
-                                    <div class="collage-name">
-                                        <h5 class="text-info">ABC XYZ</h5>
-                                    </div>
-                                    <div class="collage-name">
-                                        <h6 class="text-muted"><small class="text-dark">Address</small></h6>
-                                    </div>
-                                    <div class="button_collection clearfix">
-                                        <button class="btn-default btn-sm btn btn-anis-effect pull-left" type="button">Compare</button>
-                                        <button class="add-to-fav pull-right"><span class="text-middle icon"><i class="fa fa-heart"></i></span></button>
-                                    </div>
-                                </div>
-                                <div class="collage_box post-modern">
-                                    <div class="collage-logo"><img src="{{asset('images/front/clg-logo.jpg')}}" alt=""></div>
-                                    <hr class="hr hr-gradient">
-                                    <div class="collage-name">
-                                        <h5 class="text-info">ABC XYZ</h5>
-                                    </div>
-                                    <div class="collage-name">
-                                        <h6 class="text-muted"><small class="text-dark">Address</small></h6>
-                                    </div>
-                                    <div class="button_collection clearfix">
-                                        <button class="btn-default btn-sm btn btn-anis-effect pull-left" type="button">Compare</button>
-                                        <button class="add-to-fav pull-right"><span class="text-middle icon"><i class="fa fa-heart"></i></span></button>
-                                    </div>
-                                </div>
-                                <div class="collage_box post-modern">
-                                    <div class="collage-logo"><img src="{{asset('images/front/clg-logo.jpg')}}" alt=""></div>
-                                    <hr class="hr hr-gradient">
-                                    <div class="collage-name">
-                                        <h5 class="text-info">ABC XYZ</h5>
-                                    </div>
-                                    <div class="collage-name">
-                                        <h6 class="text-muted"><small class="text-dark">Address</small></h6>
-                                    </div>
-                                    <div class="button_collection clearfix">
-                                        <button class="btn-default btn-sm btn btn-anis-effect pull-left" type="button">Compare</button>
-                                        <button class="add-to-fav pull-right"><span class="text-middle icon"><i class="fa fa-heart"></i></span></button>
-                                    </div>
-                                </div>
-                                <div class="collage_box post-modern">
-                                    <div class="collage-logo"><img src="{{asset('images/front/clg-logo.jpg')}}" alt=""></div>
-                                    <hr class="hr hr-gradient">
-                                    <div class="collage-name">
-                                        <h5 class="text-info">ABC XYZ</h5>
-                                    </div>
-                                    <div class="collage-name">
-                                        <h6 class="text-muted"><small class="text-dark">Address</small></h6>
-                                    </div>
-                                    <div class="button_collection clearfix">
-                                        <button class="btn-default btn-sm btn btn-anis-effect pull-left" type="button">Compare</button>
-                                        <button class="add-to-fav pull-right"><span class="text-middle icon"><i class="fa fa-heart"></i></span></button>
-                                    </div>
-                                </div>
+                                @empty
+                                @endforelse
+                            @if (isset($school_data) && !empty($school_data))
+                            <div class="pull-right">
+                                <?php echo $school_data->render(); ?>
                             </div>
+                            @endif 
+                            </div>
+                            
                             <hr class="hr bg-gray">
                             <div class="google_ad_footer">
                                 <div class="inner_ad"><img src="{{asset('images/front/nav-ad.png')}}" alt=""></div>

@@ -533,5 +533,22 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
         
         return $response;
     }
+    
+    public function get_school_data_for_front() {
+        $school_data = $this->model
+                ->leftJoin('collage_logo', function ($leftJoin) {
+                    $leftJoin->on('collage_logo.UnitID', '=' , 'collage_quick_facts.UnitID');
+                    $leftJoin->where('collage_logo.image_type', Config::get('constant.LOGO_IMAGE_FLAG'));
+                    $leftJoin->where('collage_logo.deleted', Config::get('constant.ACTIVE_FLAG'));
+                })
+                ->select('collage_quick_facts.Institution_Name',
+                        'collage_quick_facts.Post_office_box',
+                        'collage_logo.image_path'
+                        )
+                ->where('collage_quick_facts.deleted', Config::get('constant.ACTIVE_FLAG'))
+                ->orderBy('collage_quick_facts.Institution_Name', 'ASC');
+                
+        return $school_data;
+    }
 
 }

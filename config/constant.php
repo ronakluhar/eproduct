@@ -63,5 +63,6 @@ return [
     'REPLAY_USER_SUGGESTION_TEMPALTE' => 'property-suggestion-replay',
 
     'ADMIN_MAIL_ID' => 'viral.85@gmail.com',
+    'FRONT_RECORD_PER_PAGE' => 6,
 ];
 
