@@ -14,6 +14,8 @@ var userAgent = navigator.userAgent.toLowerCase(),
     isIE = userAgent.indexOf("msie") != -1 ? parseInt(userAgent.split("msie")[1]) : userAgent.indexOf("trident") != -1 ? 11 : userAgent.indexOf("edge") != -1 ? 12 : false,
     isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
     isTouch = "ontouchstart" in window,
+    c3ChartsArray = [],
+    onloadCaptchaCallback,
 
     plugins = {
       pointerEvents: isIE < 11 ? "js/pointer-events.min.js" : false,
@@ -31,7 +33,8 @@ var userAgent = navigator.userAgent.toLowerCase(),
       regula: $("[data-constraints]"),
       stepper: $("input[type='number']"),
       radio: $("input[type='radio']"),
-      checkbox: $("input[type='checkbox']"),
+      checkbox: $(".checkbox-custom"),
+      toggles: $(".toggle-custom"),
       textRotator: $(".text-rotator"),
       owl: $(".owl-carousel"),
       swiper: $(".swiper-slider"),
@@ -45,7 +48,7 @@ var userAgent = navigator.userAgent.toLowerCase(),
       countDown: $(".countdown"),
       stacktable: $("table[data-responsive='true']"),
       customToggle: $("[data-custom-toggle]"),
-      customWaypoints: $('[data-custom-scroll-to]'),
+      customWaypoints: $('[data-waypoint-to]'),
       resizable: $(".resizable"),
       selectFilter: $("select"),
       calendar: $(".rd-calendar"),
@@ -55,11 +58,20 @@ var userAgent = navigator.userAgent.toLowerCase(),
       pageLoader: $(".page-loader"),
       search: $(".rd-search"),
       searchResults: $('.rd-search-results'),
-      instafeed: $(".instafeed"),
       rdMailForm: $(".rd-mailform"),
       iframeEmbed: $("iframe.embed-responsive-item"),
       bootstrapDateTimePicker: $("[data-time-picker]"),
-      checkoutRDTabs: $(".checkout-tabs")
+      checkoutRDTabs: $(".checkout-tabs"),
+      higCharts: {
+        charts: $(".higchart"),
+        legend: $(".chart-legend")
+      },
+      d3Charts: $('.d3-chart'),
+      flotCharts: $('.flot-chart'),
+      captcha: $('.recaptcha'),
+      galleryRDTabs: $(".gallery-tabs"),
+      revolution: $("#rev_slider_1"),
+      tilter: $(".tilter")
     };
 
 /**
@@ -109,7 +121,6 @@ $document.ready(function () {
   function getSwiperHeight(object, attr) {
     var val = object.attr("data-" + attr),
         dim;
-
     if (!val) {
       return undefined;
     }
@@ -305,13 +316,13 @@ $document.ready(function () {
    * isValidated
    * @description  check if all elemnts pass validation
    */
-  function isValidated(elements) {
+  function isValidated(elements, captcha) {
     var results, errors = 0;
+
     if (elements.length) {
       for (j = 0; j < elements.length; j++) {
 
         var $input = $(elements[j]);
-
         if ((results = $input.regula('validate')).length) {
           for (k = 0; k < results.length; k++) {
             errors++;
@@ -322,9 +333,141 @@ $document.ready(function () {
         }
       }
 
+      if (captcha) {
+        if (captcha.length) {
+          return validateReCaptcha(captcha) && errors == 0
+        }
+      }
+
       return errors == 0;
     }
     return true;
+  }
+
+
+  /**
+   * validateReCaptcha
+   * @description  validate google reCaptcha
+   */
+  function validateReCaptcha(captcha) {
+      var $captchaToken = captcha.find('.g-recaptcha-response').val();
+
+      if ($captchaToken == '') {
+        captcha
+            .siblings('.form-validation')
+            .html('Please, prove that you are not robot.')
+            .addClass('active');
+        captcha
+            .closest('.form-group')
+            .addClass('has-error');
+
+        captcha.bind('propertychange', function () {
+          var $this = $(this),
+              $captchaToken = $this.find('.g-recaptcha-response').val();
+
+          if($captchaToken != '') {
+            $this
+                .closest('.form-group')
+                .removeClass('has-error');
+            $this
+                .siblings('.form-validation')
+                .removeClass('active')
+                .html('');
+            $this.unbind('propertychange');
+          }
+        });
+
+        return false;
+      }
+
+    return true;
+  }
+
+
+  /**
+   * onloadCaptchaCallback
+   * @description  init google reCaptcha
+   */
+  onloadCaptchaCallback = function () {
+    for (i = 0; i < plugins.captcha.length; i++) {
+      var $capthcaItem = $(plugins.captcha[i]);
+
+      grecaptcha.render(
+          $capthcaItem.attr('id'),
+          {
+            sitekey: $capthcaItem.attr('data-sitekey'),
+            size: $capthcaItem.attr('data-size') ? $capthcaItem.attr('data-size') : 'normal',
+            theme: $capthcaItem.attr('data-theme') ? $capthcaItem.attr('data-theme') : 'light',
+            callback: function (e) {
+              $('.recaptcha').trigger('propertychange');
+            }
+          }
+      );
+      $capthcaItem.after("<span class='form-validation'></span>");
+    }
+  }
+
+  /**
+   * parseJSONObject
+   * @description  return JSON object witch methods
+   */
+  function parseJSONObject(element, attr) {
+    return JSON.parse($(element).attr(attr), function (key, value) {
+      if ((typeof value) === 'string') {
+        if (value.indexOf('function') == 0) {
+          return eval('(' + value + ')');
+        }
+      }
+      return value;
+    });
+  }
+
+  /**
+   * makeUniqueRandom
+   * @description  make random for gallery tabs
+   */
+  function makeUniqueRandom(count) {
+    if (!uniqueRandoms.length) {
+      for (var i = 0; i < count; i++) {
+        uniqueRandoms.push(i);
+      }
+    }
+    var index = Math.floor(Math.random() * uniqueRandoms.length);
+    var val = uniqueRandoms[index];
+    uniqueRandoms.splice(index, 1);
+    return val;
+  }
+
+  /**
+   * makeVisible
+   * @description  set class to gallery tabs to make it visible
+   */
+  function makeVisible(el) {
+    var count = el.length,
+        k = 0,
+        step = 2.5;
+    for (var i = 0; i < count; i++) {
+      timer = setTimeout(function () {
+        var rand = makeUniqueRandom(count);
+        el.eq(rand).addClass('visible');
+      }, k * 35);
+      k += step;
+    }
+    timer2 = setTimeout(function () {
+      el.not('.visible').addClass('visible');
+    }, count * step * 35)
+  }
+
+  /**
+   * makeInVisible
+   * @description  set class to gallery tabs to make it invisible
+   */
+  function makeInvisible() {
+    var el = $('.image.visible');
+    el.removeClass('visible');
+    uniqueRandoms = [];
+    clearTimeout(timer);
+    clearTimeout(timer2);
   }
 
   /**
@@ -354,6 +497,126 @@ $document.ready(function () {
       $("html").addClass("ie-edge");
     }
   }
+
+
+  /**
+   * Revolution slider
+   * @description  Initialize Revolution slider
+   */
+  if (plugins.revolution.length) {
+    plugins.revolution.show().revolution({
+      delay: 9000,
+      sliderLayout: 'fullscreen',
+      responsiveLevels: [1200, 992, 768, 480],
+      gridwidth: [1200, 992, 768, 480],
+      visibilityLevels: [1200, 992, 768, 480],
+      minHeight:  ['630', '630', '630', '500'],
+      stopLoop: 'on',
+      stopAfterLoops: 0,
+      stopAtSlide: 1,
+      spinner: 'spinner3',
+      extensions: 'js/extensions/',
+      viewPort: {
+        enable: true,
+        outof: 'wait',
+        visible_area: '80%',
+        presize: true
+      },
+      navigation: {
+        arrows: {
+          enable: true,
+          hide_onleave: true,
+          hide_onmobile: true,
+          hide_under: 1360,
+          style: 'uranus',
+        },
+        bullets: {
+          enable: true,
+          style: 'uranus',
+          hide_onleave: false,
+          h_align: 'center',
+          v_align: 'bottom',
+          h_offset: 0,
+          v_offset: 20,
+          space: 10
+        },
+        touch:{
+          touchenabled:"on",						// Enable Swipe Function : on/off
+          swipe_treshold : 75,					// The number of pixels that the user must move their finger by before it is considered a swipe.
+          swipe_min_touches : 1,					// Min Finger (touch) used for swipe
+          drag_block_vertical:false,				// Prevent Vertical Scroll during Swipe
+          swipe_direction:"horizontal"
+        },
+      },
+      parallax: {
+        type: 'scroll',
+        origo:"slidercenter",
+        speed: 1000,
+        levels: [5,10,15,20,25,30,35,40,
+          45,46,47,48,49,50,51,55],
+        disable_onmobile: 'on'
+      },
+    });
+  }
+
+  /**
+   * Tilter
+   */
+  if (plugins.tilter.length) {
+    var tiltSettings = [
+      {},
+      {
+        movement: {
+          lines : {
+            translation : {x: 40, y: 40, z: 0},
+            reverseAnimation : {duration : 1500, easing : 'easeOutElastic'}
+          },
+          caption : {
+            translation : {x: 20, y: 20, z: 0},
+            rotation : {x: 0, y: 0, z: -5},
+            reverseAnimation : {duration : 1000, easing : 'easeOutExpo'}
+          },
+          overlay : {
+            translation : {x: -30, y: -30, z: 0},
+            rotation : {x: 0, y: 0, z: 3},
+            reverseAnimation : {duration : 750, easing : 'easeOutExpo'}
+          },
+          shine : {
+            translation : {x: 100, y: 100, z: 0},
+            reverseAnimation : {duration : 750, easing : 'easeOutExpo'}
+          }
+        }
+      },
+      {
+        movement: {
+          lines : {
+            translation : {x: 40, y: 40, z: 0},
+            reverseAnimation : {duration : 1500, easing : 'easeOutElastic'}
+          },
+          caption : {
+            translation : {x: 20, y: 20, z: 0},
+            rotation : {x: 0, y: 0, z: -5},
+            reverseAnimation : {duration : 1000, easing : 'easeOutExpo'}
+          },
+          overlay : {
+            translation : {x: -30, y: -30, z: 0},
+            rotation : {x: 0, y: 0, z: 3},
+            reverseAnimation : {duration : 750, easing : 'easeOutExpo'}
+          },
+          shine : {
+            translation : {x: 100, y: 100, z: 0},
+            reverseAnimation : {duration : 750, easing : 'easeOutExpo'}
+          }
+        }
+      }];
+
+    plugins.tilter.each(function (pos, el) {
+      var idx = 0;
+      idx = pos % 2 === 0 ? idx + 1 : idx;
+      new TiltFx(el, tiltSettings[idx - 1]);
+    });
+  }
+
 
   /**
    * Swiper 3.1.7
@@ -555,6 +818,7 @@ $document.ready(function () {
     }
   }
 
+
   /**
    * Progress bar
    * @description  Enable progress bar
@@ -563,20 +827,20 @@ $document.ready(function () {
     for (i = 0; i < plugins.progressBar.length; i++) {
       var progressBar = $(plugins.progressBar[i]);
       $window
-          .on("scroll load", $.proxy(function () {
-            var bar = $(this);
-            if (!bar.hasClass('animated-first') && isScrolledIntoView(bar)) {
-              var end = bar.attr("data-to");
-              bar.find('.progress-bar-linear').css({width: end + '%'});
-              bar.find('.progress-value').countTo({
-                refreshInterval: 40,
-                from: 0,
-                to: end,
-                speed: 500
-              });
-              bar.addClass('animated-first');
-            }
-          }, progressBar));
+        .on("scroll load", $.proxy(function () {
+          var bar = $(this);
+          if (!bar.hasClass('animated-first') && isScrolledIntoView(bar)) {
+            var end = bar.attr("data-to");
+            bar.find('.progress-bar-linear').css({width: end + '%'});
+            bar.find('.progress-value').countTo({
+              refreshInterval: 40,
+              from: 0,
+              to: end,
+              speed: 500
+            });
+            bar.addClass('animated-first');
+          }
+        }, progressBar));
     }
   }
 
@@ -644,7 +908,6 @@ $document.ready(function () {
     plugins.bootstrapTooltip.tooltip();
   }
 
-
   /**
    * RD Audio player
    * @description Enables RD Audio player plugin
@@ -671,8 +934,6 @@ $document.ready(function () {
           playlist.slideUp(300);
         }
       });
-
-
     }
   }
 
@@ -756,7 +1017,7 @@ $document.ready(function () {
    * @description Enables RD Google Maps plugin
    */
   if (plugins.rdGoogleMaps.length) {
-    $.getScript("http://maps.google.com/maps/api/js?sensor=false&libraries=geometry&v=3.7", function () {
+    $.getScript("//maps.google.com/maps/api/js?key=AIzaSyAwH60q5rWrS8bXwpkZwZwhw9Bw0pqKTZM&sensor=false&libraries=geometry,places&v=3.7", function () {
       var head = document.getElementsByTagName('head')[0],
           insertBefore = head.insertBefore;
 
@@ -772,6 +1033,46 @@ $document.ready(function () {
 
         plugins.rdGoogleMaps.googleMap({
           styles: styles ? JSON.parse(styles) : {},
+          onInit: function (map) {
+            var inputAddress = $('#rd-google-map-address');
+
+            if (inputAddress.length) {
+              var input = inputAddress;
+              var geocoder = new google.maps.Geocoder();
+              var marker = new google.maps.Marker(
+                  {
+                    map: map,
+                    icon: "images/gmap_marker.png",
+                  }
+              );
+              var autocomplete = new google.maps.places.Autocomplete(inputAddress[0]);
+              autocomplete.bindTo('bounds', map);
+              inputAddress.attr('placeholder', '');
+              inputAddress.on('change', function () {
+                $("#rd-google-map-address-submit").trigger('click');
+              });
+
+              $("#rd-google-map-address-submit").on('click', function (e) {
+                e.preventDefault();
+                var address = input.val();
+                geocoder.geocode({'address': address}, function (results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    var latitude = results[0].geometry.location.lat();
+                    var longitude = results[0].geometry.location.lng();
+
+                    map.setCenter(new google.maps.LatLng(
+                        parseFloat(latitude),
+                        parseFloat(longitude)
+                    ));
+                    marker.setPosition(new google.maps.LatLng(
+                        parseFloat(latitude),
+                        parseFloat(longitude)
+                    ))
+                  }
+                });
+              });
+            }
+          }
         })
       });
     });
@@ -867,7 +1168,20 @@ $document.ready(function () {
     var i;
     for (i = 0; i < plugins.checkbox.length; i++) {
       var $this = $(plugins.checkbox[i]);
-      $this.addClass("checkbox-custom").after("<span class='checkbox-custom-dummy'></span>")
+      $this.after("<span class='checkbox-custom-dummy'></span>")
+    }
+  }
+
+
+  /**
+   * Toggles
+   * @description Make toggles from input[type="checkbox"]
+   */
+  if (plugins.toggles.length) {
+    var i;
+    for (i = 0; i < plugins.toggles.length; i++) {
+      var $this = $(plugins.toggles[i]);
+      $this.after("<span class='toggle-custom-dummy'></span>")
     }
   }
 
@@ -1026,18 +1340,50 @@ $document.ready(function () {
    * Isotope
    * @description Enables Isotope plugin
    */
-
   if (plugins.isotope.length) {
-    var i, isogroup = [];
+    var i, j, isogroup = [];
     for (i = 0; i < plugins.isotope.length; i++) {
-      var isotopeItem = plugins.isotope[i]
-          , iso = new Isotope(isotopeItem, {
-        itemSelector: '.isotope-item',
-        layoutMode: isotopeItem.getAttribute('data-isotope-layout') ? isotopeItem.getAttribute('data-isotope-layout') : 'masonry',
-        filter: '*'
-      });
+      var isotopeItem = plugins.isotope[i],
+          filterItems = $(isotopeItem).closest('.isotope-wrap').find('[data-isotope-filter]'),
+          iso = new Isotope(isotopeItem,
+              {
+                itemSelector: '.isotope-item',
+                layoutMode: isotopeItem.getAttribute('data-isotope-layout') ? isotopeItem.getAttribute('data-isotope-layout') : 'masonry',
+                filter: '*',
+              }
+          );
 
       isogroup.push(iso);
+
+      filterItems.on("click", function (e) {
+        e.preventDefault();
+        var filter = $(this),
+            iso = $('.isotope[data-isotope-group="' + this.getAttribute("data-isotope-group") + '"]'),
+            filtersContainer = filter.closest(".isotope-filters");
+
+        filtersContainer
+            .find('.active')
+            .removeClass("active");
+        filter.addClass("active");
+
+        iso.isotope({
+          itemSelector: '.isotope-item',
+          layoutMode: iso.attr('data-isotope-layout') ? iso.attr('data-isotope-layout') : 'masonry',
+          filter: this.getAttribute("data-isotope-filter") == '*' ? '*' : '[data-filter*="' + this.getAttribute("data-isotope-filter") + '"]'
+        });
+
+        $window.trigger('resize');
+
+        // If d3Charts contains in isotop, resize it on click.
+        if (filtersContainer.hasClass('isotope-has-d3-graphs') && c3ChartsArray != undefined) {
+          setTimeout(function () {
+            for (var j = 0; j < c3ChartsArray.length; j++) {
+              c3ChartsArray[j].resize();
+            }
+          }, 500);
+        }
+
+      }).eq(0).trigger("click");
     }
 
     $(window).on('load', function () {
@@ -1049,25 +1395,6 @@ $document.ready(function () {
         }
       }, 600);
     });
-
-    var resizeTimout;
-
-    $("[data-isotope-filter]").on("click", function (e) {
-      e.preventDefault();
-      var filter = $(this);
-      clearTimeout(resizeTimout);
-      filter.parents(".isotope-filters").find('.active').removeClass("active");
-      filter.addClass("active");
-      var iso = $('.isotope[data-isotope-group="' + this.getAttribute("data-isotope-group") + '"]');
-      iso.isotope({
-        itemSelector: '.isotope-item',
-        layoutMode: iso.attr('data-isotope-layout') ? iso.attr('data-isotope-layout') : 'masonry',
-        filter: this.getAttribute("data-isotope-filter") == '*' ? '*' : '[data-filter*="' + this.getAttribute("data-isotope-filter") + '"]'
-      });
-      //resizeTimout = setTimeout(function () {
-      //  $window.trigger('resize');
-      //}, 300);
-    }).eq(0).trigger("click")
   }
 
 
@@ -1091,6 +1418,7 @@ $document.ready(function () {
     plugins.rdNavbar.RDNavbar({
       stickUpClone: (plugins.rdNavbar.attr("data-stick-up-clone")) ? plugins.rdNavbar.attr("data-stick-up-clone") === 'true' : false,
       stickUpOffset: (plugins.rdNavbar.attr("data-stick-up-offset")) ? plugins.rdNavbar.attr("data-stick-up-offset") : 1,
+      anchorNavOffset: -78
     });
     if (plugins.rdNavbar.attr("data-body-class")) {
       document.body.className += ' ' + plugins.rdNavbar.attr("data-body-class");
@@ -1185,7 +1513,6 @@ $document.ready(function () {
     }
   }
 
-
   /**
    * Select2
    * @description Enables select2 plugin
@@ -1229,7 +1556,6 @@ $document.ready(function () {
       })
     }
   }
-
 
   /**
    * RD Calendar
@@ -1291,11 +1617,11 @@ $document.ready(function () {
                 commentBlock.remove();
               }
             }
-
             $window.trigger("resize");
           }
         }
       })
+
     }
   }
 
@@ -1390,18 +1716,6 @@ $document.ready(function () {
   }
 
   /**
-   * RD Instafeed
-   * @description Enables Instafeed
-   */
-  if (plugins.instafeed.length > 0) {
-    var i;
-    for (i = 0; i < plugins.instafeed.length; i++) {
-      var instafeedItem = $(plugins.instafeed[i]);
-      instafeedItem.RDInstafeed({});
-    }
-  }
-
-  /**
    * UI To Top
    * @description Enables ToTop Button
    */
@@ -1412,11 +1726,18 @@ $document.ready(function () {
     });
   }
 
+  /**
+   * Google ReCaptcha
+   * @description Enables Google ReCaptcha
+   */
+  if (plugins.captcha.length) {
+    var i;
+    $.getScript("//www.google.com/recaptcha/api.js?onload=onloadCaptchaCallback&render=explicit&hl=en");
+  }
 
   /**
    * RD Mailform
    */
-
   if (plugins.rdMailForm.length) {
     var i, j, k,
         msg = {
@@ -1428,8 +1749,10 @@ $document.ready(function () {
           'MF254': 'Something went wrong with PHPMailer!',
           'MF255': 'Aw, snap! Something went wrong.'
         };
+
     for (i = 0; i < plugins.rdMailForm.length; i++) {
-      var $form = $(plugins.rdMailForm[i]);
+      var $form = $(plugins.rdMailForm[i]),
+          formHasCaptcha = false;
 
       $form.attr('novalidate', 'novalidate').ajaxForm({
         data: {
@@ -1439,12 +1762,55 @@ $document.ready(function () {
         beforeSubmit: function () {
           var form = $(plugins.rdMailForm[this.extraData.counter]),
               inputs = form.find("[data-constraints]"),
-              output = $("#" + form.attr("data-form-output"));
+              output = $("#" + form.attr("data-form-output")),
+              captcha = form.find('.recaptcha'),
+              captchaFlag = true;
 
           output.removeClass("active error success");
 
-          if (isValidated(inputs)) {
+          if (isValidated(inputs, captcha)) {
+
+            // veify reCaptcha
+            if(captcha.length) {
+              var captchaToken = captcha.find('.g-recaptcha-response').val(),
+                  captchaMsg = {
+                    'CPT001': 'Please, setup you "site key" and "secret key" of reCaptcha',
+                    'CPT002': 'Something wrong with google reCaptcha'
+                  }
+
+              formHasCaptcha = true;
+
+              $.ajax({
+                method: "POST",
+                url: "bat/reCaptcha.php",
+                data: {'g-recaptcha-response': captchaToken},
+                async: false
+              })
+                .done(function (responceCode) {
+                  if (responceCode != 'CPT000') {
+                    if (output.hasClass("snackbars")) {
+                      output.html('<p><span class="icon text-middle mdi mdi-check icon-xxs"></span><span>' + captchaMsg[responceCode] + '</span></p>')
+
+                      setTimeout(function () {
+                        output.removeClass("active");
+                      }, 3500);
+
+                      captchaFlag = false;
+                    } else {
+                      output.html(captchaMsg[responceCode]);
+                    }
+
+                    output.addClass("active");
+                  }
+                });
+            }
+
+            if(!captchaFlag) {
+              return false;
+            }
+
             form.addClass('form-in-process');
+
             if (output.hasClass("snackbars")) {
               output.html('<p><span class="icon text-middle fa fa-circle-o-notch fa-spin icon-xxs"></span><span>Sending</span></p>');
               output.addClass("active");
@@ -1456,14 +1822,27 @@ $document.ready(function () {
         error: function (result) {
           var output = $("#" + $(plugins.rdMailForm[this.extraData.counter]).attr("data-form-output"));
           output.text(msg[result]);
+          form.removeClass('form-in-process');
+
+          if(formHasCaptcha) {
+            grecaptcha.reset();
+          }
         },
         success: function (result) {
-          var form = $(plugins.rdMailForm[this.extraData.counter]);
-          var output = $("#" + form.attr("data-form-output"));
-          form.addClass('success');
+          var form = $(plugins.rdMailForm[this.extraData.counter]),
+              output = $("#" + form.attr("data-form-output"));
+
+          form
+              .addClass('success')
+              .removeClass('form-in-process');
+
+          if(formHasCaptcha) {
+            grecaptcha.reset();
+          }
+
           result = result.length == 5 ? result : 'MF255';
           output.text(msg[result]);
-          form.removeClass('form-in-process');
+
           if (result === "MF000") {
             if (output.hasClass("snackbars")) {
               output.html('<p><span class="icon text-middle mdi mdi-check icon-xxs"></span><span>' + msg[result] + '</span></p>');
@@ -1477,6 +1856,7 @@ $document.ready(function () {
               output.addClass("active error");
             }
           }
+
           form.clearForm();
           form.find('input, textarea').blur();
 
@@ -1516,14 +1896,21 @@ $document.ready(function () {
    */
   if (plugins.customWaypoints.length) {
     var i;
-    $document.delegate("[data-custom-scroll-to]", "click", function (e) {
-      e.preventDefault();
-      $("body, html").stop().animate({
-        scrollTop: $("#" + $(this).attr('data-custom-scroll-to')).offset().top
-      }, 1000, function () {
-        $(window).trigger("resize");
+    plugins.customWaypoints = $document.find('[data-waypoint-to]');
+
+    for(i = 0; i< plugins.customWaypoints.length; i++){
+      var item = plugins.customWaypoints[i];
+
+      $(item).on("click", function (e) {
+        e.preventDefault();
+        console.log($(this));
+        $("body, html").stop().animate({
+          scrollTop: $($(this).attr('data-waypoint-to')).offset().top
+        }, 1000, function () {
+          $(window).trigger("resize");
+        });
       });
-    });
+    }
   }
 
   /**
@@ -1617,6 +2004,7 @@ $document.ready(function () {
     }
   }
 
+
   /**
    * RD Parallax
    * @description Enables RD Parallax plugin
@@ -1643,5 +2031,169 @@ $document.ready(function () {
         $(window).trigger("resize");
       }, 300);
     });
+  }
+
+  /**
+   * Highcharts
+   * @description Enables Highcharts plugin
+   */
+  if (plugins.higCharts.charts.length) {
+    var i,
+        detailChart,
+        masterChart;
+
+    for (i = 0; i < plugins.higCharts.charts.length; i++) {
+      var higchartsItem = $(plugins.higCharts.charts[i]),
+          higChartsItemObject = parseJSONObject(higchartsItem, 'data-graph-object');
+
+      if (!higchartsItem.attr('data-parent-chart') && !higchartsItem.attr('data-child-chart')) {
+        higchartsItem.highcharts(
+            higChartsItemObject
+        );
+      } else {
+        if (higchartsItem.attr('data-child-chart')) {
+          var childGraph = higchartsItem.attr('data-child-chart'),
+              higChartsChildObject = parseJSONObject(childGraph, 'data-graph-object');
+
+          masterChart = higchartsItem.highcharts(
+              higChartsItemObject, function () {
+                detailChart = $(childGraph).highcharts(
+                    higChartsChildObject
+                ).highcharts();
+              }
+          ).highcharts();
+        }
+      }
+    }
+  }
+
+  /**
+   * Highcharts
+   * @description Enables legends for highcharts plugin
+   */
+  if (plugins.higCharts.legend.length) {
+    var i, j;
+
+    for (i = 0; i < plugins.higCharts.legend.length; i++) {
+      var higchartsLegend = plugins.higCharts.legend[i],
+          legendId = $(higchartsLegend).attr('data-chart-id'),
+          legendItems = $(higchartsLegend).find('.legend-item');
+
+      for (j = 0; j < legendItems.length; j++) {
+        var legendItem = $(legendItems[j]),
+            itemId = legendItem.attr('data-chart-id'),
+            legend = $(legendId).highcharts().series[itemId],
+            legendName = legend.name,
+            legendObj;
+
+        if (legendItem.is('input')) {
+          if (legend.visible) {
+            legendItem.prop('checked', true);
+          } else {
+            legendItem.prop('checked', false);
+          }
+        }
+
+        legendItem.html(legendName);
+        legendObj = {
+          legendItem: legendItem,
+          legend: legend
+        };
+
+        // assign click handler which toggles legend data
+        legendItem.on('click', $.proxy(function (e) {
+          var _this = this;
+
+          if (_this.legendItem.attr('href')) {
+            e.preventDefault();
+          }
+          if (_this.legend.visible) {
+            _this.legend.hide();
+            _this.legendItem.toggleClass('active');
+          } else {
+            _this.legend.show();
+            _this.legendItem.toggleClass('active');
+          }
+        }, legendObj));
+    }
+  }
+}
+
+/**
+* D3 Charts
+* @description Enables D3 Charts plugin
+*/
+if (plugins.d3Charts.length) {
+  var i;
+
+  for (i = 0; i < plugins.d3Charts.length; i++) {
+      var d3ChartsItem = $(plugins.d3Charts[i]),
+      d3ChartItemObject = parseJSONObject(d3ChartsItem, 'data-graph-object');
+      c3ChartsArray.push(c3.generate(d3ChartItemObject));
+  }
+}
+
+  /**
+   * Flot Charts
+   * @description Enables Flot Charts plugin
+   */
+  if (plugins.flotCharts.length) {
+    var i;
+
+    for (i = 0; i < plugins.flotCharts.length; i++) {
+      var flotChartsItem = plugins.flotCharts[i],
+          flotChartItemObject = parseJSONObject(flotChartsItem, 'data-graph-object'),
+          gridObject = parseJSONObject(flotChartsItem, 'data-grid-object');
+
+      $.plot(flotChartsItem, flotChartItemObject, gridObject);
+    }
+  }
+
+  /**
+   * Gallery RD Material Tabs
+  */
+  if (plugins.galleryRDTabs.length) {
+    var uniqueRandoms = [];
+    var timer = false,
+        timer2 = false;
+    plugins.galleryRDTabs.RDMaterialTabs({
+      responsive: {
+        0: {
+          items: 3
+        },
+        768: {
+          margin: 50
+        },
+        992: {
+          margin: 100,
+          items: 4
+        },
+        1200: {
+          items: 5
+        },
+        1600: {
+          items: 6
+        }
+      },
+      callbacks: {
+        onInit: function () {
+          plugins.galleryRDTabs.addClass('loaded');
+          if ($html.hasClass('desktop')) {
+            makeVisible(plugins.galleryRDTabs.find('.rd-material-tab:first-child .image'));
+          }
+        },
+        onChangeStart: function () {
+          if ($html.hasClass('desktop')) {
+            makeInvisible();
+          }
+        },
+        onChangeEnd: function () {
+          if ($html.hasClass('desktop')) {
+            makeVisible(plugins.galleryRDTabs.find('.rd-material-tab-active .image'));
+          }
+        }
+      }
+    });
+    $window.trigger("resize");
   }
 });

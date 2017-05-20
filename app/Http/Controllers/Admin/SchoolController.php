@@ -96,7 +96,7 @@ class SchoolController extends Controller {
         $records["recordsTotal"] = $total_records;
         $records["recordsFiltered"] = $total_records;
 
-        echo json_encode($records);         
+        echo json_encode($records);
         exit;
     }
 

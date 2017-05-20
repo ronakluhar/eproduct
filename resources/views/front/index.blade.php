@@ -18,6 +18,13 @@
         <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
         <script src="js/html5shiv.min.js"></script>
         <![endif]-->
+    <script>
+        var at_page = parseInt("<?= $at_page; ?>");
+        var no_of_result = parseInt("<?= $no_of_result; ?>");
+        var no_of_pages = parseInt("<?= $no_of_pages; ?>");
+        var displayStart = parseInt("<?= $start_from; ?>");
+        var displayLength = parseInt("<?= $record_per_page; ?>");
+    </script>
     </head>
     <body>
         <!-- Page-->
@@ -28,7 +35,7 @@
                 <nav class="rd-navbar-default rd-navbar-dark cst_navigation">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-3 col-sm-3"><a href="/" class="logo_box"><img src="{{asset('images/front/logo-big.png')}}" alt=""></a></div>
+                            <div class="col-md-3 col-sm-3"><a href="#" class="logo_box"><img src="{{asset('images/front/logo-big.png')}}" alt=""></a></div>
                         </div>
                     </div>
                 </nav>
@@ -122,23 +129,25 @@
                             <!-- Category-->
                             <h6 class="text-uppercase text-spacing-60">SELECT FILTERS</h6>
                             <div class="text-subline"></div>
-                            <ul class="list list-marked offset-top-30">
-                                <li>Test Scores & Selectivity</li>
-                                <li>Type of School</li>
-                                <li>Location</li>
-                                <li>Campus & Housing</li>
-                                <li>Majors & Learning Environment</li>
-                                <li>Sports & Activities</li>
-                                <li>Academic Credit</li>
-                                <li>Paying</li>
-                                <li>Support Services</li>
-                                <li>Diversity</li>
+                            <ul class="list list-marked offset-top-30 filter-list">
+                                <li data-toggle="modal" data-target="#myModal">School Name</li>
+                                <li data-toggle="modal" data-target="#myModal">Location</li>
+                                <li data-toggle="modal" data-target="#myModal">Net Cost</li>
+                                <li data-toggle="modal" data-target="#myModal">Tuition</li>
+                                <li data-toggle="modal" data-target="#myModal">Majors</li>
+                                <li data-toggle="modal" data-target="#myModal">SAT Scores</li>
+                                <li data-toggle="modal" data-target="#myModal">Campus Setting</li>
+                                <li data-toggle="modal" data-target="#myModal">Athletics</li>
+                                <li data-toggle="modal" data-target="#myModal">Acceptance Rate</li>
+                                <li data-toggle="modal" data-target="#myModal">Diversity</li>
+                                <li data-toggle="modal" data-target="#myModal">Library facts</li>
+                                <li data-toggle="modal" data-target="#myModal">Ranking</li>
                             </ul>
                         </div>
                         <div class="col-md-9 collage_container">
                             <div class="row">
                                 <div class="col-md-8 col-sm-6 result_count">
-                                    <h5 class="text-primary">{{$no_of_result}} Results</h5>
+                                    <h5 class="text-primary total_result">{{$no_of_result}} Results</h5>
                                 </div>
                                 <div class="col-md-4 col-sm-6">
                                     <div class="grid_section_header">
@@ -160,32 +169,25 @@
                                 </div>
                             </div>
                             <hr class="hr bg-blue-gray">
-                            <div class="box_body_container">
-                                @forelse($school_data as $_school_data)
-                                <div class="collage_box post-modern">
-                                    <div class="collage-logo"><img src="@if(!empty($_school_data['image_path'])){{asset($logo_path.$_school_data['image_path'])}}@else{{asset('images/front/clg-logo.jpg')}}@endif" alt=""></div>
-                                    <hr class="hr hr-gradient">
-                                    <div class="collage-name">
-                                        <h5 class="text-info">{{$_school_data['Institution_Name']}}</h5>
-                                    </div>
-                                    <div class="collage-name">
-                                        <h6 class="text-muted"><small class="text-dark">{{$_school_data['Post_office_box']}}</small></h6>
-                                    </div>
-                                    <div class="button_collection clearfix">
-                                        <button class="btn-default btn-sm btn btn-anis-effect pull-left" type="button">Compare</button>
-                                        <button class="add-to-fav pull-right"><span class="text-middle icon"><i class="fa fa-heart"></i></span></button>
-                                    </div>
-                                </div>
-                                @empty
-                                @endforelse
-                            @if (isset($school_data) && !empty($school_data))
-                            <div class="pull-right">
-                                <?php echo $school_data->render(); ?>
-                            </div>
-                            @endif 
+                            <div class="box_body_container" id="school_content">
+                                <!-- AJAX DATA -->
                             </div>
                             
                             <hr class="hr bg-gray">
+                            <div class="pull-left">
+                                <button type="button" class="leftPagination_previous">Previous</button>
+                            </div>
+                            <div class="pull-center">
+                                <label>Page</label>
+                                <input type="text" name="at_page" style="text-align: center;width: 5%" value="{{$at_page}}">
+                                <label>of</label>
+                                <div class="pull-center" id="no_of_pages" style="display: inline">{{$no_of_pages}}</div>
+                            </div>
+                            <div class="pull-right">
+                                <button type="button" class="rightPagination_next">Next</button>
+                            </div>
+                            <hr class="hr bg-gray">
+                            
                             <div class="google_ad_footer">
                                 <div class="inner_ad"><img src="{{asset('images/front/nav-ad.png')}}" alt=""></div>
                             </div>
@@ -270,7 +272,7 @@
                                             <div class="form-group">
                                                 <div class="input-group input-group-sm"><span class="input-group-addon"><span class="input-group-icon mdi mdi-email"></span></span>
                                                     <input class="form-control" placeholder="Type your E-Mail" type="email" name="email" data-constraints="@Required @Email"><span class="input-group-btn">
-                                                    <button class="btn btn-sm btn-primary" type="button">Subscribe</button></span>
+                                                        <button class="btn btn-sm btn-primary" type="button">Subscribe</button></span>
                                                 </div>
                                             </div>
                                             <div class="form-output" id="form-subscribe-footer"></div>
@@ -345,7 +347,135 @@
             </div>
         </div>
         <!-- JavaScript-->
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title text-primary">Modal Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h6 class="text-uppercase text-spacing-60">Normal title</h6>
+                        <div class="text-subline mb10"></div>
+                        <div class="form-group">
+                            <label class="form-label" for="input-labels-2">Placeholder</label>
+                            <input class="form-control" id="input-labels-2" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                <input name="input-group-radio" value="radio-1" type="radio" class="radio-custom"><span class="radio-custom-dummy"></span>Radio 1
+                            </label>
+                            <label class="radio-inline">
+                                <input name="input-group-radio" value="radio-2" type="radio" class="radio-custom"><span class="radio-custom-dummy"></span>Radio 2
+                            </label>
+                        </div>
+                        <div class="form-group ">
+                            <label class="checkbox-inline">
+                                <input class="checkbox-custom" name="input-group-radio" value="checkbox-1" type="checkbox"><span class="checkbox-custom-dummy"></span>Checkbox 1
+                            </label>
+                            <label class="checkbox-inline">
+                                <input class="checkbox-custom" name="input-group-radio" value="checkbox-2" type="checkbox"><span class="checkbox-custom-dummy"></span>Checkbox 2
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control select-filter" data-placeholder="Select an option" data-minimum-results-for-search="Infinity">
+                                <optgroup label="Category 1">
+                                    <option>Demo Item 1-1</option>
+                                    <option>Demo Item 1-2</option>
+                                    <option>Demo Item 1-2</option>
+                                </optgroup>
+                                <optgroup label="Category 2">
+                                    <option>Demo Item 2-1</option>
+                                    <option>Demo Item 2-2</option>
+                                    <option>Demo Item 2-3</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-sm" data-dismiss="modal">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- tempate of school list -->
+        <script id="tplSchoolList" type="text/script" type="x-tmpl-mustache">
+            @include ('front.partial._school_iist_content')
+        </script>
+        
         <script src="{{asset('js/front/core.min.js')}}"></script>
         <script src="{{asset('js/front/script.js')}}"></script>
+        <script src="{{asset('js/front/mustache.js/mustache.min.js')}}" type="text/javascript"></script>
+        <script>
+            $('#ex1').slider({
+                formatter: function (value) {
+                    return 'Current value: ' + value;
+                }
+            });
+            var getSchoolList = function(displayStart, displayLength) {
+                $.ajax({
+                    "url": "{{ url('school-front-list-ajax') }}",
+                    "type": "post",
+                    data: {
+                        _token: "{{csrf_token()}}",
+                        displayStart: displayStart,
+                        displayLength: displayLength
+                    },
+                    success: function(response) {
+                        
+                        var result_text = (response.no_of_result > 1) ? 'Results' : 'Result';
+                        $('.total_result').html(response.no_of_result + ' ' +result_text);
+                        $('#no_of_pages').html(response.no_of_pages);
+                        $('input[name="at_page"]').val(at_page);
+                        var schoolListTpl = $('#tplSchoolList').html();
+                            Mustache.parse(schoolListTpl);
+
+                        var html = Mustache.render(schoolListTpl, { list: response.list });
+                        $('#school_content').html(html);
+                    }
+                });
+            };
+            var delay = (function(){
+              var timer = 0;
+              return function(callback, ms){
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+              };
+            })();
+            
+            $(document).ready(function () {
+                getSchoolList(displayStart, displayLength);
+                $('body').on('click', '.leftPagination_previous', function(e) {
+                    at_page = ((at_page > 2) ? (at_page - 1) : 1);
+                    displayStart = ((at_page - 1) * displayLength);
+                    getSchoolList(displayStart, displayLength);
+                });
+                $('body').on('click', '.rightPagination_next', function(e) {
+                    at_page = ((at_page < no_of_pages) ? (at_page + 1) : no_of_pages);
+                    displayStart = ((at_page - 1) * displayLength);
+                    getSchoolList(displayStart, displayLength);
+                });
+                $(document).on('keyup', 'input[name="at_page"]', function() {
+                    var page_no = parseInt($(this).val());
+                    
+                    delay(function() {
+                        if(Number.isInteger(page_no) && page_no > 0) {
+                            at_page = ((page_no > no_of_pages) ? no_of_pages : page_no);
+                            displayStart = ((at_page - 1) * displayLength);
+                        }
+                        getSchoolList(displayStart, displayLength);
+                    }, 700);
+                });
+                
+            });            
+        </script>
     </body>
 </html>

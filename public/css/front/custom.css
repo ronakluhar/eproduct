@@ -1,5 +1,6 @@
 .cst_navigation{
   height: 100px;
+  background: #002147 !important;
 }
 .logo_box{
   height: 100px;
@@ -35,14 +36,17 @@
   max-width: 100%;
   display: inline-block;
 }
-
+.filter-list{
+  cursor: pointer;
+  user-select:none;
+}
 /*collage box*/
 .result_count{
   padding-top: 12px;
   text-align: left;
 }
 .collage_box{
-  max-width: 250px;
+  width: 250px;
   display: inline-block;
   padding: 7px 12px;
   margin:0 10px 20px 10px;
@@ -53,9 +57,16 @@
   box-shadow: 0 3px 11px 0 rgba(0, 0, 0, 0.32);
 }
 
+.collage-logo {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
 .collage-logo img{
-  max-width: 100%;
-  display: inline-block;
+    max-width: 150px;
+    max-height: 150px;
+  display:inline-block;
+  vertical-align:middle;
 }
 .collage_box hr{
   margin:7px 0;
@@ -79,4 +90,21 @@
 .add-to-fav:focus,
 .add-to-fav:active{
   color: #f54b0f;
+}
+.mb10{margin-bottom: 15px;}
+.collage-name{
+  height: 100px;
+  width: 100%;
+  display: table;
+}
+.collage-name .inner{
+  display: table-cell;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+.collage-name h6{margin:0;}
+/*Modal settings*/
+.modal .modal-dialog{
+  margin-top: 15px;
 }

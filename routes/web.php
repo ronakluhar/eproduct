@@ -11,8 +11,10 @@
   |
  */
 //Front
-Route::get('/', ['as' => 'home', 'uses' => 'Front\IndexController@index']);
-Route::get('/home', ['as' => 'home', 'uses' => 'Front\IndexController@index']);
+//Route::get('/', ['as' => 'home', 'uses' => 'Front\IndexController@index']);
+//Route::get('/home', ['as' => 'home', 'uses' => 'Front\IndexController@index']);
+Route::get('/', ['as' => 'home', 'uses' => 'Front\IndexController@home']);
+Route::get('/home', ['as' => 'home', 'uses' => 'Front\IndexController@home']);
 Route::get('/index.html', ['as' => 'home', 'uses' => 'Front\IndexController@home']);
 Route::get('/login', ['as' => 'login', 'uses' => 'Front\LoginController@login']);
 Route::get('/signup', ['as' => 'signup', 'uses' => 'Front\SignupController@signup']);
@@ -29,6 +31,8 @@ Route::post('reset-password', 'Front\PasswordController@setNewPassword');
 Route::get('verify-user', 'Front\VerifyUserManagementController@index');
 Route::post('profile_setting', 'Front\UserController@saveProfileSetting');
 Route::post('change_password', 'Front\PasswordController@changePassword');
+Route::post('school-front-list-ajax', 'Front\IndexController@school_front_list_ajax');
+
 
 //Admin
 Route::get('/admin', ['as' => 'admin', 'uses' => 'Admin\IndexController@login']);
