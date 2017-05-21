@@ -36,7 +36,7 @@ class IndexController extends Controller {
         $start_from = 0; // Start from
         $record_per_page = Config::get('constant.FRONT_RECORD_PER_PAGE'); // No. of record  per page
         $at_page = 1; // At page 1
-        $no_of_pages = (intval($record_per_page) <= 0) ? ceil($no_of_result / $record_per_page) : 1; // No of pages
+        $no_of_pages = ((intval($record_per_page) <= 0) ? 1 : ceil($no_of_result / $record_per_page)); // No of pages
         
         return view('front.index', compact('no_of_result', 'start_from', 'record_per_page', 'at_page', 'no_of_pages'));
     }

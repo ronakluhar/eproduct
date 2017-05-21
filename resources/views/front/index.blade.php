@@ -453,16 +453,21 @@
             
             $(document).ready(function () {
                 getSchoolList(displayStart, displayLength);
+                // Previous button
                 $('body').on('click', '.leftPagination_previous', function(e) {
                     at_page = ((at_page > 2) ? (at_page - 1) : 1);
                     displayStart = ((at_page - 1) * displayLength);
+                    
                     getSchoolList(displayStart, displayLength);
                 });
+                // Next button
                 $('body').on('click', '.rightPagination_next', function(e) {
                     at_page = ((at_page < no_of_pages) ? (at_page + 1) : no_of_pages);
                     displayStart = ((at_page - 1) * displayLength);
+
                     getSchoolList(displayStart, displayLength);
                 });
+                // Jump to no of page
                 $(document).on('keyup', 'input[name="at_page"]', function() {
                     var page_no = parseInt($(this).val());
                     
