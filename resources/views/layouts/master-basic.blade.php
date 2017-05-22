@@ -19,6 +19,9 @@
     <script src="js/html5shiv.min.js"></script>
 		<![endif]-->
   </head>
+  <style>
+      @-webkit-keyframes pulse {  0% {    opacity: 1;  }  100% {    opacity: 0;  }}@keyframes pulse {  0% {    opacity: 1;  }  100% {    opacity: 0;  }}body {  margin: 0;}.ldr {  margin:20px auto;  width:42px;}.ldr-blk {  height: 15px;  width: 15px;  float:left;  margin:3px;  -webkit-animation: pulse 0.75s ease-in infinite alternate;          animation: pulse 0.75s ease-in infinite alternate;  background-color: #029eb7;}.an_delay {  -webkit-animation-delay: 0.75s;          animation-delay: 0.75s;}
+  </style>
   <body>
     <!-- Page-->
     <div class="page text-center">

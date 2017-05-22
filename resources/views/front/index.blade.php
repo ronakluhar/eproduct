@@ -18,6 +18,9 @@
         <div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
         <script src="js/html5shiv.min.js"></script>
         <![endif]-->
+        <style>
+            .loader{display:block;padding:50px 0;width:100%;}@-webkit-keyframes pulse{0%{opacity:1}100%{opacity:0}}@keyframes pulse{0%{opacity:1}100%{opacity:0}}body{margin:0}.ldr{margin:20px auto;width:56px}.ldr-blk{height:20px;width:20px;float:left;margin:4px !important;-webkit-animation:pulse .75s ease-in infinite alternate;animation:pulse .75s ease-in infinite alternate;background-color:#029eb7}.an_delay{-webkit-animation-delay:.75s;animation-delay:.75s}
+        </style>
     <script>
         var at_page = parseInt("<?= $at_page; ?>");
         var no_of_result = parseInt("<?= $no_of_result; ?>");
@@ -168,23 +171,42 @@
                                     </div>
                                 </div>
                             </div>
+                            
                             <hr class="hr bg-blue-gray">
-                            <div class="box_body_container" id="school_content">
+                            <div class="box_body_container" >
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="loader">
+                                <div class="ldr clearfix">
+                                    <div class="ldr-blk"></div>
+                                    <div class="ldr-blk an_delay"></div>
+                                    <div class="ldr-blk an_delay"></div>
+                                    <div class="ldr-blk"></div>
+                                  </div>
+                            </div>
+                                    </div>
+                                </div>
+                                <div id="school_content"></div>
                                 <!-- AJAX DATA -->
                             </div>
                             
                             <hr class="hr bg-gray">
-                            <div class="pull-left">
-                                <button type="button" class="leftPagination_previous">Previous</button>
-                            </div>
-                            <div class="pull-center">
-                                <label>Page</label>
-                                <input type="text" name="at_page" style="text-align: center;width: 5%" value="{{$at_page}}">
-                                <label>of</label>
-                                <div class="pull-center" id="no_of_pages" style="display: inline">{{$no_of_pages}}</div>
-                            </div>
-                            <div class="pull-right">
-                                <button type="button" class="rightPagination_next">Next</button>
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <button type="button" class="leftPagination_previous btn btn-xs btn-primary">Previous</button>
+                                </div>
+                                <div class="col-xs-8">
+                                    <label>Page</label>
+                                    <div class="form-group" style="max-width: 40px;display: inline-block;vertical-align: middle;margin: 0 7px;">
+                                        <input class="form-control input-sm" name="at_page" id="input-sizes-3" type="text" value="{{$at_page}}">
+                                    </div>
+                                    
+                                    <label>of</label>
+                                    <div class="pull-center" id="no_of_pages" style="display: inline">{{$no_of_pages}}</div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button type="button" class="rightPagination_next btn btn-xs btn-primary">Next</button>
+                                </div>
                             </div>
                             <hr class="hr bg-gray">
                             
@@ -421,6 +443,8 @@
                 }
             });
             var getSchoolList = function(displayStart, displayLength) {
+                $('#school_content').html('');
+                $('.loader').show();
                 $.ajax({
                     "url": "{{ url('school-front-list-ajax') }}",
                     "type": "post",
@@ -440,6 +464,7 @@
 
                         var html = Mustache.render(schoolListTpl, { list: response.list });
                         $('#school_content').html(html);
+                        $('.loader').hide();
                     }
                 });
             };
