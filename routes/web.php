@@ -136,3 +136,5 @@ Route::post('admin/upload-multiple-school-logo', 'Admin\FileManagementController
 Route::get('admin/update-school-logo/{UnitID}', 'Admin\FileManagementController@update_school_logo');
 Route::get('admin/delete-school-logo/{UnitID}', 'Admin\FileManagementController@delete_school_logo');
 Route::get('admin/multiple-upload-image', 'Admin\FileManagementController@multipleImageUpload');
+
+Route::get('school-detail', 'Front\IndexController@SchoolDetail');

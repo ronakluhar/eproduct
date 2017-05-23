@@ -38,7 +38,7 @@
                 <nav class="rd-navbar-default rd-navbar-dark cst_navigation">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-3 col-sm-3"><a href="#" class="logo_box"><img src="{{asset('images/front/logo-big.png')}}" alt=""></a></div>
+                            <div class="col-md-3 col-sm-3"><a href="{{url('/')}}" class="logo_box"><img src="{{asset('images/front/logo-big.png')}}" alt=""></a></div>
                         </div>
                     </div>
                 </nav>

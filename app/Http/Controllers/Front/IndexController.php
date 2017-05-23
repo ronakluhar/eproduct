@@ -64,5 +64,9 @@ class IndexController extends Controller {
             'no_of_pages' => $no_of_pages
         ));
     }
-
+    
+    public function SchoolDetail()
+    {
+        return view('front.school-detail');
+    }
 }
