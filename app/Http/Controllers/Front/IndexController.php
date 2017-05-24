@@ -66,10 +66,13 @@ class IndexController extends Controller {
     }
     
     public function SchoolDetail($UnitId)
-    {
+    {   
+        $logo_path = $this->logo_original_path;
         
-        $schoolData = $this->schoolRepository->getSchoolDetailByUnitId($UnitId);
+        $schoolData = $this->schoolRepository->getSchoolDetailByUnitId($UnitId);   
+        $schoolLogo = $this->schoolRepository->get_school_logo_by_unit_id($UnitId,Config::get('constant.LOGO_IMAGE_FLAG'));   
+        $schoolImage = ((!empty($schoolLogo->image_path)) ? asset($logo_path.$schoolLogo->image_path) : asset("images/front/clg-logo.jpg"));
         
-        return view('front.school-detail',compact('schoolData'));
+        return view('front.school-detail',compact('schoolData','schoolImage'));
     }
 }

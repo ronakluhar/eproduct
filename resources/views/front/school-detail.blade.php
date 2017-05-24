@@ -44,7 +44,7 @@
                 <div class="container section-10">
                     <div class="collage-title">
                         <div class="right_section">
-                            <img src="{{asset('images/front/clg-logo.jpg')}}" alt="">
+                            <img src="{{$schoolImage}}" alt="">
                         </div>
                         <div class="left_section">{{$schoolData->Institution_Name}}</div>
                     </div>
@@ -78,17 +78,33 @@
                                     <tbody>
                                         <tr>
                                             <td>General information:</td>
-                                            <td>{{$schoolData->General_information_number}}</td>
+                                            <td>{{$schoolData->General_information_number }}</td>
                                         </tr>
                                         <tr>
                                             <td>Website:</td>
                                             <td>{{$schoolData->Internet_web_address}}</td>
                                         </tr>
                                         <tr>
-                                            <td>Type:</td>
-                                            <td>4-year, Public</td>
+                                            <td>Address:</td>
+                                            <td>{{$schoolData->Post_office_box}}</td>
                                         </tr>
                                         <tr>
+                                            <td>City:</td>
+                                            <td>{{$schoolData->City}}, {{$schoolData->ZIP_code}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Type:</td>
+                                            <td>
+                                                @if($schoolData->Control_of_institution == 1)
+                                                Public
+                                                @elseif($schoolData->Control_of_institution == 2) 
+                                                Private not-for-profit
+                                                @else
+                                                Private for-profit
+                                                @endif
+                                            </td>
+                                        </tr>
+<!--                                        <tr>
                                             <td>Awards offered:</td>
                                             <td>Bachelor's degree</td>
                                         </tr>
@@ -98,22 +114,32 @@
                                                 <br/>Post-master's certificate
                                                 <br/>Doctor's degree - research/scholarship</td>
                                         </tr>
-                                        <tr>
-                                            <td>City:</td>
-                                            <td>Midsize</td>
-                                        </tr>
+                                        
                                         <tr>
                                             <td>Campus housing:</td>
                                             <td>Yes</td>
-                                        </tr>
+                                        </tr>-->
                                         <tr>
                                             <td>Student population:</td>
-                                            <td>5,628 (4,505 undergraduate)</td>
+                                            <td>
+                                                @if($schoolData->Institution_size_category == 1)
+                                                Under 1,000
+                                                @elseif($schoolData->Institution_size_category == 2) 
+                                                1,000 - 4,999
+                                                @elseif($schoolData->Institution_size_category == 3)
+                                                5,000 - 9,999
+                                                @elseif($schoolData->Institution_size_category == 4) 
+                                                10,000 - 19,999
+                                                @else
+                                                20,000 and above
+
+                                                @endif    
+                                            </td>
                                         </tr>
-                                        <tr>
+<!--                                        <tr>
                                             <td>Student-to-faculty ratio:</td>
                                             <td>19 to 1</td>
-                                        </tr>
+                                        </tr>-->
                                     </tbody>
                                 </table>
                             </div>
