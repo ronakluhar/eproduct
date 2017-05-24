@@ -137,4 +137,4 @@ Route::get('admin/update-school-logo/{UnitID}', 'Admin\FileManagementController@
 Route::get('admin/delete-school-logo/{UnitID}', 'Admin\FileManagementController@delete_school_logo');
 Route::get('admin/multiple-upload-image', 'Admin\FileManagementController@multipleImageUpload');
 
-Route::get('school-detail', 'Front\IndexController@SchoolDetail');
+Route::get('school-detail/{UnitID}', 'Front\IndexController@SchoolDetail');

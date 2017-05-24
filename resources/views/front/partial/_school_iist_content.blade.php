@@ -5,7 +5,7 @@
             <hr class="hr hr-gradient">
             <div class="collage-name">
                 <div class="inner">
-                    <h6 class="text-info"><a href="{{url('school-detail')}}">@{{Institution_Name}}</a></h6>
+                    <h6 class="text-info"><a href="{{url('school-detail')}}/@{{UnitID}}">@{{Institution_Name}}</a></h6>
                     <h6 class="text-muted">@{{Post_office_box}}</h6>
                 </div>
             </div>

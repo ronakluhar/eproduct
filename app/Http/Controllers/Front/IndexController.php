@@ -65,8 +65,11 @@ class IndexController extends Controller {
         ));
     }
     
-    public function SchoolDetail()
+    public function SchoolDetail($UnitId)
     {
-        return view('front.school-detail');
+        
+        $schoolData = $this->schoolRepository->getSchoolDetailByUnitId($UnitId);
+        
+        return view('front.school-detail',compact('schoolData'));
     }
 }

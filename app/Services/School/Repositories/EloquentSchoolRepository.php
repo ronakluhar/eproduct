@@ -543,11 +543,12 @@ class EloquentSchoolRepository extends EloquentBaseRepository implements SchoolR
                 })
                 ->select('collage_quick_facts.Institution_Name',
                         'collage_quick_facts.Post_office_box',
-                        'collage_logo.image_path'
+                        'collage_logo.image_path',
+                        'collage_quick_facts.UnitID'
                         )
                 ->where('collage_quick_facts.deleted', Config::get('constant.ACTIVE_FLAG'))
                 ->orderBy('collage_quick_facts.Institution_Name', 'ASC');
-                
+      
         return $school_data;
     }
 

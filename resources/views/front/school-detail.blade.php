@@ -46,7 +46,7 @@
                         <div class="right_section">
                             <img src="{{asset('images/front/clg-logo.jpg')}}" alt="">
                         </div>
-                        <div class="left_section">Collage-name</div>
+                        <div class="left_section">{{$schoolData->Institution_Name}}</div>
                     </div>
                 </div>
             </section>
@@ -78,11 +78,11 @@
                                     <tbody>
                                         <tr>
                                             <td>General information:</td>
-                                            <td>(256) 372-5000</td>
+                                            <td>{{$schoolData->General_information_number}}</td>
                                         </tr>
                                         <tr>
                                             <td>Website:</td>
-                                            <td>www.aamu.edu/</td>
+                                            <td>{{$schoolData->Internet_web_address}}</td>
                                         </tr>
                                         <tr>
                                             <td>Type:</td>
